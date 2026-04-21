@@ -6,9 +6,11 @@
 ## OSMX Mainline State
 
 - Repository: `Tattao/osmx`
-- Current `origin/main`: `f7402ed`
+- Current `origin/main`: `40d0a73`
 - Wave 2 brief PR: `https://github.com/Tattao/osmx/pull/8`
 - Wave 2 brief merge commit: `f7402ed`
+- Wave 2 clean worktree note PR: `https://github.com/Tattao/osmx/pull/9`
+- Wave 2 clean worktree note merge commit: `40d0a73`
 - P0 cleanup PR: `https://github.com/Tattao/osmx/pull/7`
 - P0 cleanup merge commit: `91c4f87`
 
@@ -21,6 +23,14 @@ docs/plans/wave-2-command-center-governed-loop.md
 ```
 
 K1 should treat this as the execution contract for Wave 2.
+
+The clean local Wave 2 implementation worktree has been prepared at:
+
+```text
+/Users/apple/Exec/Code/osmx-emergency-main-sync-wave2
+```
+
+It is a worktree of `osmx-emergency-main-sync`, currently on branch `wave2/command-center-governed-loop`, tracking `github/main`.
 
 ## Execution Boundary
 
@@ -57,7 +67,7 @@ K1 may start Wave 2 preparation after:
 
 - local implementation worktree is clean or a fresh Wave 2 worktree is created
 - `osmx-emergency-main-sync` has fetched current `origin/main`
-- the working baseline includes `f7402ed` or an equivalent main commit containing the Wave 2 brief
+- the working baseline includes `40d0a73` or a later main commit containing the Wave 2 brief and clean-worktree note
 - operator confirms external credential rotation/revocation status for the P0 exposure
 
 ## First K1 Action
@@ -69,4 +79,3 @@ First action should be:
 ```text
 Split docs/plans/wave-2-command-center-governed-loop.md into backend, frontend, and evaluation subtasks, then confirm the branch/worktree baseline.
 ```
-

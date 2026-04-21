@@ -5,7 +5,7 @@
 
 ## Current Mainline State
 
-- `osmx` current `origin/main`: `f7402ed`
+- `osmx` current `origin/main`: `40d0a73`
 - Wave 1 code merge PR: `https://github.com/Tattao/osmx/pull/2`
 - Wave 1 code merge commit: `ae2be3b`
 - Wave board closeout PR: `https://github.com/Tattao/osmx/pull/3`
@@ -16,6 +16,8 @@
 - P0 public credential cleanup merge commit: `91c4f87`
 - Wave 2 mother task brief PR: `https://github.com/Tattao/osmx/pull/8`
 - Wave 2 mother task brief merge commit: `f7402ed`
+- Wave 2 clean worktree note PR: `https://github.com/Tattao/osmx/pull/9`
+- Wave 2 clean worktree note merge commit: `40d0a73`
 - Shared specs governance note: `shared-specs/wave2-shared-specs-governance-boundary.md`
 - P0 cleanup evidence: `shared-specs/wave2-p0-public-credential-cleanup.md`
 - Wave 2 dispatch evidence: `shared-specs/wave2-mother-task-brief-dispatch.md`

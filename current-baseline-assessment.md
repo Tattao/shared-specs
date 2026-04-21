@@ -105,7 +105,7 @@ The current Wave 1 closure question is now answered:
 Has Wave 1 reached the main-repo acceptance gate and merged back to main?
 ```
 
-The answer is yes. PR #2 was merged into `main` at `2026-04-21 22:35 CST` with merge commit `ae2be3b`. Docs-only closeout PR #3 updated the Wave board, PR #4 aligned the operator runbook state flow, PR #5 marked `shared-specs` as an independent evidence repository, PR #6 added the shared-specs governance guardrails, PR #7 removed public credential/private-infra traces from the current tree, and PR #8 dispatched the Wave 2 mother task brief. Current `origin/main` is `f7402ed`.
+The answer is yes. PR #2 was merged into `main` at `2026-04-21 22:35 CST` with merge commit `ae2be3b`. Docs-only closeout PR #3 updated the Wave board, PR #4 aligned the operator runbook state flow, PR #5 marked `shared-specs` as an independent evidence repository, PR #6 added the shared-specs governance guardrails, PR #7 removed public credential/private-infra traces from the current tree, PR #8 dispatched the Wave 2 mother task brief, and PR #9 documented the clean Wave 2 worktree. Current `origin/main` is `40d0a73`.
 
 ## 4. Architecture Assessment
 
@@ -352,7 +352,7 @@ merge commit: ae2be3b
 docs closeout merge commit: fa34e47
 runbook state closeout merge commit: 3bd018b
 shared-specs boundary merge commit: 57534c9
-Wave 2 mother task brief merge commit: f7402ed
+Wave 2 clean worktree note merge commit: 40d0a73
 ```
 
 Wave 1 status is now `merged_to_main`; PR #2 was reviewed, passed GitGuardian, and was merged into `main`. PR #3 closed the official Wave board status on `main`, PR #4 added `merged_to_main` to the operator runbook plus the post-Wave-1 development directory boundary, PR #5 updated `shared-specs` from a local record directory to an independent collaboration evidence repository, and PR #6 added the no-runtime-dependency guardrails for `shared-specs`.
@@ -363,7 +363,7 @@ Recommended task:
 
 ```text
 Wave 1 Closeout Agent:
-Confirm current `main` is `f7402ed` and contains merge commits `ae2be3b`, `91c4f87`, and `f7402ed`; then split the Wave 2 mother task brief into backend, frontend, and evaluation subtasks in `osmx-emergency-main-sync`.
+Confirm current `main` is `40d0a73` and contains merge commits `ae2be3b`, `91c4f87`, `f7402ed`, and `40d0a73`; then split the Wave 2 mother task brief into backend, frontend, and evaluation subtasks in the clean Wave 2 worktree.
 ```
 
 Acceptance criteria:
@@ -373,7 +373,7 @@ Acceptance criteria:
 3. `gh -R Tattao/osmx pr view 4 --json state,mergeCommit,mergedAt` reports `MERGED`.
 4. `gh -R Tattao/osmx pr view 5 --json state,mergeCommit,mergedAt` reports `MERGED`.
 5. `gh -R Tattao/osmx pr view 6 --json state,mergeCommit,mergedAt` reports `MERGED`.
-6. `git ls-remote origin refs/heads/main` reports `f7402ed165e6c026ed1f79658b3cbcb6054fb071`.
+6. `git ls-remote origin refs/heads/main` reports `40d0a73265609bfe4f42a0aa5f2aebf37e00b377`.
 7. The Wave board records Wave 1 as merged, not merely ready for merge.
 8. The operator runbook includes `merged_to_main`, the post-Wave-1 development directory boundary, the `shared-specs` evidence-repo boundary, and the no-runtime-dependency guardrails.
 9. Wave 2 remains scoped by a new owner task brief before implementation starts.
