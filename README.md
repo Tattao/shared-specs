@@ -9,9 +9,10 @@
 `shared-specs` 是独立协作证据仓 / 非源码仓。
 
 - 本地路径：`/Users/apple/Exec/Code/shared-specs`
+- 远端仓库：`https://github.com/Tattao/shared-specs`
 - 当前用途：沉淀跨仓规则、评审记录、任务模板和交付证据
 - 当前限制：不放业务源码、不放密钥、不放运行数据、不替代 `osmx/docs/plans`
-- 远端状态：尚未配置 remote；如需多人共享，应绑定私有远端仓库后再 push
+- 远端状态：已配置 `origin` 并推送 baseline
 
 ## Source Of Truth
 

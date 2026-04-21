@@ -19,6 +19,7 @@
 - Historical emergency reference only: `/Users/apple/Exec/Code/osmx-emergency`
 - Merge / PR worktree only: `/Users/apple/Exec/Code/osmx-main-merge`
 - Collaboration evidence repo: `/Users/apple/Exec/Code/shared-specs`
+- Collaboration evidence remote: `https://github.com/Tattao/shared-specs`
 
 ## Review Entry Points
 
@@ -37,4 +38,3 @@
 - K1 executable task brief
 - Forbidden change scope
 - Required validation commands and acceptance criteria
-
