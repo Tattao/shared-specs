@@ -74,7 +74,8 @@ Follow-up closeout:
 ```text
 Docs-only PR #3 moved origin/main to fa34e47d1e7031951690e8ac7f817d7d665798c6 after recording Wave 1 as merged on the official Wave board.
 Docs-only PR #4 moved origin/main to 3bd018b3910a99e73d6628e0d42365bef0ec1d05 after aligning the operator runbook state flow.
-Docs-only PR #5 then moved current origin/main to 57534c9b1405b3598cd5bc65b03f0a079d0a0f05 after marking shared-specs as an independent evidence repository.
+Docs-only PR #5 moved origin/main to 57534c9b1405b3598cd5bc65b03f0a079d0a0f05 after marking shared-specs as an independent evidence repository.
+Docs-only PR #6 then moved current origin/main to 7dc19efbfea8b1fc4a83a6bc20794c6f4786336d after adding shared-specs governance guardrails.
 ```
 
 Backend:

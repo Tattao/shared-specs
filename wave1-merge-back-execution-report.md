@@ -10,10 +10,12 @@
 > Closeout docs merge commit: `fa34e47`
 > Runbook state closeout merge commit: `3bd018b`
 > Shared-specs boundary merge commit: `57534c9`
+> Shared-specs governance merge commit: `7dc19ef`
 > Pull request: https://github.com/Tattao/osmx/pull/2
 > Closeout pull request: https://github.com/Tattao/osmx/pull/3
 > Runbook state closeout pull request: https://github.com/Tattao/osmx/pull/4
 > Shared-specs boundary pull request: https://github.com/Tattao/osmx/pull/5
+> Shared-specs governance pull request: https://github.com/Tattao/osmx/pull/6
 
 ## 1. Execution Status
 
@@ -25,7 +27,7 @@ merge-back branch prepared as a single-parent commit, validated locally, pushed,
 
 PR #2 was merged at `2026-04-21 22:35 CST` as merge commit `ae2be3b9e034081ce1969937ab9ef4b687b0878c`.
 
-A docs-only closeout PR #3 was then merged at `2026-04-21 22:41 CST`, docs-only PR #4 was merged at `2026-04-21 23:07 CST` to align the operator runbook state flow, and docs-only PR #5 was merged at `2026-04-21 23:22 CST` to mark `shared-specs` as an independent evidence repository. Current `origin/main` points at `57534c9b1405b3598cd5bc65b03f0a079d0a0f05`, which contains the Wave 1 code merge commit `ae2be3b`.
+A docs-only closeout PR #3 was then merged at `2026-04-21 22:41 CST`, docs-only PR #4 was merged at `2026-04-21 23:07 CST` to align the operator runbook state flow, docs-only PR #5 was merged at `2026-04-21 23:22 CST` to mark `shared-specs` as an independent evidence repository, and docs-only PR #6 was merged at `2026-04-22 00:22 CST` to add shared-specs governance guardrails. Current `origin/main` points at `7dc19efbfea8b1fc4a83a6bc20794c6f4786336d`, which contains the Wave 1 code merge commit `ae2be3b`.
 
 ## 2. What Was Applied
 
@@ -243,7 +245,7 @@ Immediately after the PR #2 merge and `git fetch origin main`, the local merge-b
 wave1-merge-back-20260421-squashed...origin/main [behind 1]
 ```
 
-At the PR #2 merge point, `origin/main` was the merge commit with parents `4fb91a7` and `a14f425`. After PR #3, `origin/main` was `fa34e47`; after PR #4, it was `3bd018b`; after PR #5, current `origin/main` is `57534c9`.
+At the PR #2 merge point, `origin/main` was the merge commit with parents `4fb91a7` and `a14f425`. After PR #3, `origin/main` was `fa34e47`; after PR #4, it was `3bd018b`; after PR #5, it was `57534c9`; after PR #6, current `origin/main` is `7dc19ef`.
 
 Remote branch:
 
@@ -268,7 +270,8 @@ origin/wave1-merge-back-20260421: a14f4252ff8f9ef148696b7adf2ed96a8937a60d
 docs closeout PR #3: MERGED
 runbook state closeout PR #4: MERGED
 shared-specs boundary PR #5: MERGED
-current origin/main: 57534c9b1405b3598cd5bc65b03f0a079d0a0f05
+shared-specs governance PR #6: MERGED
+current origin/main: 7dc19efbfea8b1fc4a83a6bc20794c6f4786336d
 ```
 
 Review report:

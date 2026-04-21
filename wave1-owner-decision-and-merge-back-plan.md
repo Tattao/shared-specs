@@ -4,7 +4,7 @@
 > Owner scope: `/Users/apple/Exec/Code/osmx`
 > Implementation scope: `/Users/apple/Exec/Code/osmx-emergency-main-sync`
 > Decision input: `shared-specs/wave1-main-repo-evaluation.md`
-> Execution update: PR #2 merged to `main` at `2026-04-21 22:35 CST`, merge commit `ae2be3b`; docs-only closeout PR #3 merged at `2026-04-21 22:41 CST`; docs-only runbook-state PR #4 merged at `2026-04-21 23:07 CST`; docs-only shared-specs boundary PR #5 merged at `2026-04-21 23:22 CST`; current `origin/main` `57534c9`
+> Execution update: PR #2 merged to `main` at `2026-04-21 22:35 CST`, merge commit `ae2be3b`; docs-only closeout PR #3 merged at `2026-04-21 22:41 CST`; docs-only runbook-state PR #4 merged at `2026-04-21 23:07 CST`; docs-only shared-specs boundary PR #5 merged at `2026-04-21 23:22 CST`; docs-only shared-specs governance PR #6 merged at `2026-04-22 00:22 CST`; current `origin/main` `7dc19ef`
 
 ## 1. Owner Decision
 

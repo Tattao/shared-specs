@@ -5,12 +5,13 @@
 
 ## Current Mainline State
 
-- `osmx` current `origin/main`: `57534c9`
+- `osmx` current `origin/main`: `7dc19ef`
 - Wave 1 code merge PR: `https://github.com/Tattao/osmx/pull/2`
 - Wave 1 code merge commit: `ae2be3b`
 - Wave board closeout PR: `https://github.com/Tattao/osmx/pull/3`
 - Operator runbook state-flow PR: `https://github.com/Tattao/osmx/pull/4`
 - `shared-specs` repository-boundary PR: `https://github.com/Tattao/osmx/pull/5`
+- Shared specs governance guardrails PR: `https://github.com/Tattao/osmx/pull/6`
 - Shared specs governance note: `shared-specs/wave2-shared-specs-governance-boundary.md`
 
 ## Repository Boundaries

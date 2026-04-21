@@ -105,7 +105,7 @@ The current Wave 1 closure question is now answered:
 Has Wave 1 reached the main-repo acceptance gate and merged back to main?
 ```
 
-The answer is yes. PR #2 was merged into `main` at `2026-04-21 22:35 CST` with merge commit `ae2be3b`. Docs-only closeout PR #3 updated the Wave board, PR #4 aligned the operator runbook state flow, and PR #5 marked `shared-specs` as an independent evidence repository. Current `origin/main` is `57534c9`.
+The answer is yes. PR #2 was merged into `main` at `2026-04-21 22:35 CST` with merge commit `ae2be3b`. Docs-only closeout PR #3 updated the Wave board, PR #4 aligned the operator runbook state flow, PR #5 marked `shared-specs` as an independent evidence repository, and PR #6 added the shared-specs governance guardrails. Current `origin/main` is `7dc19ef`.
 
 ## 4. Architecture Assessment
 
@@ -346,14 +346,16 @@ pull request: https://github.com/Tattao/osmx/pull/2
 closeout pull request: https://github.com/Tattao/osmx/pull/3
 runbook state closeout pull request: https://github.com/Tattao/osmx/pull/4
 shared-specs boundary pull request: https://github.com/Tattao/osmx/pull/5
+shared-specs governance pull request: https://github.com/Tattao/osmx/pull/6
 review report: shared-specs/wave1-pr2-review-report.md
 merge commit: ae2be3b
 docs closeout merge commit: fa34e47
 runbook state closeout merge commit: 3bd018b
 shared-specs boundary merge commit: 57534c9
+shared-specs governance merge commit: 7dc19ef
 ```
 
-Wave 1 status is now `merged_to_main`; PR #2 was reviewed, passed GitGuardian, and was merged into `main`. PR #3 closed the official Wave board status on `main`, PR #4 added `merged_to_main` to the operator runbook plus the post-Wave-1 development directory boundary, and PR #5 updated `shared-specs` from a local record directory to an independent collaboration evidence repository.
+Wave 1 status is now `merged_to_main`; PR #2 was reviewed, passed GitGuardian, and was merged into `main`. PR #3 closed the official Wave board status on `main`, PR #4 added `merged_to_main` to the operator runbook plus the post-Wave-1 development directory boundary, PR #5 updated `shared-specs` from a local record directory to an independent collaboration evidence repository, and PR #6 added the no-runtime-dependency guardrails for `shared-specs`.
 
 The next task should be Wave 1 closeout / Wave 2 task-brief preparation, not immediate new feature expansion.
 
@@ -361,7 +363,7 @@ Recommended task:
 
 ```text
 Wave 1 Closeout Agent:
-Confirm current `main` is `57534c9` and contains merge commit `ae2be3b`, archive the Wave 1 evidence set, and prepare the next Wave 2 mother task brief from the canonical `osmx/docs/plans` scope.
+Confirm current `main` is `7dc19ef` and contains merge commit `ae2be3b`, archive the Wave 1 evidence set, and prepare the next Wave 2 mother task brief from the canonical `osmx/docs/plans` scope.
 ```
 
 Acceptance criteria:
@@ -370,7 +372,8 @@ Acceptance criteria:
 2. `gh -R Tattao/osmx pr view 3 --json state,mergeCommit,mergedAt` reports `MERGED`.
 3. `gh -R Tattao/osmx pr view 4 --json state,mergeCommit,mergedAt` reports `MERGED`.
 4. `gh -R Tattao/osmx pr view 5 --json state,mergeCommit,mergedAt` reports `MERGED`.
-5. `git ls-remote origin refs/heads/main` reports `57534c9b1405b3598cd5bc65b03f0a079d0a0f05`.
-6. The Wave board records Wave 1 as merged, not merely ready for merge.
-7. The operator runbook includes `merged_to_main`, the post-Wave-1 development directory boundary, and the `shared-specs` evidence-repo boundary.
-8. Wave 2 remains scoped by a new owner task brief before implementation starts.
+5. `gh -R Tattao/osmx pr view 6 --json state,mergeCommit,mergedAt` reports `MERGED`.
+6. `git ls-remote origin refs/heads/main` reports `7dc19efbfea8b1fc4a83a6bc20794c6f4786336d`.
+7. The Wave board records Wave 1 as merged, not merely ready for merge.
+8. The operator runbook includes `merged_to_main`, the post-Wave-1 development directory boundary, the `shared-specs` evidence-repo boundary, and the no-runtime-dependency guardrails.
+9. Wave 2 remains scoped by a new owner task brief before implementation starts.

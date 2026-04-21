@@ -28,10 +28,10 @@ If `shared-specs` conflicts with `osmx`, `osmx` wins.
 | Historical reference | `/Users/apple/Exec/Code/osmx-emergency` | Read-only historical reference, not Wave 2 development |
 | Merge worktree | `/Users/apple/Exec/Code/osmx-main-merge` | Temporary PR / main merge worktree only |
 
-Current Wave 2 code baseline:
+Current Wave 2 branch baseline:
 
 ```text
-osmx origin/main = 57534c9
+osmx origin/main = 7dc19ef
 ```
 
 ## 3. Wave 2 Direction
@@ -134,4 +134,3 @@ Forbidden references:
 - build scripts cloning `shared-specs`
 - CI requiring `shared-specs` access
 - runtime config reading from `shared-specs`
-
