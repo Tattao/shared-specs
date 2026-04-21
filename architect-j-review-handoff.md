@@ -1,0 +1,40 @@
+# Architect J Review Handoff
+
+> Date: 2026-04-21
+> Purpose: provide the architecture reviewer with the current Wave 1 merge status, repository boundaries, and next-review entry points.
+
+## Current Mainline State
+
+- `osmx` current `origin/main`: `57534c9`
+- Wave 1 code merge PR: `https://github.com/Tattao/osmx/pull/2`
+- Wave 1 code merge commit: `ae2be3b`
+- Wave board closeout PR: `https://github.com/Tattao/osmx/pull/3`
+- Operator runbook state-flow PR: `https://github.com/Tattao/osmx/pull/4`
+- `shared-specs` repository-boundary PR: `https://github.com/Tattao/osmx/pull/5`
+
+## Repository Boundaries
+
+- Main product / architecture source: `/Users/apple/Exec/Code/osmx`
+- Emergency follow-up implementation worktree: `/Users/apple/Exec/Code/osmx-emergency-main-sync`
+- Historical emergency reference only: `/Users/apple/Exec/Code/osmx-emergency`
+- Merge / PR worktree only: `/Users/apple/Exec/Code/osmx-main-merge`
+- Collaboration evidence repo: `/Users/apple/Exec/Code/shared-specs`
+
+## Review Entry Points
+
+- `shared-specs/current-baseline-assessment.md`
+- `shared-specs/wave1-emergency-owner-summary-package.md`
+- `shared-specs/wave1-main-repo-evaluation.md`
+- `shared-specs/wave1-merge-back-execution-report.md`
+- `shared-specs/wave1-pr2-review-report.md`
+- `osmx/docs/plans/osmx-dual-repo-wave-board.md`
+- `osmx/docs/plans/osmx-dual-repo-agent-operator-runbook.md`
+
+## Requested Review Output
+
+- Architecture review verdict
+- Wave 2 development priority
+- K1 executable task brief
+- Forbidden change scope
+- Required validation commands and acceptance criteria
+
