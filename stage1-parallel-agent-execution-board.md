@@ -20,13 +20,14 @@
 | D. Delivery/Ops | `/Users/apple/Exec/Code/osmx-delivery-ops` | `stage1/delivery-ops-hardening` | `40d0a73` | standard deployment, smoke, and reproducible runtime |
 | E. Security/Release Gate | `/Users/apple/Exec/Code/osmx-security-release` | `stage1/security-release-gate` | `40d0a73` | secret scanning, release gate, and credential hygiene evidence |
 | F. Integration/Regression | `/Users/apple/Exec/Code/osmx-integration-regression` | `stage1/integration-regression-captain` | `40d0a73` | integration queue, merge readiness, and regression orchestration |
+| G. Studio / OO Compatibility | `/Users/apple/Exec/Code/osmx-studio-oo-compatibility` | `stage1/studio-oo-compatibility` | `40d0a73` | bounded Studio / OO compatibility track for user-demanded imported asset usability |
 
 ## Dispatch Rules
 
 1. Every Agent must state its target worktree before editing.
 2. Agents may read other worktrees, but must only write inside their assigned worktree unless explicitly reassigned.
 3. `shared-specs` is coordination evidence only. Do not import, clone, submodule, or depend on it from product code, tests, build, CI, or runtime.
-4. Studio / OO / Worker / Hermes work is allowed only when directly required by the `Command Center Governed Loop`.
+4. Studio / OO / Worker / Hermes work is allowed only when directly required by the `Command Center Governed Loop`, or when explicitly scoped as the separate `G. Studio / OO Compatibility` track. G-track work must still feed `PlanStep / AssetExecution / Artifact / Audit` contracts and must not become a second product fact source.
 5. Each worktree should produce its own branch / PR. Integration only happens through reviewed PRs into `osmx`.
 6. Broad rewrites, naming churn, generated artifacts, binary outputs, and unrelated cleanup are out of scope.
 
@@ -94,6 +95,35 @@ Worktree: `/Users/apple/Exec/Code/osmx-integration-regression`
 |------|------|-------------|-------------|
 | F1 | Merge Captain | docs/coordination and PR queue records | PR order, conflict map, owner handoff |
 | F2 | Regression Captain | test orchestration docs/scripts | consolidated build/test/smoke matrix |
+
+### Group G: Studio / OO Compatibility
+
+Worktree: `/Users/apple/Exec/Code/osmx-studio-oo-compatibility`
+
+Priority reason: near-term user demand for Studio / OO imported asset usability is high enough to run in parallel, but this track must not interrupt Wave 2 Command Center governed loop hardening.
+
+Allowed scope:
+
+- OO Content Pack / JAR imported asset usability.
+- Operation / Flow correct routing and readonly viewers.
+- Compatibility status and projection/readiness evidence.
+- Imported asset execution bridge that remains governed by `PlanStep / AssetExecution / Artifact / Audit`.
+- Studio wrapper/subflow bridge placeholders that do not attempt full OO Studio parity.
+
+Forbidden scope:
+
+- Full OO Studio clone.
+- OO-compatible export.
+- Generic plugin marketplace.
+- Bypassing Approval / Audit for imported asset execution.
+- Making Studio / OO a second fact source outside `osmx`.
+
+| Agent | Role | Write Scope | Deliverable |
+|------|------|-------------|-------------|
+| G1 | Compatibility Contract | `docs/plans`, `docs/reference`, change log | priority ruling, boundary, acceptance, task split |
+| G2 | Backend Compatibility | content pack, AFL/CloudSlang compiler, projection/resolver tests | highest-value OO compatibility gap closure |
+| G3 | Frontend Compatibility | Content Pack / Imported Operation / Imported Flow / Runbook list views | correct routing, compatibility status, readonly explanation |
+| G4 | Compatibility Evaluation | focused frontend/backend tests and reports | validation matrix and no-regression evidence |
 
 ## First-Wave Startup Prompts
 
@@ -223,3 +253,4 @@ Start these Agents immediately:
 
 Hold B2/B3/C2/D2/E2/F2 until the first wave reports file ownership and initial validation results.
 
+After the first wave completed, G1/G2/G3/G4 were dispatched as a bounded compatibility track because Studio / OO imported asset usability is now treated as a near-term user-demand lane. This does not change the fact that Wave 2 Incident Commander remains the primary governed-loop delivery track.
