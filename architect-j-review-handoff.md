@@ -5,7 +5,7 @@
 
 ## Current Mainline State
 
-- `osmx` current `origin/main`: `7dc19ef`
+- `osmx` current `origin/main`: `91c4f87`
 - Wave 1 code merge PR: `https://github.com/Tattao/osmx/pull/2`
 - Wave 1 code merge commit: `ae2be3b`
 - Wave board closeout PR: `https://github.com/Tattao/osmx/pull/3`
@@ -13,6 +13,7 @@
 - `shared-specs` repository-boundary PR: `https://github.com/Tattao/osmx/pull/5`
 - Shared specs governance guardrails PR: `https://github.com/Tattao/osmx/pull/6`
 - P0 public credential cleanup PR: `https://github.com/Tattao/osmx/pull/7`
+- P0 public credential cleanup merge commit: `91c4f87`
 - Shared specs governance note: `shared-specs/wave2-shared-specs-governance-boundary.md`
 - P0 cleanup evidence: `shared-specs/wave2-p0-public-credential-cleanup.md`
 

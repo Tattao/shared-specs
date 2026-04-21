@@ -15,7 +15,9 @@ The exact sensitive values are intentionally not repeated in this record.
 - Base: `main`
 - Branch: `p0-public-credential-cleanup-20260422`
 - PR: `https://github.com/Tattao/osmx/pull/7`
-- Commit: `14f0922`
+- Cleanup commit: `14f0922`
+- Merge commit: `91c4f87`
+- State: merged
 
 ## Cleanup Summary
 
@@ -31,11 +33,9 @@ PR #7 removes sensitive traces from the current tree by:
 
 Executed in `/Users/apple/Exec/Code/osmx-main-merge`:
 
-```bash
-git grep -nE "10\\.198\\.168\\.[0-9]+|neatlogic@901|Aa123456|bigmodel@|sk-[A-Za-z0-9]{16,}|AKIA|BEGIN .*PRIVATE KEY" || true
-```
+High-risk exact-match scan covered private infrastructure IPs, the previously exposed login identifiers, the previously exposed credential literals, API-key-shaped values, AWS key IDs, and private key blocks.
 
-Result: no output.
+Result: no remaining current-tree match for the P0 high-risk pattern.
 
 ```bash
 git diff --check
@@ -62,7 +62,6 @@ This cleanup only removes values from the current tree. Because the repository i
 
 K1 should not start broad Wave 2 feature work until:
 
-- PR #7 is reviewed and merged, or an equivalent cleanup lands on `main`
+- PR #7 cleanup is present on `main`
 - credential rotation/revocation is confirmed outside the repo
 - Wave 2 mother task brief is written against the post-cleanup main baseline
-
