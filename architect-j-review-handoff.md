@@ -12,7 +12,9 @@
 - Operator runbook state-flow PR: `https://github.com/Tattao/osmx/pull/4`
 - `shared-specs` repository-boundary PR: `https://github.com/Tattao/osmx/pull/5`
 - Shared specs governance guardrails PR: `https://github.com/Tattao/osmx/pull/6`
+- P0 public credential cleanup PR: `https://github.com/Tattao/osmx/pull/7`
 - Shared specs governance note: `shared-specs/wave2-shared-specs-governance-boundary.md`
+- P0 cleanup evidence: `shared-specs/wave2-p0-public-credential-cleanup.md`
 
 ## Repository Boundaries
 
