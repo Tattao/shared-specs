@@ -11,6 +11,7 @@
 - Wave board closeout PR: `https://github.com/Tattao/osmx/pull/3`
 - Operator runbook state-flow PR: `https://github.com/Tattao/osmx/pull/4`
 - `shared-specs` repository-boundary PR: `https://github.com/Tattao/osmx/pull/5`
+- Shared specs governance note: `shared-specs/wave2-shared-specs-governance-boundary.md`
 
 ## Repository Boundaries
 
@@ -20,6 +21,12 @@
 - Merge / PR worktree only: `/Users/apple/Exec/Code/osmx-main-merge`
 - Collaboration evidence repo: `/Users/apple/Exec/Code/shared-specs`
 - Collaboration evidence remote: `https://github.com/Tattao/shared-specs`
+
+## Governance Note
+
+`shared-specs` is a collaboration record / shared specification repository, not the final product source of truth. Final product architecture, runbooks, state flows, API contracts, acceptance criteria, code, tests, and merge facts must land in `osmx`.
+
+Wave 2 may draft in `shared-specs`, but accepted designs must be reflected in `osmx`. Do not make OSMX build, test, CI, runtime, or source code depend on `shared-specs`.
 
 ## Review Entry Points
 

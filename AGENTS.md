@@ -16,6 +16,8 @@
 5. Do not mix short-term convenience with long-term architecture.
 6. Always explain file and repository boundaries before large changes.
 7. Treat shared-specs as a non-source repository: do not add business code, secrets, runtime data, or generated artifacts.
+8. Treat `osmx` as the final product source of truth. If shared-specs conflicts with `osmx`, `osmx` wins.
+9. Do not make `osmx` build, test, CI, runtime, or source code depend on the current shared-specs HEAD.
 
 ## Agent Dispatch Policy
 
@@ -24,6 +26,10 @@
 - Emergency implementation -> modify `osmx-emergency-main-sync` only
 - Collaboration evidence / templates / handoffs -> modify `shared-specs` only
 - Test / review agents -> may read all, but must state target repository clearly
+
+## Shared Specs Adoption Rule
+
+Drafts in `shared-specs` become product truth only after their accepted behavior lands in `osmx` as code, tests, docs, runbook updates, or PR review evidence.
 
 ## Mandatory Output for Cross-Repo Tasks
 
