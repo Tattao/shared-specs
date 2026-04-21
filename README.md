@@ -59,6 +59,7 @@
 - [architect-j-review-handoff.md](./architect-j-review-handoff.md)
 - [wave2-shared-specs-governance-boundary.md](./wave2-shared-specs-governance-boundary.md)
 - [wave2-p0-public-credential-cleanup.md](./wave2-p0-public-credential-cleanup.md)
+- [wave2-mother-task-brief-dispatch.md](./wave2-mother-task-brief-dispatch.md)
 - [AGENTS.md](./AGENTS.md)
 - [OSMX_OSMX-Emergency主控Agent系统提示词.md](./OSMX_OSMX-Emergency主控Agent系统提示词.md)
 - [Agent系统提示词.md](./Agent系统提示词.md)
