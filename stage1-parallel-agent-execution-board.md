@@ -254,3 +254,19 @@ Start these Agents immediately:
 Hold B2/B3/C2/D2/E2/F2 until the first wave reports file ownership and initial validation results.
 
 After the first wave completed, G1/G2/G3/G4 were dispatched as a bounded compatibility track because Studio / OO imported asset usability is now treated as a near-term user-demand lane. This does not change the fact that Wave 2 Incident Commander remains the primary governed-loop delivery track.
+
+## PR Queue Created
+
+Recommended merge/review order:
+
+1. D Delivery/Ops: [Tattao/osmx#10](https://github.com/Tattao/osmx/pull/10)
+2. E Security/Release Gate: [Tattao/osmx#11](https://github.com/Tattao/osmx/pull/11)
+3. C Knowledge SLA: [Tattao/osmx#12](https://github.com/Tattao/osmx/pull/12)
+4. B DB Copilot Productization: [Tattao/osmx#13](https://github.com/Tattao/osmx/pull/13)
+5. A Incident Commander Wave 2: [Tattao/osmx#14](https://github.com/Tattao/osmx/pull/14)
+6. G Studio / OO Compatibility: [Tattao/osmx#15](https://github.com/Tattao/osmx/pull/15)
+
+Notes:
+
+- PR #15 is intentionally after PR #14 because both touch runbook-facing model/frontend surfaces and should not compete with the governed-loop hardening review.
+- Existing PR #1 (`batch/full-integration`) is legacy and is not part of this Stage 1 parallel queue.
