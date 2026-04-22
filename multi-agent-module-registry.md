@@ -8,9 +8,9 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `330003e` |
+| `osmx` main | `06f3942` |
 | `osmx` plan governance PR | `#16` merged |
-| `shared-specs` baseline before this update | `6c473fc` |
+| `shared-specs` baseline before this update | `46f7b54` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
 | Agent operating model | `osmx/docs/plans/90-agent-execution-operating-model.md` |
 | Database architecture ADR | `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` |
@@ -472,6 +472,36 @@ Interpretation:
 | Laplace | `019db3a0-5728-7f22-81a4-c4490825f049` | PostgreSQL synchronous guardrail docs | `/Users/apple/Exec/Code/osmx-db-sync-guardrails` | ADR and plan docs only | Must upgrade wording from readiness to synchronous adaptation without authorizing migration | dispatched |
 | Newton | `019db3a0-578f-79c1-ac63-d516d2574088` | Runtime browser / HTTP acceptance | `/Users/apple/Exec/Code/osmx-post13-docs` | read-only runtime checks | `not_applicable`, but record any DB-query runtime errors as adaptation risk | dispatched |
 | McClintock | `019db3a0-580b-78e3-b4f6-04963863d581` | DB architecture decision review | `/Users/apple/Exec/Code/osmx-post13-docs` | read-only decision review | Must recommend how `business_systems` / `AutoMigrate` move toward MySQL/PostgreSQL-compatible migration practice | dispatched |
+
+## R5 / P8 Completion Summary
+
+Date: 2026-04-22 13:27 CST
+
+| Workstream | Result | Evidence | PostgreSQL adaptation result | Residual risk |
+|------------|--------|----------|------------------------------|---------------|
+| DB time-bucket adaptation | merged | OSMX PR #24 merged at `aaee95d`; changed `trend_service.go`, `report_repo.go`, and focused tests | `pass`; MySQL keeps `DATE_FORMAT` / `DATE`, PostgreSQL uses `date_trunc` / `to_char` behind helper functions | Unsupported GORM dialectors now return explicit errors |
+| PostgreSQL synchronous guardrail docs | merged | OSMX PR #25 merged at `a8ad0ac` | `pass`; DB-sensitive PRs must include MySQL/PostgreSQL dialect, type, index, test impact and PostgreSQL adaptation conclusion | Enforcement depends on future PR review discipline |
+| Runtime browser / HTTP acceptance | completed | `15174`, `15175`, `18081` reachable; Emergency login, plans API, plan detail, approvals, executions, runbook executions, and audit logs passed; screenshots in `/tmp/osmx-acceptance-artifacts*` | `not_applicable`; no DB dialect/runtime query errors observed | Minor async URL sampling race after login, visually passed |
+| DB architecture decision review | completed | McClintock read ADR, migration, models, repos, services, and `AutoMigrate` path | `blocked_for_future_schema_prs` unless tenant/project, migration-first, and PostgreSQL compatibility notes are present | `business_systems` / `business_databases` need schema/service scoped follow-up |
+| Wave board sync | merged | OSMX PR #26 merged at `06f3942` | `pass`; board records PostgreSQL synchronous adaptation as active guardrail | none |
+
+Current `osmx` main after R5 / P8:
+
+```text
+06f3942 Docs: sync board after PostgreSQL adaptation wave
+```
+
+Current open OSMX PRs:
+
+```text
+none
+```
+
+Next recommended split:
+
+1. Schema scope PR: make `business_systems` / `business_databases` explicitly tenant/project scoped, migration-first, and MySQL/PostgreSQL-compatible.
+2. AutoMigrate policy PR: document and, if needed, enforce dev-only/bootstrap behavior while making explicit migrations the schema source of truth.
+3. DB-sensitive PR template/checklist update: make PostgreSQL adaptation evidence a blocking checklist item for model/migration/raw SQL/audit/artifact/execution changes.
 
 ## Registration Template
 
