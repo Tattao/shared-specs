@@ -8,9 +8,9 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `06f3942` |
+| `osmx` main | `9e32e35` |
 | `osmx` plan governance PR | `#16` merged |
-| `shared-specs` baseline before this update | `46f7b54` |
+| `shared-specs` baseline before this update | `f3edcfe` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
 | Agent operating model | `osmx/docs/plans/90-agent-execution-operating-model.md` |
 | Database architecture ADR | `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` |
@@ -69,7 +69,7 @@ This means DB-sensitive PRs must design, implement, or explicitly validate the M
 - New raw SQL must avoid MySQL-specific syntax, or include explicit MySQL/PostgreSQL dialect isolation, tests or scan evidence, and a follow-up risk note.
 - New JSON fields must include a `schema_version`, and high-frequency filter fields must be promoted to normal indexed columns.
 - Incident Commander work must preserve the main chain: `Plan -> Approval -> AssetExecution -> Artifact -> Audit`.
-- PRs that touch data models, migrations, queries, audit, artifact, execution, or Incident Commander state must include DB portability / PostgreSQL-readiness notes.
+- PRs that touch data models, migrations, queries, audit, artifact, execution, or Incident Commander state must include DB portability / PostgreSQL synchronous adaptation notes.
 
 Canonicalization status:
 
@@ -89,6 +89,7 @@ Canonicalization status:
 | F | Integration/Regression | `/Users/apple/Exec/Code/osmx-integration-regression` | `docs/tools-stage1-wave2-template-pack` | PR queue templates, regression dispatcher tooling, historical references | `osmx/docs/plans/80-wave-execution-board.md` | docs_tools_template_merged | OSMX PR #23 / merge `330003e` |
 | G | Studio / OO Compatibility | `/Users/apple/Exec/Code/osmx-studio-oo-compatibility` | `stage1/studio-oo-compatibility` | imported asset usability, wrapper, compatibility evidence | `osmx/docs/plans/30-asset-flow-center-plan.md` | merged / after_14_replay_done | OSMX PR #15 / merge `cc08f53` |
 | H | Plan Governance | `/Users/apple/Exec/Code/osmx-plan-governance` | `docs/plan-governance-template` | numbered plan system and operating model | `osmx/docs/plans/00-current-plan-index.md` | merged | OSMX PR #16 / merge `1f21695` |
+| I | DB Portability / PostgreSQL Adaptation | `/Users/apple/Exec/Code/osmx-business-scope` and scoped follow-up worktrees | `db/business-scope-postgres-adaptation`, docs sync branches | DB-sensitive model/migration/raw SQL/query paths | `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` | active_guardrail / latest_merged | OSMX PR #27 / merge `001bfb7`; board sync PR #28 / merge `9e32e35` |
 
 ## Next Dispatch Batch
 
@@ -502,6 +503,51 @@ Next recommended split:
 1. Schema scope PR: make `business_systems` / `business_databases` explicitly tenant/project scoped, migration-first, and MySQL/PostgreSQL-compatible.
 2. AutoMigrate policy PR: document and, if needed, enforce dev-only/bootstrap behavior while making explicit migrations the schema source of truth.
 3. DB-sensitive PR template/checklist update: make PostgreSQL adaptation evidence a blocking checklist item for model/migration/raw SQL/audit/artifact/execution changes.
+
+## R6 / P9 Business Scope PostgreSQL Adaptation Completion Summary
+
+Date: 2026-04-22 13:56 CST
+
+Scope:
+
+- Worktree: `/Users/apple/Exec/Code/osmx-business-scope`
+- Implementation branch: `db/business-scope-postgres-adaptation`
+- Board sync branch: `docs/post27-board-sync`
+- Canonical OSMX board: `osmx/docs/plans/80-wave-execution-board.md`
+
+Results:
+
+| Workstream | Result | Evidence | PostgreSQL adaptation result | Residual risk |
+|------------|--------|----------|------------------------------|---------------|
+| Business scope implementation | merged | OSMX PR #27 merged at `001bfb7`; changed business models, repos, service, handler, OSM onboarding, focused repository tests, and dialect-specific migrations | `pass_with_risk`; MySQL file uses `BIGINT UNSIGNED` / `AUTO_INCREMENT` / `DATETIME(3)` / `ON UPDATE`; PostgreSQL file uses `BIGSERIAL` / `BIGINT` / `TIMESTAMPTZ` / explicit indexes | SQL migrations are review artifacts while startup still relies on GORM AutoMigrate |
+| Business scope docs sync | merged | OSMX PR #28 merged at `9e32e35`; wave board now records #27 and next DB portability lane | `pass`; board keeps PostgreSQL synchronous adaptation active | none |
+
+Validation evidence from #27:
+
+- `go test ./internal/repository ./internal/service ./internal/api/v1` passed.
+- `scripts/db-portability-scan.sh > /tmp/osmx-business-scope-db-portability-staged.txt` completed and showed the new MySQL migration patterns as explicit dialect-specific artifacts.
+- `git diff --cached --check` passed before #27 commit.
+- `make security-release-gate` passed locally with 0 blocking findings and the existing review-level public IP finding.
+- GitHub #27: GitGuardian and `security-gate` passed.
+- GitHub #28: GitGuardian and `security-gate` passed.
+
+Current `osmx` main after R6 / P9:
+
+```text
+9e32e35 Merge PR #28: Sync board after business scope merge
+```
+
+Current open OSMX PRs:
+
+```text
+none
+```
+
+Next recommended split:
+
+1. Fix the existing full-suite blocker in `osmx-go/internal/agent/runtime_client.go`: `go test ./...` fails on five `fmt.Errorf` non-constant format string vet errors. Keep this as a narrow PR.
+2. AutoMigrate policy PR: document and, if needed, enforce dev-only/bootstrap behavior while making explicit migrations the schema source of truth.
+3. DB-sensitive template/checklist PR: make PostgreSQL adaptation evidence a blocking checklist item for model/migration/raw SQL/audit/artifact/execution changes.
 
 ## Registration Template
 
