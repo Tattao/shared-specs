@@ -129,6 +129,32 @@ Readiness matrix:
 | A4 Command Center Regression | `/Users/apple/Exec/Code/osmx-emergency-main-sync-wave2` | refresh #14 Go/frontend/Playwright/live smoke evidence |
 | G1 Studio OO Rebase | `/Users/apple/Exec/Code/osmx-studio-oo-compatibility` | rebase/resolve #15 conflicts after #14 assumptions are clear |
 
+## R2 Dispatch Registration
+
+Date: 2026-04-22
+
+Dispatch baseline:
+
+- `osmx` main: `1f21695`
+- `shared-specs` registry baseline: `c2e0b92`
+- Dispatch mode: parallel worker Agents
+
+| Lane | Agent | Codex subagent | Worktree | Branch | Expected output | Status |
+|------|-------|----------------|----------|--------|-----------------|--------|
+| D | D1 Delivery/Ops Evidence | `Gibbs` / `019db2dc-1df3-7691-b7a1-0ed806fe6ab5` | `/Users/apple/Exec/Code/osmx-delivery-ops` | `stage1/delivery-ops-hardening` | refreshed #10 smoke/self-test evidence | dispatched |
+| E | E1 Security Release Evidence | `Einstein` / `019db2dc-1e65-71b0-b577-8ee3467b52ff` | `/Users/apple/Exec/Code/osmx-security-release` | `stage1/security-release-gate` | refreshed #11 security gate evidence | dispatched |
+| C | C1 Knowledge SLA Evidence | `Hume` / `019db2dc-1ed2-7ae0-b855-2f8ddf9c4de4` | `/Users/apple/Exec/Code/osmx-knowledge-sla` | `stage1/knowledge-sla-baseline` | refreshed #12 knowledge tests and SLA evidence note | dispatched |
+| B | B1 DB Copilot Evidence | `Hegel` / `019db2dc-1f43-7fe1-a2d1-fafeccbe88f6` | `/Users/apple/Exec/Code/osmx-db-copilot-productization` | `stage1/db-copilot-productization` | real LLM evidence or explicit gate-framework downgrade for #13 | dispatched |
+| A | A4 Command Center Regression | `Jason` / `019db2dc-1fc3-7bc2-afb2-21be21387e5c` | `/Users/apple/Exec/Code/osmx-emergency-main-sync-wave2` | `wave2/command-center-governed-loop` | refreshed #14 Go/frontend/Playwright/live smoke evidence | dispatched |
+| G | G1 Studio OO Rebase | `Euler` / `019db2dc-202d-7a13-b31f-556ad1574763` | `/Users/apple/Exec/Code/osmx-studio-oo-compatibility` | `stage1/studio-oo-compatibility` | #15 rebase/conflict resolution and post-conflict validation | dispatched |
+
+Dispatch constraints:
+
+- Every Agent must preserve its assigned worktree/write scope.
+- No Agent may update `shared-specs`; Integration Captain records summaries here.
+- Product facts remain in `osmx`.
+- PR #15 remains last in merge order unless Integration Captain explicitly revises the conflict map.
+
 ## Registration Template
 
 ```markdown
