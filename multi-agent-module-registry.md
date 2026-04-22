@@ -654,6 +654,42 @@ Next recommended split:
 2. DB-sensitive P0 implementation prep: inspect execution / approval / audit / Artifact main-chain models and create a narrow MySQL/PostgreSQL adaptation plan before editing.
 3. Runbook state manager adaptation: evaluate `osmx-go/internal/runbook/engine/mysql_state.go` after the main-chain model scope is bounded.
 
+## R9 / P12 Rolling 8-Task Dispatch
+
+Date: 2026-04-22 14:38 CST
+
+Baseline:
+
+- `osmx` main: `bf33368 Merge PR #33: Sync board after DB checklist merge`
+- `shared-specs` main before dispatch: `98456b8`
+- Requested parallelism: 8 tasks.
+- Tool concurrency limit observed: 6 active Agent threads; therefore R9 uses a rolling queue of 8 tasks, with 6 active and 2 queued.
+
+Active Agents:
+
+| Agent | Agent id | Workstream | Worktree | Branch | Write scope | Status |
+|-------|----------|------------|----------|--------|-------------|--------|
+| Huygens | `019db3e8-62f0-78e2-a1db-ffd12f1949a6` | Runtime latest-main rebaseline | `/Users/apple/Exec/Code/osmx-runtime-main-rebaseline` | `runtime/main-rebaseline` | no code commits; runtime/tmux only | active |
+| Hegel | `019db3e8-6472-70a3-bb92-38c82be9fb20` | Main-chain model adaptation | `/Users/apple/Exec/Code/osmx-db-mainchain-adaptation` | `db/mainchain-model-adaptation` | main-chain model files only | active |
+| Lovelace | `019db3e9-093f-7130-b21e-0a72986f8970` | Runbook state adaptation | `/Users/apple/Exec/Code/osmx-runbook-state-adaptation` | `db/runbook-state-adaptation` | `mysql_state.go` and focused tests only | active |
+| Herschel | `019db3e9-09e9-77b0-96ec-6a6149de1f89` | Main-chain migration artifacts | `/Users/apple/Exec/Code/osmx-mainchain-migration-artifacts` | `db/mainchain-migration-artifacts` | migrations only | active |
+| Jason | `019db3e9-0a79-7c33-af04-bfdfe364309c` | DB adaptation test matrix | `/Users/apple/Exec/Code/osmx-db-test-matrix` | `review/db-adaptation-test-matrix` | read-only | active |
+| Kant | `019db3e9-0ae6-72e2-ad39-cc40d2966182` | DB portability scan review | `/Users/apple/Exec/Code/osmx-db-portability-scan-review` | `review/db-portability-scan-next` | read-only | active |
+
+Queued Agents:
+
+| Workstream | Worktree | Branch | Reason queued |
+|------------|----------|--------|---------------|
+| Runtime browser latest-main review | `/Users/apple/Exec/Code/osmx-runtime-browser-review` | `review/runtime-browser-latest-main` | waiting for one active slot |
+| P11/P12 integration review | `/Users/apple/Exec/Code/osmx-p11-integration-review` | `review/p11-integration-review` | waiting for one active slot |
+
+R9 constraints:
+
+- DB-sensitive work must complete `.github/pull_request_template.md` evidence if it becomes a PR.
+- No primary database migration, no dual writes, no TimescaleDB/control-plane merge, and no Qdrant replacement.
+- Workers may commit only inside their assigned write scopes.
+- Read-only Agents must not edit files or commit.
+
 ## Registration Template
 
 ```markdown
