@@ -8,7 +8,7 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `9e32e35` |
+| `osmx` main | `6203dc9` |
 | `osmx` plan governance PR | `#16` merged |
 | `shared-specs` baseline before this update | `f3edcfe` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
@@ -548,6 +548,50 @@ Next recommended split:
 1. Fix the existing full-suite blocker in `osmx-go/internal/agent/runtime_client.go`: `go test ./...` fails on five `fmt.Errorf` non-constant format string vet errors. Keep this as a narrow PR.
 2. AutoMigrate policy PR: document and, if needed, enforce dev-only/bootstrap behavior while making explicit migrations the schema source of truth.
 3. DB-sensitive template/checklist PR: make PostgreSQL adaptation evidence a blocking checklist item for model/migration/raw SQL/audit/artifact/execution changes.
+
+## R7 / P10 Go Full-Suite Restoration Completion Summary
+
+Date: 2026-04-22 14:01 CST
+
+Scope:
+
+- Worktree: `/Users/apple/Exec/Code/osmx-business-scope`
+- Implementation branch: `fix/agent-runtime-vet-errors`
+- Board sync branch: `docs/post29-board-sync`
+
+Results:
+
+| Workstream | Result | Evidence | DB guardrail | Residual risk |
+|------------|--------|----------|--------------|---------------|
+| Agent runtime vet fix | merged | OSMX PR #29 merged at `c7f9fa0`; replaced five dynamic `fmt.Errorf(msg)` calls with `errors.New(msg)` | `not_applicable`; no data model, migration, raw SQL, audit, artifact, execution, or DB query changes | none observed |
+| Go full-suite validation | passed | `go test ./...` passed locally after #29 patch | `not_applicable` | none observed |
+| Board sync | merged | OSMX PR #30 merged at `6203dc9`; board records #29 and moves next lane to AutoMigrate policy / DB-sensitive checklist | `not_applicable`; docs-only sync | none |
+
+Validation evidence:
+
+- `go test ./...` passed.
+- `git diff --check` passed.
+- `make security-release-gate` passed locally with 0 blocking findings and the existing review-level public IP finding.
+- GitHub #29: GitGuardian and `security-gate` passed.
+- GitHub #30: GitGuardian and `security-gate` passed.
+
+Current `osmx` main after R7 / P10:
+
+```text
+6203dc9 Merge PR #30: Sync board after Go test restoration
+```
+
+Current open OSMX PRs:
+
+```text
+none
+```
+
+Next recommended split:
+
+1. AutoMigrate policy PR: document and, if needed, enforce dev-only/bootstrap behavior while making explicit migrations the schema source of truth.
+2. DB-sensitive PR template/checklist update: make PostgreSQL adaptation evidence a blocking checklist item for model/migration/raw SQL/audit/artifact/execution changes.
+3. Runtime/browser revalidation: keep current services available and rerun local smoke after pulling `6203dc9` into the runtime worktree.
 
 ## Registration Template
 
