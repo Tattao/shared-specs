@@ -845,6 +845,17 @@ git grep -nE \
   -- docs osmx-go osmx-ai app scripts || true
 ```
 
+### 14.7 Latest-main runtime rebaseline after PR #40
+
+- OSMX PR `#40` merged at `45d61dc`.
+- Runtime config env override now binds `OSMX_*` env vars before config unmarshal, so `OSMX_DATABASE_PASSWORD`, `OSMX_DATABASE_DRIVER`, `OSMX_DATABASE_SSLMODE`, and related overrides can replace local config values.
+- This closes the `root@localhost using password: NO` local smoke blocker that remained after datasource factory PR `#39`.
+- Latest-main runtime worktree: `/Users/apple/Exec/Code/osmx-runtime-main-rebaseline`
+- Runtime listeners: Go `8080`, AI `5001`, frontend `25174`
+- Validation: `scripts/smoke.sh --mode local-runtime` passed; `scripts/runtime_provenance.py --frontend-base-url http://127.0.0.1:25174` passed.
+- PostgreSQL sync status: `pass_with_risk`; no primary migration, dual write, TimescaleDB/control-plane merge, or Qdrant replacement.
+- Boundary: `shared-specs` remains a coordination ledger only; product facts remain in `osmx/docs/plans`.
+
 ---
 
 ## 15. 建议新增验证脚本

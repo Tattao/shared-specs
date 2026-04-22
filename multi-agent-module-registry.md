@@ -805,6 +805,40 @@ Validation evidence:
 
 - `git diff --check` passed in `/Users/apple/Exec/Code/shared-specs`.
 
+## R12 / P15 Runtime Config Env Override Completion Summary
+
+Date: 2026-04-22
+
+Final integration result:
+
+- `osmx` main after closeout: `45d61dc Merge PR #40: runtime config env override`
+- Scope: runtime config env override completion for the local startup path.
+- Result: `OSMX_*` environment variables now bind before config unmarshal, so `OSMX_DATABASE_PASSWORD`, `OSMX_DATABASE_DRIVER`, `OSMX_DATABASE_SSLMODE`, and related overrides can replace local config values.
+- Immediate effect: local runtime no longer needs a committed real MySQL password to clear startup, which closes the `root@localhost using password: NO` smoke blocker left after PR #39.
+- Verdict: `pass_with_risk`.
+- Guardrail reminder: this is not a PostgreSQL primary database migration, and it does not prove PostgreSQL schema / product runtime completeness.
+- Still forbidden: primary DB migration, dual write, TimescaleDB / control-plane merge, and Qdrant replacement.
+- Next step: keep explicit execution / approval / audit / artifact migration artifacts moving, then run PostgreSQL runtime smoke after those artifacts land.
+- Boundary: `shared-specs` remains a coordination ledger only; these notes are coordination evidence, not product source of truth.
+
+Latest-main runtime rebaseline:
+
+- Worktree: `/Users/apple/Exec/Code/osmx-runtime-main-rebaseline`
+- Commit: `45d61dc`
+- Services: Go `8080`, AI `5001`, frontend `25174`
+- `scripts/smoke.sh --mode local-runtime` passed.
+- `scripts/runtime_provenance.py --frontend-base-url http://127.0.0.1:25174` passed.
+
+PostgreSQL sync status:
+
+- `pass_with_risk`
+- No primary migration, dual write, TimescaleDB/control-plane merge, or Qdrant replacement was done.
+- Real PostgreSQL schema / runtime smoke remains a later task.
+
+Validation evidence:
+
+- `git diff --check` passed in `/Users/apple/Exec/Code/shared-specs`.
+
 ## Registration Template
 
 ```markdown
