@@ -236,13 +236,18 @@ R3 merge execution completed for the non-blocked lanes.
 Current `osmx` main after R3:
 
 ```text
-cc08f53 Merge PR #15: Stage 1 Studio OO compatibility track
+88b1be0 Merge PR #17: close R3 wave execution status
 ```
 
 Open integration-relevant PRs:
 
 - `#13` remains open as `gate_framework_only / blocked_by_real_llm_evidence`.
 - old `#1` remains open and dirty; it is not part of the R3 merge queue.
+
+Canonical docs sync:
+
+- `#17` updated `osmx/docs/plans/80-wave-execution-board.md` and `docs/guides/document-change-log.md` so the main repo no longer lists #10-#15 as open R3 queue items.
+- `#17` merge commit: `88b1be0`.
 
 ## Registration Template
 
