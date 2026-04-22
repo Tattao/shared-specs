@@ -593,6 +593,30 @@ Next recommended split:
 2. DB-sensitive PR template/checklist update: make PostgreSQL adaptation evidence a blocking checklist item for model/migration/raw SQL/audit/artifact/execution changes.
 3. Runtime/browser revalidation: keep current services available and rerun local smoke after pulling `6203dc9` into the runtime worktree.
 
+## R8 / P11 Parallel Dispatch
+
+Date: 2026-04-22 14:05 CST
+
+Baseline:
+
+- `osmx` main: `6203dc9 Merge PR #30: Sync board after Go test restoration`
+- `shared-specs` main before dispatch: `df56aa8`
+- User instruction: increase task count and parallelism while preserving PostgreSQL synchronous adaptation.
+
+| Agent | Agent id | Workstream | Worktree | Branch | Write scope | DB guardrail | Status |
+|-------|----------|------------|----------|--------|-------------|--------------|--------|
+| Bernoulli | `019db3d7-a901-72c2-a2bf-a0ddb1850a75` | AutoMigrate policy | `/Users/apple/Exec/Code/osmx-automigrate-policy` | `docs/automigrate-policy` | docs only: ADR / operating model / board / change log | Must state AutoMigrate is dev/bootstrap only; no migration/dual-write authorization | dispatched |
+| Leibniz | `019db3d7-aa31-7510-8da5-01e57babb4b3` | DB-sensitive PR checklist | `/Users/apple/Exec/Code/osmx-db-sensitive-checklist` | `docs/db-sensitive-checklist` | `.github` PR template and docs only | Must require PostgreSQL adaptation evidence for DB-sensitive PRs | dispatched |
+| Fermat | `019db3d7-aabb-7f53-a390-ca1753a01480` | Runtime revalidation | `/Users/apple/Exec/Code/osmx-runtime-revalidation` | `runtime/latest-main-revalidation` | read-only runtime checks | `not_applicable`; record DB/runtime errors if observed | dispatched |
+| Meitner | `019db3d7-ab4a-7b42-b83c-6cacfd9522fd` | Next DB-sensitive scope review | `/Users/apple/Exec/Code/osmx-next-db-scope` | `review/next-db-scope` | read-only scan/review | Must recommend next scope without migration/dual-write/TimescaleDB/Qdrant scope creep | dispatched |
+
+Parallel constraints:
+
+- Bernoulli and Leibniz both touch docs/plans, so Integration Captain must merge one before replaying the other.
+- Runtime and scope-review Agents are read-only and may finish independently.
+- No Agent may add `shared-specs` as a runtime/build/test/CI dependency.
+- Accepted facts must be synchronized back to OSMX canonical docs before being treated as product truth.
+
 ## Registration Template
 
 ```markdown
