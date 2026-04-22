@@ -8,7 +8,7 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `bef835e` |
+| `osmx` main | `0a07edb` |
 | `osmx` plan governance PR | `#16` merged |
 | `shared-specs` baseline before this update | `ba08f20` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
@@ -838,6 +838,52 @@ PostgreSQL sync status:
 Validation evidence:
 
 - `git diff --check` passed in `/Users/apple/Exec/Code/shared-specs`.
+
+## R13 / P16 Main-Chain Migration Artifact Completion Summary
+
+Date: 2026-04-22
+
+Final integration result:
+
+- `osmx` main after closeout: `0a07edb Merge PR #43: Sync board after main-chain migrations`
+- Implementation PR: `#42 Add main-chain migration artifacts`, merge `be942c5`
+- Canonical docs sync PR: `#43 Sync board after main-chain migrations`, merge `0a07edb`
+- Scope: explicit paired MySQL/PostgreSQL migration artifacts for the execution / approval / audit / Artifact main chain.
+- Result: `pass_with_risk`.
+- Guardrail reminder: this is not a PostgreSQL primary database migration, not dual write, not a TimescaleDB/control-plane merge, and not a Qdrant replacement.
+- Boundary: `shared-specs` remains a coordination ledger only; canonical product facts were synchronized to `osmx/docs/plans/80-wave-execution-board.md` and `osmx/docs/guides/document-change-log.md` in PR #43.
+
+Artifacts added in #42:
+
+- `osmx-go/migrations/003_mainchain_core.sql`
+- `osmx-go/migrations/003_mainchain_core.mysql.sql`
+- `osmx-go/migrations/003_mainchain_core.postgres.sql`
+- `osmx-go/migrations/README.md` updated from gap index to explicit artifact index.
+
+Validation evidence from #42:
+
+- `git diff --check` passed.
+- `python3 scripts/migration_pair_check.py --root .` passed.
+- `make integration-efficiency-gate` passed with 0 blocking security findings and the existing review-level public IP finding.
+- `cd osmx-go && go test ./...` passed.
+- Disposable local MySQL apply of `003_mainchain_core.mysql.sql` passed with 18 tables and 141 index/statistics entries before cleanup.
+- GitHub #42 GitGuardian and `security-gate` passed.
+
+Runtime evidence after #42:
+
+- Worktree: `/Users/apple/Exec/Code/osmx-runtime-main-rebaseline`
+- Commit: `be942c5`
+- Services: Go `8080`, AI `5001`, frontend `25174`
+- `scripts/smoke.sh --mode local-runtime` passed with explicit local URLs.
+- `scripts/runtime_provenance.py --frontend-base-url http://127.0.0.1:25174` passed and showed listener cwd values under the latest-main runtime worktree.
+
+Residual risks / next recommended split:
+
+1. PostgreSQL DDL apply / migration tooling replay for `003_mainchain_core.postgres.sql`.
+2. `database.driver=postgres` runtime smoke after the PostgreSQL apply target is ready.
+3. Existing JSON payload fields need a model/API contract pass for `schema_version` semantics.
+4. Main-chain models that still lack tenant/project fields need a model-first normalization PR before SQL invents columns.
+5. Add DB-backed approval / audit / artifact / migration parity tests for MySQL and PostgreSQL.
 
 ## Registration Template
 
