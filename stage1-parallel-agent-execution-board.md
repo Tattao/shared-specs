@@ -40,7 +40,7 @@ Worktree: `/Users/apple/Exec/Code/osmx-emergency-main-sync-wave2`
 Canonical task brief:
 
 ```text
-docs/plans/wave-2-command-center-governed-loop.md
+docs/plans/70-wave-2-command-center-governed-loop.md
 ```
 
 | Agent | Role | Write Scope | Deliverable |
@@ -132,7 +132,7 @@ Forbidden scope:
 ```text
 Worktree: /Users/apple/Exec/Code/osmx-emergency-main-sync-wave2
 
-Read docs/plans/wave-2-command-center-governed-loop.md first.
+Read docs/plans/70-wave-2-command-center-governed-loop.md first.
 
 Implement only the backend invariants for Plan / Approval / AssetExecution:
 - unapproved Plan must not create AssetExecution
@@ -148,7 +148,7 @@ Do not expand Studio / OO / Worker / Hermes. List changed files and validation c
 ```text
 Worktree: /Users/apple/Exec/Code/osmx-emergency-main-sync-wave2
 
-Read docs/plans/wave-2-command-center-governed-loop.md first.
+Read docs/plans/70-wave-2-command-center-governed-loop.md first.
 
 Implement or harden failed / cancelled / timed_out execution semantics, minimal artifact provenance, and backend timeline projection evidence.
 
@@ -160,7 +160,7 @@ Stay inside runbook/execution/audit/artifact related code. Do not add generic wo
 ```text
 Worktree: /Users/apple/Exec/Code/osmx-emergency-main-sync-wave2
 
-Read docs/plans/wave-2-command-center-governed-loop.md first.
+Read docs/plans/70-wave-2-command-center-governed-loop.md first.
 
 Build the minimal Command Center chain explanation:
 Plan -> Approval -> AssetExecution -> Artifact -> Audit.
@@ -173,7 +173,7 @@ Use existing views/routes/components where possible. Do not expand Studio / OO p
 ```text
 Worktree: /Users/apple/Exec/Code/osmx-emergency-main-sync-wave2
 
-Read docs/plans/wave-2-command-center-governed-loop.md first.
+Read docs/plans/70-wave-2-command-center-governed-loop.md first.
 
 Create or extend focused tests/smoke evidence for:
 - happy path

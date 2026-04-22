@@ -1,8 +1,8 @@
 # OSMX Suite Shared Specs
 
-`shared-specs` 是 `osmx` 与 `osmx-emergency-main-sync` 的共享协作层。
+`shared-specs` 是 `osmx` 与 `osmx-emergency-main-sync` 的共享协作层，也是未来多 Agent、多模块并行开发的协调账本。
 
-它用于放置跨仓库协作规则、任务模板、Agent 提示词、契约索引和当前轮次的评估摘要；它不替代 `osmx` 主仓的事实源文档。
+它用于放置跨仓库协作规则、任务模板、Agent 提示词、契约索引、Agent 登记、模块 ownership、PR 队列、冲突账本和当前轮次的评估摘要；它不替代 `osmx` 主仓的事实源文档。
 
 `shared-specs` 可以记录草案和跨角色协作过程，但不能单独决定最终产品行为。凡是被采纳并影响 OSMX 产品架构、运行链路、接口契约或验收标准的内容，必须同步落回 `osmx` 的代码、测试、docs、runbook 或 PR 证据中。
 
@@ -12,7 +12,7 @@
 
 - 本地路径：`/Users/apple/Exec/Code/shared-specs`
 - 远端仓库：`https://github.com/Tattao/shared-specs`
-- 当前用途：沉淀跨仓规则、评审记录、任务模板和交付证据
+- 当前用途：沉淀跨仓规则、评审记录、任务模板、Agent 登记、模块边界、PR 队列和交付证据
 - 当前限制：不放业务源码、不放密钥、不放运行数据、不替代 `osmx/docs/plans`
 - 远端状态：已配置 `origin` 并推送 baseline
 - 运行边界：不得作为 `osmx` 的 runtime / build / CI / test 依赖，不得作为 git submodule
@@ -25,13 +25,16 @@
 |------|----------|------|
 | 总计划 / 阶段口径 | `osmx/docs/plans/` | 以 `osmx` 主仓为准 |
 | 应急专项实现 | `osmx-emergency-main-sync/` | 只消费主仓事实源并回报实现状态 |
-| 跨仓协作规则 | `shared-specs/` | 放索引、模板、提示词和评估摘要 |
+| 跨仓协作账本 | `shared-specs/` | 放索引、模板、提示词、Agent 登记、handoff、PR 队列、冲突账本和评估摘要 |
 
 如果 `shared-specs` 与 `osmx/docs/plans` 出现冲突，以 `osmx/docs/plans` 为准。
 
 ## What Belongs Here
 
 - 多 Agent 派单模板
+- 多 Agent / 多模块并行执行登记表
+- worktree / branch / write-scope ownership 记录
+- PR 队列、冲突账本和合流顺序
 - PR / MR 审查模板
 - 主控、Core、Emergency、Review Agent 标准提示词
 - 跨仓库契约索引
@@ -47,6 +50,39 @@
 - 密钥、token、`.env`、运行数据和构建产物
 - 会让 `osmx` 构建、测试或运行依赖本仓当前 HEAD 的脚本或配置
 
+## Multi-Agent Operating Role
+
+未来所有并行开发轮次都必须把 `shared-specs` 当作协作账本使用。
+
+每个 Agent 开工前登记：
+
+- Agent / 模块 / 角色
+- worktree
+- branch
+- 允许写入路径
+- 输入计划文档
+- 预期交付物
+- 可能影响的 PR 或模块
+
+每个 Agent 收工后登记：
+
+- changed files
+- validation commands
+- commit / PR
+- pass / fail / blocked 结论
+- 剩余风险
+- 需要 Integration Captain 处理的冲突
+
+Integration Captain 在这里维护：
+
+- 并行 Agent 队列
+- 模块 ownership 矩阵
+- PR 合流顺序
+- 回归验证矩阵
+- 跨模块冲突和裁决记录
+
+这些记录用于协调和审计，不直接定义产品行为。任何被采纳并影响产品行为、接口契约、状态机或验收标准的内容，必须同步落回 `osmx/docs/plans`、代码、测试、runbook 或 PR。
+
 ## Current Canonical Entry Points
 
 - [current-baseline-assessment.md](./current-baseline-assessment.md)
@@ -61,6 +97,7 @@
 - [wave2-p0-public-credential-cleanup.md](./wave2-p0-public-credential-cleanup.md)
 - [wave2-mother-task-brief-dispatch.md](./wave2-mother-task-brief-dispatch.md)
 - [stage1-parallel-agent-execution-board.md](./stage1-parallel-agent-execution-board.md)
+- [multi-agent-module-registry.md](./multi-agent-module-registry.md)
 - [AGENTS.md](./AGENTS.md)
 - [OSMX_OSMX-Emergency主控Agent系统提示词.md](./OSMX_OSMX-Emergency主控Agent系统提示词.md)
 - [Agent系统提示词.md](./Agent系统提示词.md)
