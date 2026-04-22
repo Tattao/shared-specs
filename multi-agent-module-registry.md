@@ -869,10 +869,10 @@ Validation evidence from #42:
 - Disposable local MySQL apply of `003_mainchain_core.mysql.sql` passed with 18 tables and 141 index/statistics entries before cleanup.
 - GitHub #42 GitGuardian and `security-gate` passed.
 
-Runtime evidence after #42:
+Runtime evidence after #43 docs sync:
 
 - Worktree: `/Users/apple/Exec/Code/osmx-runtime-main-rebaseline`
-- Commit: `be942c5`
+- Commit: `0a07edb`
 - Services: Go `8080`, AI `5001`, frontend `25174`
 - `scripts/smoke.sh --mode local-runtime` passed with explicit local URLs.
 - `scripts/runtime_provenance.py --frontend-base-url http://127.0.0.1:25174` passed and showed listener cwd values under the latest-main runtime worktree.
