@@ -388,6 +388,32 @@ Read-only checks run:
 - `./scripts/regression_dispatcher.sh --list` passed.
 - `./scripts/regression_dispatcher.sh --queue D E C B A --dry-run` returned blockers for missing `.venv` and `frontend/node_modules`, so it is not current pass evidence.
 
+## R4 / P7 Parallel Execution Dispatch
+
+Date: 2026-04-22 13:07 CST
+
+Baseline:
+
+- `osmx` main: `0d3bfab Docs: add database readiness guardrails`
+- `shared-specs` main: `8aba3f2`
+- Canonical DB architecture record: `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md`
+- Current strategy: `Keep MySQL Now, Build PostgreSQL Readiness`
+
+| Agent | Agent id | Workstream | Worktree | Write scope | DB guardrail | Status |
+|-------|----------|------------|----------|-------------|--------------|--------|
+| Harvey | `019db396-4982-7303-b0af-224d12b87000` | Runtime acceptance | `/Users/apple/Exec/Code/osmx-post13-docs` | read-only runtime checks | `not_applicable` | dispatched |
+| Epicurus | `019db396-49f0-7dd0-82b0-932d02cfc9ae` | PR #1 umbrella closure | `/Users/apple/Exec/Code/osmx-post13-docs` | GitHub PR comment / close only | `not_applicable`; follow-up PRs must apply ADR-DB-001 | dispatched |
+| Bohr | `019db396-4a6f-7640-b044-8141d283ae4a` | DB portability baseline review | `/Users/apple/Exec/Code/osmx-post13-docs` | read-only scan / classification | `pass/read_only_baseline` | dispatched |
+| Confucius | `019db396-4adf-7cb1-9fc9-50d54332d834` | Integration regression docs/tools cleanup | `/Users/apple/Exec/Code/osmx-integration-regression` | docs/tools only; no product code; no shared-specs | `not_applicable`; must not imply DB migration | dispatched |
+
+Parallel constraints:
+
+- No Agent may start a PostgreSQL primary database migration.
+- No Agent may introduce primary-store dual writes.
+- No Agent may merge TimescaleDB with the control-plane primary database.
+- No Agent may replace Qdrant with pgvector.
+- Any follow-up PR touching data models, migrations, raw SQL, audit, Artifact, Execution, or Incident Commander state must include `scripts/db-portability-scan.sh` evidence or a scoped equivalent.
+
 ## Registration Template
 
 ```markdown
