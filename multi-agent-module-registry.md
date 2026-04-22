@@ -8,9 +8,9 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `6b02668` |
+| `osmx` main | `86dab5d` |
 | `osmx` plan governance PR | `#16` merged |
-| `shared-specs` baseline before this update | `d393e1c` |
+| `shared-specs` baseline before this update | `f054b03` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
 | Agent operating model | `osmx/docs/plans/90-agent-execution-operating-model.md` |
 | Registry role | coordination ledger only, not product source of truth |
@@ -50,7 +50,7 @@ Rules:
 | Lane | Agent / owner | Worktree | Branch | Write scope | Source plan | Status | PR / evidence |
 |------|---------------|----------|--------|-------------|-------------|--------|---------------|
 | A | Incident Commander Wave 2 | `/Users/apple/Exec/Code/osmx-emergency-main-sync-wave2` | `wave2/command-center-governed-loop` | Command Center governed loop backend/frontend/tests | `osmx/docs/plans/70-wave-2-command-center-governed-loop.md` | merged / live_smoke_risk | OSMX PR #14 / merge `81a7709` |
-| B | DB Copilot Productization | `/Users/apple/Exec/Code/osmx-db-copilot-productization` | `stage1/db-copilot-productization` | DB Copilot gate, LLM smoke, PoC path | `osmx/docs/plans/01-osmx-stage-roadmap-master-plan.md` | framework_merged / real_llm_replay_passed | OSMX PR #13 / merge `591bc29`; supplemental PR #20 / merge `6b02668` |
+| B | DB Copilot Productization | `/Users/apple/Exec/Code/osmx-db-copilot-productization` | `stage1/db-copilot-productization` | DB Copilot gate, LLM smoke, PoC path | `osmx/docs/plans/01-osmx-stage-roadmap-master-plan.md` | framework_merged / real_llm_replay_passed | OSMX PR #13 / merge `591bc29`; supplemental PR #20 / merge `6b02668`; board sync PR #21 / merge `86dab5d` |
 | C | Knowledge SLA | `/Users/apple/Exec/Code/osmx-knowledge-sla` | `stage1/knowledge-sla-baseline` | retrieval benchmark, knowledge health | `osmx/docs/plans/40-knowledge-evidence-plan.md` | merged / real_mode_gap | OSMX PR #12 / merge `91fcadc` |
 | D | Delivery/Ops | `/Users/apple/Exec/Code/osmx-delivery-ops` | `stage1/delivery-ops-hardening` | runtime, smoke, reproducible deployment | `osmx/docs/plans/90-agent-execution-operating-model.md` | merged / pass_with_risk | OSMX PR #10 / merge `7be68f6` |
 | E | Security/Release | `/Users/apple/Exec/Code/osmx-security-release` | `stage1/security-release-gate` | secret scan, release gate, credential hygiene evidence | `osmx/docs/plans/90-agent-execution-operating-model.md` | merged / pass_with_risk | OSMX PR #11 / merge `51250db` |
@@ -284,6 +284,22 @@ Current `osmx` main after P4:
 
 ```text
 6b02668 Merge PR #20: DB Copilot real LLM replay evidence
+```
+
+## P5 Wave Board Snapshot Sync
+
+Date: 2026-04-22
+
+- OSMX PR `#21` merged at `86dab5d`.
+- Scope: synchronized `osmx/docs/plans/80-wave-execution-board.md` from the post-#19 snapshot to the post-#20 / real LLM replay state.
+- Result: canonical wave board now lists `#20`, records `framework_merged / real_llm_replay_passed`, and points Stage 1 DB Productization to DB Copilot product acceptance / PoC refinement.
+- Validation: `git diff --check` passed; `make security-release-gate` passed locally with 0 blocking findings and 1 existing review-level public IP finding; GitHub `security-gate` and GitGuardian checks passed.
+- Boundary: this registry only mirrors the coordination state. Product facts remain in `osmx/docs/plans`, reviewed PRs, tests, and runtime evidence.
+
+Current `osmx` main after P5:
+
+```text
+86dab5d Docs: sync wave board after real LLM replay
 ```
 
 ## P2 Local Runtime Smoke Docs Sync
