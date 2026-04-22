@@ -13,6 +13,7 @@
 | `shared-specs` baseline before this update | `f054b03` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
 | Agent operating model | `osmx/docs/plans/90-agent-execution-operating-model.md` |
+| Database architecture guardrail | `shared-specs/OSMX_Database_Architecture_Assessment.md` |
 | Registry role | coordination ledger only, not product source of truth |
 
 ## Purpose
@@ -41,9 +42,27 @@ Use this file to prevent parallel Agent work from colliding:
 Rules:
 
 - If this file conflicts with `osmx/docs/plans`, `osmx/docs/plans` wins.
+- `OSMX_Database_Architecture_Assessment.md` is a mandatory architecture input for future planning and implementation until its accepted decisions are synchronized into `osmx/docs/architecture`.
 - `shared-specs` must not become a runtime / build / test / CI dependency.
 - `shared-specs` must not be added as a git submodule.
 - Any accepted draft here must be synchronized back into `osmx`.
+
+## Database Architecture Guardrail
+
+Starting 2026-04-22, every new plan, PR review, implementation task, and Agent handoff must account for the database architecture assessment:
+
+- Current strategy: keep MySQL as the control-plane OLTP database now; build PostgreSQL readiness.
+- Wave 2 must not start a MySQL to PostgreSQL primary database migration.
+- PostgreSQL is a future control-plane primary database candidate, not a current runtime dependency.
+- TimescaleDB remains the observability time-series store; do not merge it with the control-plane primary database in Wave 2.
+- Qdrant remains the primary semantic / RAG vector store; do not replace it with pgvector in Wave 2.
+- New data models and queries must be tenant-aware, project-aware, audit-aware, artifact-aware, idempotency-aware, and PostgreSQL-ready.
+- New raw SQL must avoid MySQL-specific syntax, or include an explicit dialect isolation note and scan evidence.
+- New JSON fields must include a `schema_version`, and high-frequency filter fields must be promoted to normal indexed columns.
+- Incident Commander work must preserve the main chain: `Plan -> Approval -> AssetExecution -> Artifact -> Audit`.
+- PRs that touch data models, migrations, queries, audit, artifact, execution, or Incident Commander state must include DB portability / PostgreSQL-readiness notes.
+
+The next canonicalization step is to promote the accepted decision into `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` and add a local `scripts/db-portability-scan.sh` in `osmx`.
 
 ## Current Agent Lanes
 
