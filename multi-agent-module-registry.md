@@ -8,12 +8,13 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `86dab5d` |
+| `osmx` main | `0d3bfab` |
 | `osmx` plan governance PR | `#16` merged |
-| `shared-specs` baseline before this update | `f054b03` |
+| `shared-specs` baseline before this update | `3912cee` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
 | Agent operating model | `osmx/docs/plans/90-agent-execution-operating-model.md` |
-| Database architecture guardrail | `shared-specs/OSMX_Database_Architecture_Assessment.md` |
+| Database architecture ADR | `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` |
+| Database architecture assessment | `shared-specs/OSMX_Database_Architecture_Assessment.md` |
 | Registry role | coordination ledger only, not product source of truth |
 
 ## Purpose
@@ -42,7 +43,7 @@ Use this file to prevent parallel Agent work from colliding:
 Rules:
 
 - If this file conflicts with `osmx/docs/plans`, `osmx/docs/plans` wins.
-- `OSMX_Database_Architecture_Assessment.md` is a mandatory architecture input for future planning and implementation until its accepted decisions are synchronized into `osmx/docs/architecture`.
+- `OSMX_Database_Architecture_Assessment.md` has been synchronized into `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md`; the ADR is now the canonical product-architecture record.
 - `shared-specs` must not become a runtime / build / test / CI dependency.
 - `shared-specs` must not be added as a git submodule.
 - Any accepted draft here must be synchronized back into `osmx`.
@@ -62,7 +63,11 @@ Starting 2026-04-22, every new plan, PR review, implementation task, and Agent h
 - Incident Commander work must preserve the main chain: `Plan -> Approval -> AssetExecution -> Artifact -> Audit`.
 - PRs that touch data models, migrations, queries, audit, artifact, execution, or Incident Commander state must include DB portability / PostgreSQL-readiness notes.
 
-The next canonicalization step is to promote the accepted decision into `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` and add a local `scripts/db-portability-scan.sh` in `osmx`.
+Canonicalization status:
+
+- OSMX PR `#22` promoted the accepted decision into `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md`.
+- OSMX PR `#22` added `scripts/db-portability-scan.sh`.
+- Future product decisions should cite the OSMX ADR first; this shared-specs assessment remains a coordination source and historical input.
 
 ## Current Agent Lanes
 
@@ -319,6 +324,23 @@ Current `osmx` main after P5:
 
 ```text
 86dab5d Docs: sync wave board after real LLM replay
+```
+
+## P6 Database Architecture Guardrail Canonicalization
+
+Date: 2026-04-22
+
+- OSMX PR `#22` merged at `0d3bfab`.
+- Scope: canonicalized `OSMX_Database_Architecture_Assessment.md` into `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` and added `scripts/db-portability-scan.sh`.
+- Result: future plans, PR reviews, Agent handoffs, and implementations must account for `Keep MySQL Now, Build PostgreSQL Readiness`.
+- Guardrail: Wave 2 does not start MySQL to PostgreSQL primary database migration, does not introduce dual writes, does not merge TimescaleDB with the control-plane database, and does not replace Qdrant with pgvector.
+- Validation: `bash -n scripts/db-portability-scan.sh` passed; `scripts/db-portability-scan.sh` completed; `git diff --check` passed; `make security-release-gate` passed locally with 0 blocking findings and 1 existing review-level public IP finding; GitHub `security-gate` and GitGuardian checks passed.
+- Boundary: `shared-specs` remains coordination-only; the canonical architecture record is now in `osmx`.
+
+Current `osmx` main after P6:
+
+```text
+0d3bfab Docs: add database readiness guardrails
 ```
 
 ## P2 Local Runtime Smoke Docs Sync
