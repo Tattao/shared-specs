@@ -8,7 +8,7 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `1f21695` |
+| `osmx` main | `591bc29` |
 | `osmx` plan governance PR | `#16` merged |
 | `shared-specs` baseline before this update | `d393e1c` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
@@ -50,7 +50,7 @@ Rules:
 | Lane | Agent / owner | Worktree | Branch | Write scope | Source plan | Status | PR / evidence |
 |------|---------------|----------|--------|-------------|-------------|--------|---------------|
 | A | Incident Commander Wave 2 | `/Users/apple/Exec/Code/osmx-emergency-main-sync-wave2` | `wave2/command-center-governed-loop` | Command Center governed loop backend/frontend/tests | `osmx/docs/plans/70-wave-2-command-center-governed-loop.md` | merged / live_smoke_risk | OSMX PR #14 / merge `81a7709` |
-| B | DB Copilot Productization | `/Users/apple/Exec/Code/osmx-db-copilot-productization` | `stage1/db-copilot-productization` | DB Copilot gate, LLM smoke, PoC path | `osmx/docs/plans/01-osmx-stage-roadmap-master-plan.md` | blocked_by_real_llm_evidence / gate_framework_only | OSMX PR #13 |
+| B | DB Copilot Productization | `/Users/apple/Exec/Code/osmx-db-copilot-productization` | `stage1/db-copilot-productization` | DB Copilot gate, LLM smoke, PoC path | `osmx/docs/plans/01-osmx-stage-roadmap-master-plan.md` | merged_framework_only / real_llm_blocker_open | OSMX PR #13 / merge `591bc29` |
 | C | Knowledge SLA | `/Users/apple/Exec/Code/osmx-knowledge-sla` | `stage1/knowledge-sla-baseline` | retrieval benchmark, knowledge health | `osmx/docs/plans/40-knowledge-evidence-plan.md` | merged / real_mode_gap | OSMX PR #12 / merge `91fcadc` |
 | D | Delivery/Ops | `/Users/apple/Exec/Code/osmx-delivery-ops` | `stage1/delivery-ops-hardening` | runtime, smoke, reproducible deployment | `osmx/docs/plans/90-agent-execution-operating-model.md` | merged / pass_with_risk | OSMX PR #10 / merge `7be68f6` |
 | E | Security/Release | `/Users/apple/Exec/Code/osmx-security-release` | `stage1/security-release-gate` | secret scan, release gate, credential hygiene evidence | `osmx/docs/plans/90-agent-execution-operating-model.md` | merged / pass_with_risk | OSMX PR #11 / merge `51250db` |
@@ -231,17 +231,17 @@ R3 merge execution completed for the non-blocked lanes.
 | #12 | C Knowledge SLA | replayed after #11, merged | `91fcadc` | `make knowledge-regression` passed with `38 passed, 1 skipped`; GitGuardian and security-gate passed; real Go/Qdrant mode still not configured |
 | #14 | A Command Center | merged | `81a7709` | Go tagged tests, frontend build/check/build, and Playwright governed-loop spec passed; live backend smoke blocked by local MySQL credentials |
 | #15 | G Studio / OO Compatibility | replayed after #14, merged | `cc08f53` | `git diff --check`, frontend build/check, route compatibility test, Go runbook tests, GitGuardian, and security-gate passed |
-| #13 | B DB Copilot | open, framework-only | PR head `ecd4a19`; `CLEAN` / `MERGEABLE` | real LLM smoke still `expected_blocked`; missing `OSMX_LLM_BASE_URL` and `OSMX_LLM_MODEL`; GitGuardian and security-gate passed |
+| #13 | B DB Copilot | merged, framework-only | merge `591bc29` | real LLM smoke still lacks `status=passed`; 192.168.1.6 LLM expected available but not verified because Clash Verge TUN routes it through `utun6 / 198.18.0.1`; GitGuardian and security-gate passed |
 
 Current `osmx` main after R3:
 
 ```text
-88b1be0 Merge PR #17: close R3 wave execution status
+591bc29 Merge PR #13: DB Copilot gate framework
 ```
 
 Open integration-relevant PRs:
 
-- `#13` remains open as `gate_framework_only / blocked_by_real_llm_evidence`.
+- `#13` is merged as `gate_framework_only / real_llm_blocker_open`.
 - old `#1` remains open and dirty; it is not part of the R3 merge queue.
 
 Canonical docs sync:
@@ -254,6 +254,14 @@ Post-R3 follow-up status:
 - `#13` was replayed onto `main @ 88b1be0`, retitled as a DB Copilot productization gate framework PR, and updated with explicit framework-only merge guidance.
 - Latest `#13` validation: Python syntax checks passed, frontend `npm run build:check` passed, `make security-release-gate` passed, and `make db-copilot-acceptance-check` returned the expected blocked result because `real_llm_smoke=expected_blocked`.
 - Live backend smoke on clean `main @ 88b1be0` still fails before startup with MySQL credential error: `Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)`.
+
+Post-R3 #13 framework-only merge:
+
+- `#13` merged at `591bc29` with explicit framework-only wording.
+- Merge scope: DB Copilot gate framework, evidence JSON shape, UI / acceptance entry point, and blocker visibility.
+- Not completed: DB Copilot productization gate; `real_llm_smoke_latest.json` is not `status=passed`.
+- Current LLM blocker: `192.168.1.6` LLM is expected available, but this machine routes it through Clash Verge TUN (`utun6 / 198.18.0.1`), so passed evidence cannot be reproduced without TUN bypass / DIRECT.
+- This ledger records coordination state only; canonical product status is synchronized to `osmx/docs/plans/80-wave-execution-board.md`.
 
 ## Registration Template
 
