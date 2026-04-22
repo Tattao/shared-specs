@@ -8,9 +8,9 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `0d3bfab` |
+| `osmx` main | `330003e` |
 | `osmx` plan governance PR | `#16` merged |
-| `shared-specs` baseline before this update | `3912cee` |
+| `shared-specs` baseline before this update | `bcbda14` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
 | Agent operating model | `osmx/docs/plans/90-agent-execution-operating-model.md` |
 | Database architecture ADR | `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` |
@@ -78,7 +78,7 @@ Canonicalization status:
 | C | Knowledge SLA | `/Users/apple/Exec/Code/osmx-knowledge-sla` | `stage1/knowledge-sla-baseline` | retrieval benchmark, knowledge health | `osmx/docs/plans/40-knowledge-evidence-plan.md` | merged / real_mode_gap | OSMX PR #12 / merge `91fcadc` |
 | D | Delivery/Ops | `/Users/apple/Exec/Code/osmx-delivery-ops` | `stage1/delivery-ops-hardening` | runtime, smoke, reproducible deployment | `osmx/docs/plans/90-agent-execution-operating-model.md` | merged / pass_with_risk | OSMX PR #10 / merge `7be68f6` |
 | E | Security/Release | `/Users/apple/Exec/Code/osmx-security-release` | `stage1/security-release-gate` | secret scan, release gate, credential hygiene evidence | `osmx/docs/plans/90-agent-execution-operating-model.md` | merged / pass_with_risk | OSMX PR #11 / merge `51250db` |
-| F | Integration/Regression | `/Users/apple/Exec/Code/osmx-integration-regression` | `stage1/integration-regression-captain` | PR queue, regression matrix, conflict map | `osmx/docs/plans/80-wave-execution-board.md` | active | local coordination |
+| F | Integration/Regression | `/Users/apple/Exec/Code/osmx-integration-regression` | `docs/tools-stage1-wave2-template-pack` | PR queue templates, regression dispatcher tooling, historical references | `osmx/docs/plans/80-wave-execution-board.md` | docs_tools_template_merged | OSMX PR #23 / merge `330003e` |
 | G | Studio / OO Compatibility | `/Users/apple/Exec/Code/osmx-studio-oo-compatibility` | `stage1/studio-oo-compatibility` | imported asset usability, wrapper, compatibility evidence | `osmx/docs/plans/30-asset-flow-center-plan.md` | merged / after_14_replay_done | OSMX PR #15 / merge `cc08f53` |
 | H | Plan Governance | `/Users/apple/Exec/Code/osmx-plan-governance` | `docs/plan-governance-template` | numbered plan system and operating model | `osmx/docs/plans/00-current-plan-index.md` | merged | OSMX PR #16 / merge `1f21695` |
 
@@ -413,6 +413,35 @@ Parallel constraints:
 - No Agent may merge TimescaleDB with the control-plane primary database.
 - No Agent may replace Qdrant with pgvector.
 - Any follow-up PR touching data models, migrations, raw SQL, audit, Artifact, Execution, or Incident Commander state must include `scripts/db-portability-scan.sh` evidence or a scoped equivalent.
+
+## R4 / P7 Completion Summary
+
+Date: 2026-04-22 13:15 CST
+
+| Workstream | Result | Evidence | DB guardrail | Residual risk |
+|------------|--------|----------|--------------|---------------|
+| PR #1 umbrella closure | completed | PR #1 closed after comment; previous state `CONFLICTING`, `DIRTY`, `changedFiles=243` | `not_applicable`; follow-up PRs must apply ADR-DB-001 | Residual value must be split into small PRs |
+| DB portability baseline | completed | `scripts/db-portability-scan.sh` run by Bohr; classified findings | `pass/read_only_baseline` | `DATE_FORMAT`, `AutoMigrate`, and old migration tenant/project drift need follow-up |
+| Integration docs/tools cleanup | merged | OSMX PR #23 merged at `330003e`; checks passed | `not_applicable` | Template wording may need wave-specific refinement later |
+| Runtime acceptance | completed with local fallback | OSMX and Emergency frontends returned HTTP 200; Emergency `/health` ok; login token length 249; `/api/v1/plans` returned plan `37bdb9bd-07c4-41f8-aa38-b1ec4b343051`; major frontend paths returned HTTP 200 | `not_applicable` | Browser visual inspection still recommended |
+
+Current `osmx` main after R4 / P7:
+
+```text
+330003e docs/tools: demote stage1 wave2 references
+```
+
+Current open OSMX PRs:
+
+```text
+none
+```
+
+Next recommended split:
+
+1. DB portability minimal fix PR: `trend_service.go` and `report_repo.go` time-bucket SQL portability, with scan evidence.
+2. Runtime browser acceptance report PR or docs note, only if visual inspection finds gaps.
+3. Small residual PRs from former PR #1 only after each has a single owner, narrow write scope, validation evidence, and ADR-DB-001 result.
 
 ## Registration Template
 
