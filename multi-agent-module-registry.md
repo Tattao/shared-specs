@@ -8,7 +8,7 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `6203dc9` |
+| `osmx` main | `bf33368` |
 | `osmx` plan governance PR | `#16` merged |
 | `shared-specs` baseline before this update | `f3edcfe` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
@@ -616,6 +616,43 @@ Parallel constraints:
 - Runtime and scope-review Agents are read-only and may finish independently.
 - No Agent may add `shared-specs` as a runtime/build/test/CI dependency.
 - Accepted facts must be synchronized back to OSMX canonical docs before being treated as product truth.
+
+## R8 / P11 Parallel Completion Summary
+
+Date: 2026-04-22 14:30 CST
+
+| Workstream | Result | Evidence | DB guardrail | Residual risk |
+|------------|--------|----------|--------------|---------------|
+| AutoMigrate policy | merged | Bernoulli produced commit `d2f20ba`; OSMX PR #31 merged at `703e2b5`; changed ADR, operating model, board, change log | `pass`; AutoMigrate is documented as dev/bootstrap/local startup only, explicit migration artifacts are the schema review/source-of-truth direction | none |
+| DB-sensitive PR checklist | merged | Leibniz produced commit `fc02510` after replay; OSMX PR #32 merged at `1adff14`; added `.github/pull_request_template.md` and docs sync | `pass`; DB-sensitive PRs must include PostgreSQL adaptation, MySQL/PostgreSQL impact, scan/test evidence, and forbidden non-goals | checklist compliance depends on review discipline |
+| Runtime revalidation | completed / read-only | Fermat verified `15174`, `15175`, `18081`; `FRONTEND_BASE_URL=http://127.0.0.1:15174 ./scripts/smoke.sh --mode local-runtime` passed | `not_applicable`; no DB runtime errors observed in smoke | services are healthy but version-unconfirmed because processes run from `osmx-post13-docs` / `osmx-emergency-main-sync`, not latest main checkout |
+| Next DB-sensitive scope review | completed / read-only | Meitner recommended P0 execution / approval / audit / Artifact main-chain models, P1 runbook execution state manager, P2 business-system migration/model alignment | `review_only`; no migration/dual-write/TimescaleDB/Qdrant scope creep | next implementation still needs a narrow PR and tests |
+| Board sync | merged | OSMX PR #33 merged at `bf33368`; board records #31/#32, runtime version caveat, and next DB-sensitive scope | `not_applicable`; docs-only sync | none |
+
+Validation evidence:
+
+- #31: `git diff --check`; GitGuardian and `security-gate` passed.
+- #32: `git diff --check`; `make security-release-gate`; GitGuardian and `security-gate` passed.
+- #33: `git diff --check`; GitGuardian and `security-gate` passed.
+- Runtime smoke: `FRONTEND_BASE_URL=http://127.0.0.1:15174 ./scripts/smoke.sh --mode local-runtime` passed.
+
+Current `osmx` main after R8 / P11:
+
+```text
+bf33368 Merge PR #33: Sync board after DB checklist merge
+```
+
+Current open OSMX PRs:
+
+```text
+none
+```
+
+Next recommended split:
+
+1. Runtime latest-main rebaseline: restart OSMX / Emergency services from a single latest-main checkout and rerun local smoke plus browser paths, so health evidence is version-confirmed.
+2. DB-sensitive P0 implementation prep: inspect execution / approval / audit / Artifact main-chain models and create a narrow MySQL/PostgreSQL adaptation plan before editing.
+3. Runbook state manager adaptation: evaluate `osmx-go/internal/runbook/engine/mysql_state.go` after the main-chain model scope is bounded.
 
 ## Registration Template
 
