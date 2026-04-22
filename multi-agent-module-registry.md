@@ -8,9 +8,9 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `bf33368` |
+| `osmx` main | `bef835e` |
 | `osmx` plan governance PR | `#16` merged |
-| `shared-specs` baseline before this update | `f3edcfe` |
+| `shared-specs` baseline before this update | `ba08f20` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
 | Agent operating model | `osmx/docs/plans/90-agent-execution-operating-model.md` |
 | Database architecture ADR | `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` |
@@ -775,16 +775,35 @@ Validation evidence:
 
 Next recommended split:
 
-1. P0 datasource factory: implement a narrow Go datasource factory for `osmx-go/internal/app/app.go` and `osmx-go/cmd/emergency/main.go`, with MySQL default and PostgreSQL selectable by config/env.
+1. P0 main-chain explicit migrations: add paired `003_mainchain_core.mysql.sql` and `003_mainchain_core.postgres.sql` for the execution / approval / audit / artifact chain only after the model shape is settled.
 2. P0 PostgreSQL startup smoke: add a no-migration PostgreSQL service startup smoke path that proves driver selection and health can run against a PostgreSQL DSN.
 3. P1 runbook state store boundary: rename or wrap `MySQLStateManager` behind a dialect-neutral interface and keep AutoMigrate limited to dev/bootstrap.
-4. P1 main-chain migration artifacts: only after model shape is settled, add paired `003_mainchain_core.mysql.sql` and `003_mainchain_core.postgres.sql`.
-5. P1 authenticated browser smoke: add token/session fixture so `25174` can prove logged-in business pages, not only login/public health.
+4. P1 authenticated browser smoke: add token/session fixture so `25174` can prove logged-in business pages, not only login/public health.
+5. P1 residual DB portability work: keep scanning MySQL-specific SQL and validate any future DB-sensitive change with explicit MySQL/PostgreSQL adaptation evidence.
 
 Ledger boundary:
 
 - `shared-specs` remains a coordination ledger only.
 - Accepted facts from this section were synchronized back to canonical `osmx` docs in PR #37/#38.
+
+## R11 / P14 Datasource Factory Completion Summary
+
+Date: 2026-04-22
+
+Final integration result:
+
+- `osmx` main after closeout: `bef835e Merge PR #39: datasource factory`
+- Scope: datasource factory completion for the control-plane startup path.
+- Result: MySQL remains the default control-plane path; PostgreSQL driver / dialector / DSN path is now wired through configuration; `sslmode` is configurable.
+- Verdict: `pass_with_risk`.
+- Guardrail reminder: this is not a PostgreSQL primary database migration, and it does not prove PostgreSQL schema / product runtime completeness.
+- Still forbidden: primary DB migration, dual write, TimescaleDB / control-plane merge, and Qdrant replacement.
+- Next step: move to explicit execution / approval / audit / artifact migration artifacts first, then run PostgreSQL runtime smoke after those artifacts land.
+- Boundary: `shared-specs` remains a coordination ledger only; these notes are coordination evidence, not product source of truth.
+
+Validation evidence:
+
+- `git diff --check` passed in `/Users/apple/Exec/Code/shared-specs`.
 
 ## Registration Template
 
