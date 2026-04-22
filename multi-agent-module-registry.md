@@ -10,7 +10,7 @@
 |------|-------|
 | `osmx` main | `330003e` |
 | `osmx` plan governance PR | `#16` merged |
-| `shared-specs` baseline before this update | `bcbda14` |
+| `shared-specs` baseline before this update | `6c473fc` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
 | Agent operating model | `osmx/docs/plans/90-agent-execution-operating-model.md` |
 | Database architecture ADR | `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` |
@@ -50,15 +50,23 @@ Rules:
 
 ## Database Architecture Guardrail
 
-Starting 2026-04-22, every new plan, PR review, implementation task, and Agent handoff must account for the database architecture assessment:
+Starting 2026-04-22, every new plan, PR review, implementation task, and Agent handoff must account for the database architecture assessment.
 
-- Current strategy: keep MySQL as the control-plane OLTP database now; build PostgreSQL readiness.
+Updated execution requirement from 2026-04-22 13:18 CST:
+
+```text
+Every DB-sensitive change must synchronously adapt to PostgreSQL.
+```
+
+This means DB-sensitive PRs must design, implement, or explicitly validate the MySQL and PostgreSQL behavior together. It still does not authorize a primary database migration, production dual writes, TimescaleDB/control-plane database merging, or Qdrant replacement.
+
+- Current strategy: keep MySQL as the control-plane OLTP database now; synchronously adapt DB-sensitive work for PostgreSQL.
 - Wave 2 must not start a MySQL to PostgreSQL primary database migration.
 - PostgreSQL is a future control-plane primary database candidate, not a current runtime dependency.
 - TimescaleDB remains the observability time-series store; do not merge it with the control-plane primary database in Wave 2.
 - Qdrant remains the primary semantic / RAG vector store; do not replace it with pgvector in Wave 2.
 - New data models and queries must be tenant-aware, project-aware, audit-aware, artifact-aware, idempotency-aware, and PostgreSQL-ready.
-- New raw SQL must avoid MySQL-specific syntax, or include an explicit dialect isolation note and scan evidence.
+- New raw SQL must avoid MySQL-specific syntax, or include explicit MySQL/PostgreSQL dialect isolation, tests or scan evidence, and a follow-up risk note.
 - New JSON fields must include a `schema_version`, and high-frequency filter fields must be promoted to normal indexed columns.
 - Incident Commander work must preserve the main chain: `Plan -> Approval -> AssetExecution -> Artifact -> Audit`.
 - PRs that touch data models, migrations, queries, audit, artifact, execution, or Incident Commander state must include DB portability / PostgreSQL-readiness notes.
@@ -442,6 +450,28 @@ Next recommended split:
 1. DB portability minimal fix PR: `trend_service.go` and `report_repo.go` time-bucket SQL portability, with scan evidence.
 2. Runtime browser acceptance report PR or docs note, only if visual inspection finds gaps.
 3. Small residual PRs from former PR #1 only after each has a single owner, narrow write scope, validation evidence, and ADR-DB-001 result.
+
+## R5 / P8 PostgreSQL Synchronous Adaptation Dispatch
+
+Date: 2026-04-22 13:18 CST
+
+Baseline:
+
+- `osmx` main: `330003e docs/tools: demote stage1 wave2 references`
+- `shared-specs` main: `6c473fc`
+- User requirement: from now on, DB-sensitive work must synchronously adapt to PostgreSQL.
+
+Interpretation:
+
+- Required: MySQL + PostgreSQL dialect/type/index/query impact must be designed and validated together for DB-sensitive changes.
+- Still forbidden: primary database migration, primary-store dual writes, TimescaleDB/control-plane database merge, Qdrant to pgvector replacement.
+
+| Agent | Agent id | Workstream | Worktree | Write scope | PostgreSQL adaptation requirement | Status |
+|-------|----------|------------|----------|-------------|-----------------------------------|--------|
+| Bacon | `019db3a0-569c-7120-aabc-72e4075f9008` | DB time-bucket code adaptation | `/Users/apple/Exec/Code/osmx-db-portability-timebucket` | `trend_service.go`, `report_repo.go`, focused tests | Must replace scattered MySQL-only `DATE_FORMAT` with MySQL/PostgreSQL dialect-aware behavior | dispatched |
+| Laplace | `019db3a0-5728-7f22-81a4-c4490825f049` | PostgreSQL synchronous guardrail docs | `/Users/apple/Exec/Code/osmx-db-sync-guardrails` | ADR and plan docs only | Must upgrade wording from readiness to synchronous adaptation without authorizing migration | dispatched |
+| Newton | `019db3a0-578f-79c1-ac63-d516d2574088` | Runtime browser / HTTP acceptance | `/Users/apple/Exec/Code/osmx-post13-docs` | read-only runtime checks | `not_applicable`, but record any DB-query runtime errors as adaptation risk | dispatched |
+| McClintock | `019db3a0-580b-78e3-b4f6-04963863d581` | DB architecture decision review | `/Users/apple/Exec/Code/osmx-post13-docs` | read-only decision review | Must recommend how `business_systems` / `AutoMigrate` move toward MySQL/PostgreSQL-compatible migration practice | dispatched |
 
 ## Registration Template
 
