@@ -8,7 +8,7 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `591bc29` |
+| `osmx` main | `8aa855f` |
 | `osmx` plan governance PR | `#16` merged |
 | `shared-specs` baseline before this update | `d393e1c` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
@@ -262,6 +262,51 @@ Post-R3 #13 framework-only merge:
 - Not completed: DB Copilot productization gate; `real_llm_smoke_latest.json` is not `status=passed`.
 - Current LLM blocker: `192.168.1.6` LLM is expected available, but this machine routes it through Clash Verge TUN (`utun6 / 198.18.0.1`), so passed evidence cannot be reproduced without TUN bypass / DIRECT.
 - This ledger records coordination state only; canonical product status is synchronized to `osmx/docs/plans/80-wave-execution-board.md`.
+
+## P2 Local Runtime Smoke Docs Sync
+
+Date: 2026-04-22
+
+- OSMX PR `#19` merged at `8aa855f`.
+- Scope: documented local source-runtime startup with placeholder-only `.env.local.example`, host MySQL env overrides, and local smoke command.
+- Runtime evidence: Go server, AI service, and frontend were started from `/Users/apple/Exec/Code/osmx-post13-docs`; `FRONTEND_BASE_URL=http://localhost:15174 ./scripts/smoke.sh --mode local-runtime` passed.
+- Secret boundary: no real MySQL password or `.env.local` file was committed.
+
+## P3 Legacy Integration Queue Triage
+
+Date: 2026-04-22
+
+Worktree inspected:
+
+- `/Users/apple/Exec/Code/osmx-integration-regression`
+- Branch: `stage1/integration-regression-captain`
+- Status: behind current `main`; contains local draft changes and untracked queue / matrix / dispatcher files.
+
+Conclusion:
+
+- Do not treat the old local R3 / Stage 1 queue drafts as the current merge source of truth.
+- Current product / merge facts are in `osmx/docs/plans/80-wave-execution-board.md`, reviewed PRs, and this coordination ledger.
+- `shared-specs` remains coordination-only and must not become a runtime / build / test / CI dependency.
+
+| Path | Classification | Next action |
+|------|----------------|-------------|
+| `docs/plans/stage1-wave2-integration-queue.md` | cleanup / archive | Superseded by merged R3 board and registry; do not publish as current queue. If kept, mark historical and remove active `D -> E -> C -> B -> A` merge instructions. |
+| `docs/plans/README.md` | cleanup | Drop the new index entry unless a historical / reference PR is opened; it currently points readers at a superseded queue. |
+| `Makefile` | separate docs/tools PR only | Keep only if the dispatcher is accepted as a generic utility; do not merge from this stale branch directly. |
+| `docs/reference/README.md` | separate docs/tools PR only | Useful as an index if the reference templates are promoted together. |
+| `docs/reference/stage1-wave2-pr-checklist.md` | keep as reusable template | Candidate for a future docs/tools PR after removing stale queue assumptions and aligning with current numbered plans. |
+| `docs/reference/stage1-wave2-ownership-conflict-matrix.md` | keep as reusable template | Candidate for a future docs/tools PR as a conflict-map template, not as a current owner truth table. |
+| `docs/reference/stage1-wave2-regression-matrix.md` | keep as reusable template | Candidate for a future docs/tools PR after aligning commands with current `scripts/smoke.sh --mode local-runtime` and post-#19 docs. |
+| `docs/reference/stage1-wave2-regression-orchestration.md` | keep as reusable template | Candidate for a future docs/tools PR if the dispatcher is retained. |
+| `scripts/check_worktree_health.sh` | keep as reusable script | Script syntax passed; promote only through a fresh branch based on current main. |
+| `scripts/regression_dispatcher.sh` | keep as reusable script / needs polish | Script syntax and `--list` passed; full queue dry-run correctly reports missing local `.venv` and frontend dependencies in the stale worktree. Promote only after updating track names and prerequisites. |
+
+Read-only checks run:
+
+- `bash -n scripts/check_worktree_health.sh` passed.
+- `bash -n scripts/regression_dispatcher.sh` passed.
+- `./scripts/regression_dispatcher.sh --list` passed.
+- `./scripts/regression_dispatcher.sh --queue D E C B A --dry-run` returned blockers for missing `.venv` and `frontend/node_modules`, so it is not current pass evidence.
 
 ## Registration Template
 
