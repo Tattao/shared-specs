@@ -737,6 +737,55 @@ Ledger boundary:
 - `shared-specs` remains a coordination ledger only.
 - Accepted facts from this section were synchronized back to canonical `osmx` docs in PR #36.
 
+## R10 / P13 Efficiency Gate Completion Summary
+
+Date: 2026-04-22 15:53 CST
+
+Final integration result:
+
+- `osmx` main after closeout: `90e09c3 Merge PR #38: Sync board after efficiency gates`
+- Merged PRs:
+  - #37 `ops/integration-efficiency-gates` -> `bfef6fa`
+  - #38 `docs/post37-board-sync` -> `90e09c3`
+- Current open OSMX PRs after closeout: `none`
+- Canonical docs sync: `docs/plans/80-wave-execution-board.md`, `docs/plans/90-agent-execution-operating-model.md`, and `docs/guides/document-change-log.md` updated in #37/#38.
+
+Efficiency gates now available:
+
+- `scripts/pr_checklist_lint.py`: lints PR bodies and blocks DB-sensitive PRs that omit checklist evidence.
+- `scripts/migration_pair_check.py`: verifies MySQL/PostgreSQL migration artifact pairing, with explicit standalone allow-list for TimescaleDB-only migrations.
+- `scripts/runtime_provenance.py`: captures repo commit, branch, dirty state, endpoint health, listener PID, and process cwd for runtime evidence.
+- `make integration-efficiency-gate`: runs security scan, migration pair check, DB portability scan, and PR checklist lint.
+- GitHub `security-gate`: now runs security scan, migration pair check, DB portability scan, and PR checklist lint on pull requests.
+
+Validation evidence:
+
+- #37 GitHub checks: GitGuardian and `security-gate` passed.
+- #38 GitHub checks: GitGuardian and `security-gate` passed.
+- Local gate replay: `make integration-efficiency-gate` passed; security scan still reports one existing REVIEW-only public IP in `osmx-go/internal/runbook/worker/register.go`.
+- PR lint replay passed against #34, #35, and #36 bodies.
+- Latest-main runtime evidence after #38:
+  - Worktree: `/Users/apple/Exec/Code/osmx-runtime-main-rebaseline`
+  - Commit: `90e09c3`
+  - Go: `http://127.0.0.1:8080/api/v1/health` -> 200
+  - AI: `http://127.0.0.1:5001/api/v1/ai/health` -> 200
+  - Frontend: `http://127.0.0.1:25174/` -> 200
+  - `scripts/smoke.sh --mode local-runtime` passed with explicit `GO_BASE_URL`, `AI_BASE_URL`, and `FRONTEND_BASE_URL`.
+  - `scripts/runtime_provenance.py` passed and showed all listener cwd values under `/Users/apple/Exec/Code/osmx-runtime-main-rebaseline`.
+
+Next recommended split:
+
+1. P0 datasource factory: implement a narrow Go datasource factory for `osmx-go/internal/app/app.go` and `osmx-go/cmd/emergency/main.go`, with MySQL default and PostgreSQL selectable by config/env.
+2. P0 PostgreSQL startup smoke: add a no-migration PostgreSQL service startup smoke path that proves driver selection and health can run against a PostgreSQL DSN.
+3. P1 runbook state store boundary: rename or wrap `MySQLStateManager` behind a dialect-neutral interface and keep AutoMigrate limited to dev/bootstrap.
+4. P1 main-chain migration artifacts: only after model shape is settled, add paired `003_mainchain_core.mysql.sql` and `003_mainchain_core.postgres.sql`.
+5. P1 authenticated browser smoke: add token/session fixture so `25174` can prove logged-in business pages, not only login/public health.
+
+Ledger boundary:
+
+- `shared-specs` remains a coordination ledger only.
+- Accepted facts from this section were synchronized back to canonical `osmx` docs in PR #37/#38.
+
 ## Registration Template
 
 ```markdown
