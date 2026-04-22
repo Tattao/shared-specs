@@ -690,6 +690,53 @@ R9 constraints:
 - Workers may commit only inside their assigned write scopes.
 - Read-only Agents must not edit files or commit.
 
+## R9 / P12 Completion Summary
+
+Date: 2026-04-22 14:55 CST
+
+Final integration result:
+
+- `osmx` main after closeout: `00140fa Merge PR #36: Sync board after P12 merges`
+- Merged PRs:
+  - #34 `db/runbook-state-adaptation` -> `732c020`
+  - #35 `db/mainchain-migration-artifacts` -> `f476de8`
+  - #36 `docs/post35-board-sync` -> `00140fa`
+- Current open OSMX PRs after closeout: `none`
+- Canonical docs sync: `docs/plans/80-wave-execution-board.md` and `docs/guides/document-change-log.md` updated in #36.
+
+Agent outcomes:
+
+| Agent | Workstream | Verdict | Output |
+|-------|------------|---------|--------|
+| Huygens | Runtime latest-main rebaseline | pass | Started latest-main Go `8080`, AI `5001`, frontend `25174` from `/Users/apple/Exec/Code/osmx-runtime-main-rebaseline`; `scripts/smoke.sh --mode local-runtime` passed |
+| Hegel | Main-chain model adaptation | pass_with_risk | Read-only/no merge; confirmed execution / approval / audit / artifact model risks around `type:json`, `type:longtext`, `type:mediumtext`, tenant/project gaps, idempotency and schema-version gaps |
+| Lovelace | Runbook state adaptation | pass_with_risk | Produced #34; replaced runbook state `mediumtext` tags with portable `text`, made `updated_at` updates explicit, added focused tests |
+| Herschel | Main-chain migration artifacts | pass_with_risk | Produced #35; added `osmx-go/migrations/README.md` as a migration artifact gap index only, not DDL implementation evidence |
+| Jason | DB adaptation test matrix | pass_with_risk | Read-only/no merge; produced next validation matrix and identified missing DB-backed approval, live `/plans -> /approvals -> /audit-logs`, `MySQLStateManager`, and migration syntax/parity tests |
+| Kant | DB portability scan review | pass_with_risk | Read-only/no merge; identified P0 blockers in runbook state store naming/AutoMigrate and startup datasource paths `gorm.Open(mysql.Open(...))` |
+| Pasteur | Runtime browser review | pass_with_risk | Read-only/no merge; old `15174` / `15175` render login, `18081` health works, but old checkout processes must not be used as latest-main proof |
+| Ramanujan | P11/P12 integration review | pass_with_risk | Read-only/no merge; confirmed ADR/board/operating-model alignment and shared-specs ledger-only boundary; flagged board drift before #36 |
+
+Validation evidence:
+
+- #34: `git diff --check`; `cd osmx-go && go test ./internal/runbook/...`; `cd osmx-go && go test ./...`; `scripts/db-portability-scan.sh`.
+- #35: `git diff --check HEAD~1..HEAD`; `ls -1 osmx-go/migrations`.
+- #36: `git diff --check`.
+- GitHub checks: GitGuardian and `security-gate` passed on #34, #35, and #36.
+
+Remaining risks / next recommended split:
+
+1. P0 datasource factory: `osmx-go/internal/app/app.go` and `osmx-go/cmd/emergency/main.go` still open `gorm.Open(mysql.Open(...))`; add a narrow driver/dialect selection layer with MySQL default and PostgreSQL startup smoke path.
+2. P0 runbook state store boundary: `MySQLStateManager` naming and AutoMigrate boundary are still MySQL-shaped; #34 reduced type/timestamp risk only.
+3. P1 main-chain explicit migrations: add paired `003_mainchain_core.mysql.sql` and `003_mainchain_core.postgres.sql` only after model shape is settled; do not invent tenant/project columns where current Go models lack them.
+4. P1 test harness: add DB-backed approval/audit/artifact tests and migration syntax/parity checks for MySQL and PostgreSQL.
+5. Runtime UX proof: latest-main services are available at `http://127.0.0.1:25174/`, but authenticated business-page browser smoke still needs a token/session fixture.
+
+Ledger boundary:
+
+- `shared-specs` remains a coordination ledger only.
+- Accepted facts from this section were synchronized back to canonical `osmx` docs in PR #36.
+
 ## Registration Template
 
 ```markdown
