@@ -49,13 +49,13 @@ Rules:
 
 | Lane | Agent / owner | Worktree | Branch | Write scope | Source plan | Status | PR / evidence |
 |------|---------------|----------|--------|-------------|-------------|--------|---------------|
-| A | Incident Commander Wave 2 | `/Users/apple/Exec/Code/osmx-emergency-main-sync-wave2` | `wave2/command-center-governed-loop` | Command Center governed loop backend/frontend/tests | `osmx/docs/plans/70-wave-2-command-center-governed-loop.md` | review_ready / evidence_refresh_required | OSMX PR #14 |
-| B | DB Copilot Productization | `/Users/apple/Exec/Code/osmx-db-copilot-productization` | `stage1/db-copilot-productization` | DB Copilot gate, LLM smoke, PoC path | `osmx/docs/plans/01-osmx-stage-roadmap-master-plan.md` | review_ready / blocked_by_real_llm_evidence | OSMX PR #13 |
-| C | Knowledge SLA | `/Users/apple/Exec/Code/osmx-knowledge-sla` | `stage1/knowledge-sla-baseline` | retrieval benchmark, knowledge health | `osmx/docs/plans/40-knowledge-evidence-plan.md` | review_ready / evidence_refresh_required | OSMX PR #12 |
-| D | Delivery/Ops | `/Users/apple/Exec/Code/osmx-delivery-ops` | `stage1/delivery-ops-hardening` | runtime, smoke, reproducible deployment | `osmx/docs/plans/90-agent-execution-operating-model.md` | review_ready / merge_candidate | OSMX PR #10 |
-| E | Security/Release | `/Users/apple/Exec/Code/osmx-security-release` | `stage1/security-release-gate` | secret scan, release gate, credential hygiene evidence | `osmx/docs/plans/90-agent-execution-operating-model.md` | review_ready / merge_candidate | OSMX PR #11 |
+| A | Incident Commander Wave 2 | `/Users/apple/Exec/Code/osmx-emergency-main-sync-wave2` | `wave2/command-center-governed-loop` | Command Center governed loop backend/frontend/tests | `osmx/docs/plans/70-wave-2-command-center-governed-loop.md` | merge_readiness_review / live_smoke_risk | OSMX PR #14 |
+| B | DB Copilot Productization | `/Users/apple/Exec/Code/osmx-db-copilot-productization` | `stage1/db-copilot-productization` | DB Copilot gate, LLM smoke, PoC path | `osmx/docs/plans/01-osmx-stage-roadmap-master-plan.md` | blocked_by_real_llm_evidence / gate_framework_only | OSMX PR #13 |
+| C | Knowledge SLA | `/Users/apple/Exec/Code/osmx-knowledge-sla` | `stage1/knowledge-sla-baseline` | retrieval benchmark, knowledge health | `osmx/docs/plans/40-knowledge-evidence-plan.md` | pass_with_risk / real_mode_gap | OSMX PR #12 |
+| D | Delivery/Ops | `/Users/apple/Exec/Code/osmx-delivery-ops` | `stage1/delivery-ops-hardening` | runtime, smoke, reproducible deployment | `osmx/docs/plans/90-agent-execution-operating-model.md` | merge_candidate / pass_with_risk | OSMX PR #10 |
+| E | Security/Release | `/Users/apple/Exec/Code/osmx-security-release` | `stage1/security-release-gate` | secret scan, release gate, credential hygiene evidence | `osmx/docs/plans/90-agent-execution-operating-model.md` | merge_candidate / pass_with_risk | OSMX PR #11 |
 | F | Integration/Regression | `/Users/apple/Exec/Code/osmx-integration-regression` | `stage1/integration-regression-captain` | PR queue, regression matrix, conflict map | `osmx/docs/plans/80-wave-execution-board.md` | active | local coordination |
-| G | Studio / OO Compatibility | `/Users/apple/Exec/Code/osmx-studio-oo-compatibility` | `stage1/studio-oo-compatibility` | imported asset usability, wrapper, compatibility evidence | `osmx/docs/plans/30-asset-flow-center-plan.md` | blocked / rebase_required / conflicts_with_pr16_and_pr14 | OSMX PR #15 |
+| G | Studio / OO Compatibility | `/Users/apple/Exec/Code/osmx-studio-oo-compatibility` | `stage1/studio-oo-compatibility` | imported asset usability, wrapper, compatibility evidence | `osmx/docs/plans/30-asset-flow-center-plan.md` | review_ready / after_14_replay_required | OSMX PR #15 |
 | H | Plan Governance | `/Users/apple/Exec/Code/osmx-plan-governance` | `docs/plan-governance-template` | numbered plan system and operating model | `osmx/docs/plans/00-current-plan-index.md` | merged | OSMX PR #16 / merge `1f21695` |
 
 ## Next Dispatch Batch
@@ -154,6 +154,69 @@ Dispatch constraints:
 - No Agent may update `shared-specs`; Integration Captain records summaries here.
 - Product facts remain in `osmx`.
 - PR #15 remains last in merge order unless Integration Captain explicitly revises the conflict map.
+
+## R2 Completion Summary
+
+Date: 2026-04-22
+
+All six dispatched Agents reported back.
+
+R2 here is the completion ledger, not the live merge queue. The current merge order and replay requirements are captured in R3 below.
+
+| Lane | PR | Agent | Result | Evidence / remaining risk |
+|------|----|-------|--------|----------------------------|
+| D | #10 | D1 Delivery/Ops Evidence | `pass_with_risk`, merge candidate | self-test, script syntax, compose config, `git diff --check` passed; live Docker smoke blocked by unavailable Docker daemon / local runtime |
+| E | #11 | E1 Security Release Evidence | `pass_with_risk`, merge candidate | `make security-release-gate` passed with 0 blocking findings; strict review-only mode exits 2 due public IP literal; credential rotation remains operator action |
+| C | #12 | C1 Knowledge SLA Evidence | `pass_with_risk` | deterministic health/benchmark, targeted pytest, `make knowledge-regression` passed; real Go/Qdrant mode not configured |
+| B | #13 | B1 DB Copilot Evidence | `blocked`, gate framework only | real LLM env missing; smoke is `expected_blocked`; acceptance is `blocked` with `real_llm_smoke=expected_blocked` |
+| A | #14 | A4 Command Center Regression | `pass_with_risk`, merge readiness review | Go tags, frontend build/check/build, Playwright governed-loop tests passed; live backend smoke blocked by local MySQL credential |
+| G | #15 | G1 Studio OO Rebase | `review_ready`, after-#14 replay required | PR #15 is now mergeable/clean against `1f21695`; docs conflict resolved into new numbered plan system; still overlaps #14 runbook type/model files |
+
+Current GitHub PR state after R2:
+
+- #10: `MERGEABLE`, GitGuardian pass.
+- #11: `MERGEABLE`, security-gate pass, GitGuardian pass.
+- #12: `MERGEABLE`, GitGuardian pass.
+- #13: `MERGEABLE`, GitGuardian pass, functionally blocked by missing real LLM evidence.
+- #14: `MERGEABLE`, GitGuardian pass.
+- #15: `MERGEABLE`, GitGuardian pass, should remain after #14.
+
+R2 merge recommendation:
+
+```text
+Merge candidates now: #10 -> #11
+Next evidence/merge review: #12 -> #14
+Conditional/framework-only: #13
+After #14 replay required: #15
+```
+
+## R3 Dispatch / Merge Plan
+
+Date: 2026-04-22
+
+This is the active handoff order after the latest Integration Captain queue replay. It supersedes the earlier R2 merge recommendation for merge sequencing, while keeping R2 as the completion record.
+
+### 3.1 Active merge order
+
+1. `#10` may merge first.
+2. `#11` must be replayed / rebased after `#10` lands.
+3. `#12` and `#14` stay in the later recheck lane, not the immediate merge lane.
+4. `#13` cannot be approved as a full productization pass because the real LLM evidence is missing.
+5. `#15` must replay after `#14` is clarified and merged.
+
+### 3.2 Replay / conflict notes
+
+- `#11` rebase focus: `Makefile` and `docs/reference/deployment.md`.
+- `#12` and `#14` remain evidence-refresh candidates and should be rechecked after the queue settles.
+- `#13` remains gate-framework-only until real LLM evidence exists.
+- `#15` stays after `#14` because it still depends on the post-#14 type/model shape.
+
+### 3.3 Boundary and scope rules
+
+- `shared-specs` is a coordination ledger only.
+- `shared-specs` must not be added to runtime imports, build steps, test commands, or CI dependencies.
+- Accepted coordination notes here must still be synchronized back into `osmx` product facts when they change plan or merge order.
+- This file records dispatch, evidence, and replay order; it does not define product behavior.
 
 ## Registration Template
 
