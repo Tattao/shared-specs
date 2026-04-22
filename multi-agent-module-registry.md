@@ -231,7 +231,7 @@ R3 merge execution completed for the non-blocked lanes.
 | #12 | C Knowledge SLA | replayed after #11, merged | `91fcadc` | `make knowledge-regression` passed with `38 passed, 1 skipped`; GitGuardian and security-gate passed; real Go/Qdrant mode still not configured |
 | #14 | A Command Center | merged | `81a7709` | Go tagged tests, frontend build/check/build, and Playwright governed-loop spec passed; live backend smoke blocked by local MySQL credentials |
 | #15 | G Studio / OO Compatibility | replayed after #14, merged | `cc08f53` | `git diff --check`, frontend build/check, route compatibility test, Go runbook tests, GitGuardian, and security-gate passed |
-| #13 | B DB Copilot | not merged | `blocked_by_real_llm_evidence` | real LLM smoke still `expected_blocked`; missing `OSMX_LLM_BASE_URL` and `OSMX_LLM_MODEL` |
+| #13 | B DB Copilot | open, framework-only | PR head `ecd4a19`; `CLEAN` / `MERGEABLE` | real LLM smoke still `expected_blocked`; missing `OSMX_LLM_BASE_URL` and `OSMX_LLM_MODEL`; GitGuardian and security-gate passed |
 
 Current `osmx` main after R3:
 
@@ -248,6 +248,12 @@ Canonical docs sync:
 
 - `#17` updated `osmx/docs/plans/80-wave-execution-board.md` and `docs/guides/document-change-log.md` so the main repo no longer lists #10-#15 as open R3 queue items.
 - `#17` merge commit: `88b1be0`.
+
+Post-R3 follow-up status:
+
+- `#13` was replayed onto `main @ 88b1be0`, retitled as a DB Copilot productization gate framework PR, and updated with explicit framework-only merge guidance.
+- Latest `#13` validation: Python syntax checks passed, frontend `npm run build:check` passed, `make security-release-gate` passed, and `make db-copilot-acceptance-check` returned the expected blocked result because `real_llm_smoke=expected_blocked`.
+- Live backend smoke on clean `main @ 88b1be0` still fails before startup with MySQL credential error: `Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)`.
 
 ## Registration Template
 
