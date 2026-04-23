@@ -1,0 +1,94 @@
+# Agent Pool Configuration
+# 6-slot tmux execution pool for 24x7 parallel development
+# Managed by: Hermes (coordinator)
+# Last updated: 2026-04-23
+
+pool:
+  name: osmx-24x7
+  max_slots: 6
+  default_agent: codex          # codex | claude-code
+  health_check_interval: 300    # seconds
+
+slots:
+  slot-1:
+    agent_type: codex
+    profile: fast-exec
+    purpose: "Backend / Go implementation"
+    tmux_session: "osmx-slot-1"
+    worktree_prefix: "/Users/apple/Exec/Code/osmx-"
+    allowed_languages: [go, sql]
+    max_timeout: 600
+    env:
+      PATH: "/usr/local/bin:/usr/bin:/bin:/Users/apple/.npm-global/bin"
+
+  slot-2:
+    agent_type: codex
+    profile: fast-exec
+    purpose: "Frontend / Vue/TS implementation"
+    tmux_session: "osmx-slot-2"
+    worktree_prefix: "/Users/apple/Exec/Code/osmx-"
+    allowed_languages: [typescript, vue, css]
+    max_timeout: 600
+
+  slot-3:
+    agent_type: claude-code
+    profile: deep-reason
+    purpose: "AI/Python implementation + architecture"
+    tmux_session: "osmx-slot-3"
+    worktree_prefix: "/Users/apple/Exec/Code/osmx-"
+    allowed_languages: [python, go]
+    max_timeout: 900
+
+  slot-4:
+    agent_type: codex
+    profile: fast-exec
+    purpose: "QA / Test / E2E validation"
+    tmux_session: "osmx-slot-4"
+    worktree_prefix: "/Users/apple/Exec/Code/osmx-"
+    allowed_languages: [go, typescript, python]
+    max_timeout: 600
+
+  slot-5:
+    agent_type: codex
+    profile: fast-exec
+    purpose: "DB / Migration / PostgreSQL adaptation"
+    tmux_session: "osmx-slot-5"
+    worktree_prefix: "/Users/apple/Exec/Code/osmx-"
+    allowed_languages: [sql, go]
+    max_timeout: 600
+
+  slot-6:
+    agent_type: claude-code
+    profile: deep-reason
+    purpose: "Docs / Integration / Review"
+    tmux_session: "osmx-slot-6"
+    worktree_prefix: "/Users/apple/Exec/Code/osmx-"
+    allowed_languages: [markdown, yaml, python]
+    max_timeout: 900
+
+# Agent command templates
+agents:
+  codex:
+    command: "codex --yolo exec"
+    args_template: "--model o4-mini"
+    working_dir: "{worktree}"
+    startup_verify: "echo 'slot ready'"
+
+  claude-code:
+    command: "claude"
+    args_template: "-p \"{prompt}\" --dangerously-skip-permissions"
+    working_dir: "{worktree}"
+    startup_verify: "echo 'slot ready'"
+
+# Worktree recycling policy
+worktree_policy:
+  auto_create: true
+  naming: "{task-lane}"         # e.g. osmx-dw2-backend
+  base_branch: "origin/main"
+  prune_merged: true
+  prune_age_days: 7
+  protect_patterns:
+    - "osmx"                    # main repo
+    - "osmx-emergency"          # emergency repo
+    - "shared-specs"            # coordination ledger
+    - "osmx-main-merge"         # merge helper

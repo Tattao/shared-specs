@@ -73,6 +73,21 @@
 - 剩余风险
 - 需要 Integration Captain 处理的冲突
 
+长会话必须提前落盘，不等自动压缩救场：
+
+- 上下文到 70% - 80% 时，在当前执行仓写入或刷新 `docs/agent-handoff-YYYYMMDD.md`。
+- handoff 必须包含 `cwd`、`branch`、目标、已修改文件、已运行命令和结果、关键决策、未完成项、阻塞、下一步唯一可执行任务。
+- 新会话先读最新 handoff，再读取 handoff 明确列出的输入文档；不要重新规划大路线。
+- 多 Agent 不默认 fork 全历史；每个 Agent 只拿窄任务 brief、worktree、branch、write scope 和验收命令。
+- 阶段结束前，把 `git diff` 状态、测试结果、失败信息和阻塞原因写回本目录、执行仓 `docs/`、`docs/plans/`、README 或 PR 描述。
+
+当前 DW1 可恢复入口：
+
+- `/Users/apple/Exec/Code/osmx-emergency-main-sync/docs/agent-handoff-20260423.md`
+- PR #44 已合并，merge commit `dc0366d91da6e821efb947a7fd68fe4334f311e3`；PR #45 / PR #46 也已合并，当前 `origin/main` 为 `d0c0a00b4e25f3c26175d8758dab5f99f6fdf6e0`。
+- 最新 DW2 状态：Track B 真实 LLM 冒烟通过；Track C Real Qdrant SLA 已 seed 后通过；Track D Compose alternate-port 验证为 `pass_with_environment_notes`；PR #48 等待人工合并。
+- Codex 恢复入口：`codex-handoff-20260423-dw2.md` 与 `infrastructure/task-queue.yaml`。当前不再纯 watch，后续并行队列为 Track C 产品化、Track D Compose fresh-volume/default-port 强化、PostgreSQL apply/runtime smoke。
+
 Integration Captain 在这里维护：
 
 - 并行 Agent 队列
@@ -96,6 +111,14 @@ Integration Captain 在这里维护：
 - [wave2-shared-specs-governance-boundary.md](./wave2-shared-specs-governance-boundary.md)
 - [wave2-p0-public-credential-cleanup.md](./wave2-p0-public-credential-cleanup.md)
 - [wave2-mother-task-brief-dispatch.md](./wave2-mother-task-brief-dispatch.md)
+- [deadline-wave1-command-asset-dispatch.md](./deadline-wave1-command-asset-dispatch.md)
+- [deadline-wave1-owner-baseline-triage.md](./deadline-wave1-owner-baseline-triage.md)
+- [deadline-wave1-implementation-delivery-package.md](./deadline-wave1-implementation-delivery-package.md)
+- [deadline-wave1-owner-merge-review-decision.md](./deadline-wave1-owner-merge-review-decision.md)
+- [deadline-wave1-main-review-evaluation.md](./deadline-wave1-main-review-evaluation.md)
+- [deadline-wave1-pr-owner-handoff.md](./deadline-wave1-pr-owner-handoff.md)
+- [deadline-wave1-pr-slice-manifest.md](./deadline-wave1-pr-slice-manifest.md)
+- [deadline-wave1-dirty-baseline-isolation-list.md](./deadline-wave1-dirty-baseline-isolation-list.md)
 - [stage1-parallel-agent-execution-board.md](./stage1-parallel-agent-execution-board.md)
 - [multi-agent-module-registry.md](./multi-agent-module-registry.md)
 - [AGENTS.md](./AGENTS.md)

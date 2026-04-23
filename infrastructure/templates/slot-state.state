@@ -1,0 +1,13 @@
+# Slot State Template
+# File: infrastructure/templates/slot-state.state
+# Actual state files go in infrastructure/slots/
+
+slot={SLOT_NAME}
+task_id={TASK_ID}
+worktree={WORKTREE_PATH}
+branch={BRANCH}
+agent_cmd={AGENT_COMMAND}
+started_at={ISO8601_TIMESTAMP}
+status=running|stopped|idle
+pid={PROCESS_ID}
+stopped_at={ISO8601_TIMESTAMP}

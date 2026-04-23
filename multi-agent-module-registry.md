@@ -8,7 +8,7 @@
 
 | Item | Value |
 |------|-------|
-| `osmx` main | `0a07edb` |
+| `osmx` main | `d0c0a00` |
 | `osmx` plan governance PR | `#16` merged |
 | `shared-specs` baseline before this update | `ba08f20` |
 | Canonical plan entry | `osmx/docs/plans/00-current-plan-index.md` |
@@ -16,6 +16,33 @@
 | Database architecture ADR | `osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md` |
 | Database architecture assessment | `shared-specs/OSMX_Database_Architecture_Assessment.md` |
 | Registry role | coordination ledger only, not product source of truth |
+
+## DW2 Current Status
+
+Date: 2026-04-23 11:41 CST
+
+| Track | State | Evidence / next action |
+|------|-------|------------------------|
+| PR #44 | merged | `dc0366d91da6e821efb947a7fd68fe4334f311e3` |
+| PR #45 | merged | `1bedb1b2a98410d3330a2647c01436e13aa448a7` |
+| PR #46 | merged | `d0c0a00b4e25f3c26175d8758dab5f99f6fdf6e0` |
+| Track B LLM smoke | passed | Qwen3.5-27B, 13.1s, reported by Hermes |
+| Track C deterministic SLA | passed | reported by Hermes |
+| Track C real Qdrant SLA | passed after seed | `osmx_knowledge_pages=3`, `osmx_knowledge_blocks=3`, `passed=true`, `sample_count=5`, `recall_at_1=1.0`, `p95_latency_ms=309.301`, `failed_samples=[]` |
+| Track D Compose validation | passed with environment notes | Go builder mismatch fixed; Qdrant healthcheck fixed; frontend builds with local `nginx:latest`; MySQL old-volume credential mismatch triaged without recording secrets; alternate-port full-stack smoke passed for Go, frontend proxy, AI, and Qdrant |
+| DW2 board sync | PR ready | OSMX PR #48 `Docs: sync DW2 remaining gate closeout`; head `fbf2840`; `git diff --check`, `make integration-efficiency-gate`, GitGuardian, and GitHub `security-gate` passed |
+| DW2 worktree cleanup | completed / no removals | Active worktrees contain dirty evidence or open PR #48 state; `shared-specs/infrastructure/prune-log.md` records the conservative decision |
+
+Next dispatch:
+
+- `DW2-D-COMPOSE-BLOCKER-FIX-001`: completed.
+- `DW2-D-COMPOSE-RERUN-001`: completed on alternate ports with environment notes.
+- `DW2-DOC-001`: completed; PR #48 opened, mergeable, and checks passed.
+- `DW2-INT-001`: completed with no removals because active validation worktrees contain evidence and reports.
+- PR #48 remains a human merge decision only: `OPEN / MERGEABLE / checks_passed`.
+- `DW2-C-PRODUCTIZE-001`: pending; productize or archive Track C Qdrant seed / real SLA code changes in `/Users/apple/Exec/Code/osmx-knowledge-sla-seed`.
+- `DW2-D-COMPOSE-FRESH-DEFAULT-001`: pending; productize Track D Compose fixes and strengthen fresh-volume/default-port handling in `/Users/apple/Exec/Code/osmx-compose-delivery-validation`.
+- `DW2-DB-PG-APPLY-RUNTIME-001`: pending; rerun current-main PostgreSQL migration apply and runtime smoke evidence in `/Users/apple/Exec/Code/osmx-postgres-apply-runtime-smoke`.
 
 ## Purpose
 
@@ -81,6 +108,7 @@ Canonicalization status:
 
 | Lane | Agent / owner | Worktree | Branch | Write scope | Source plan | Status | PR / evidence |
 |------|---------------|----------|--------|-------------|-------------|--------|---------------|
+| DW1 | Deadline Wave 1 Command + Asset | `/Users/apple/Exec/Code/osmx-dw1-main-review` | `dw1/command-asset-main-review` | Command Center, Asset & Flow Center, Run Explorer, schema/migration, focused e2e, test runtime config only | `osmx/docs/plans/osmx-deadline-wave1-command-asset-task-pack.md` | `merged / superseded_by_DW2` | OSMX PR #44 merged at `dc0366d91da6e821efb947a7fd68fe4334f311e3`; head `302bfef`; 2026-04-23 05:29 CST Playwright `7 passed`; `security-gate` and `GitGuardian Security Checks` passed |
 | A | Incident Commander Wave 2 | `/Users/apple/Exec/Code/osmx-emergency-main-sync-wave2` | `wave2/command-center-governed-loop` | Command Center governed loop backend/frontend/tests | `osmx/docs/plans/70-wave-2-command-center-governed-loop.md` | merged / live_smoke_risk | OSMX PR #14 / merge `81a7709` |
 | B | DB Copilot Productization | `/Users/apple/Exec/Code/osmx-db-copilot-productization` | `stage1/db-copilot-productization` | DB Copilot gate, LLM smoke, PoC path | `osmx/docs/plans/01-osmx-stage-roadmap-master-plan.md` | framework_merged / real_llm_replay_passed | OSMX PR #13 / merge `591bc29`; supplemental PR #20 / merge `6b02668`; board sync PR #21 / merge `86dab5d` |
 | C | Knowledge SLA | `/Users/apple/Exec/Code/osmx-knowledge-sla` | `stage1/knowledge-sla-baseline` | retrieval benchmark, knowledge health | `osmx/docs/plans/40-knowledge-evidence-plan.md` | merged / real_mode_gap | OSMX PR #12 / merge `91fcadc` |
@@ -884,6 +912,138 @@ Residual risks / next recommended split:
 3. Existing JSON payload fields need a model/API contract pass for `schema_version` semantics.
 4. Main-chain models that still lack tenant/project fields need a model-first normalization PR before SQL invents columns.
 5. Add DB-backed approval / audit / artifact / migration parity tests for MySQL and PostgreSQL.
+
+## R14 / Deadline Wave 1 Dispatch Registration
+
+Date: 2026-04-22 20:43 CST
+
+Purpose:
+
+- Register the 2026-05-15 product deadline's next execution wave.
+- Keep `shared-specs` as the coordination ledger only.
+- Point implementation Agents back to the authoritative `osmx/docs/plans` task pack.
+
+Canonical product inputs:
+
+- `osmx/docs/plans/osmx-product-deadline-2026-05-15-delivery-plan.md`
+- `osmx/docs/plans/osmx-deadline-wave1-command-asset-task-pack.md`
+- `osmx/docs/plans/osmx-dual-repo-wave-board.md`
+- `osmx/docs/plans/osmx-oo-26-1-benchmark-gap-matrix.md`
+
+Coordination entries:
+
+- `shared-specs/deadline-wave1-command-asset-dispatch.md`
+- `shared-specs/deadline-wave1-implementation-delivery-package.md`
+- `shared-specs/deadline-wave1-dirty-baseline-isolation-list.md`
+- `shared-specs/deadline-wave1-owner-merge-review-decision.md`
+- `shared-specs/deadline-wave1-main-review-evaluation.md`
+- `shared-specs/deadline-wave1-pr-slice-manifest.md`
+- `shared-specs/deadline-wave1-pr-owner-handoff.md`
+- `osmx-emergency-main-sync/docs/agent-handoff-20260423.md`
+
+Dispatch baseline:
+
+| Item | Value |
+|------|-------|
+| Product deadline | `2026-05-15` |
+| `osmx` remote main after fetch | `0a07edb` |
+| `osmx` active planning branch | `batch/full-integration @ 5db87c3` |
+| `shared-specs` main | `9e8b6d0` |
+| Implementation target | `/Users/apple/Exec/Code/osmx-emergency-main-sync` |
+| Implementation target state | dirty source intent preserved; clean PR #44 frozen for owner review at `302bfef`; current-source 18082 smoke refreshed; GitHub checks passed |
+| Dispatch status | `frozen_for_owner_review / GitHub checks passed / decision_ready / current_source_smoke_refreshed / asset_flow_breadth_passed / real_chain_smoke_passed / migration_replay_passed / pass_with_risk` |
+
+Registered lanes:
+
+| Lane | Owner | Worktree | Write scope | Expected output | Status |
+|------|-------|----------|-------------|-----------------|--------|
+| DW1-OWNER | emergency owner | `/Users/apple/Exec/Code/osmx-emergency-main-sync` | coordination summary / scoped docs | dirty baseline triage, delivery package, owner merge-review decision | `awaiting_main_review` |
+| DW1-BE | backend Agent | `/Users/apple/Exec/Code/osmx-emergency-main-sync` | plan/api/repository/model/runbook/migrations/focused tests | main-chain API, asset projection, artifact/audit linkage, DB readiness | `reported / keep-set-ready` |
+| DW1-FE | frontend Agent | `/Users/apple/Exec/Code/osmx-emergency-main-sync` | router/api/types/plan views/runbook views/focused e2e | Command Center path, Asset & Flow Center, viewer split, Run Explorer | `reported / keep-set-ready` |
+| DW1-EVAL | evaluation Agent | implementation worktree + read-only `osmx` | focused tests/e2e/reports | build, build:check, smoke, regression, readiness verdict | `frozen_for_owner_review / current_source_smoke_refreshed / pass_with_risk` |
+| DW1-MAIN-REVIEW | `osmx` evaluation Agent | `osmx` + `shared-specs` | read-only source docs, one shared-specs report | G2/G3/G4 main-review evaluation | `frozen_for_owner_review / decision_ready / current_source_smoke_refreshed / pass_with_risk` |
+| DW1-DOC | docs/contract Agent | `osmx` + `shared-specs` | plans, board, ledger | task pack, wave board, dispatch ledger, change log | `done` |
+
+Conflict / risk notes:
+
+- `osmx-emergency-main-sync` has existing dirty changes; implementation owner must classify them before edits.
+- Freeze update 2026-04-23 05:29 CST: PR #44 is frozen for owner review. Disposable PostgreSQL probe reached health/login, but runbook AutoMigrate failed on `mediumtext`, leaving `osm_runbook_execution` absent; handle PostgreSQL runtime/apply closure in a separate follow-up lane.
+- Do not reset, discard, or overwrite existing worktree changes.
+- Do not start a full OO Studio, AFL/CloudSlang, Worker/RAS, or new product-shell expansion.
+- DB-sensitive work must preserve current MySQL runtime behavior and include PostgreSQL readiness evidence where applicable.
+- Schema/model changes in `approval.go` and runbook execution models now have a migration pair artifact; local live apply and temporary replay evidence are recorded.
+- `osmx-go/emergency` remains a forbidden binary and must not enter any DW1 merge candidate.
+- Coordination/test-infra dirty files such as `AGENTS.md`, `docs/plans/osmx-dual-repo-agent-operator-runbook.md`, `docs/plans/osmx-dual-repo-wave-board.md`, and `frontend/playwright.config.ts` must stay outside the DW1 product-source slice unless separately approved.
+- Product facts must be synchronized to `osmx`; this registry is not the product source of truth.
+
+Owner review artifacts:
+
+- `shared-specs/deadline-wave1-owner-baseline-triage.md`
+- `shared-specs/deadline-wave1-implementation-delivery-package.md`
+- `shared-specs/deadline-wave1-dirty-baseline-isolation-list.md`
+- `shared-specs/deadline-wave1-owner-merge-review-decision.md`
+- `shared-specs/deadline-wave1-main-review-evaluation.md`
+- `shared-specs/deadline-wave1-pr-slice-manifest.md`
+- `shared-specs/deadline-wave1-pr-owner-handoff.md`
+- `osmx-emergency-main-sync/docs/agent-handoff-20260423.md`
+
+Early validation:
+
+- `cd osmx-go && go test ./internal/plan/...` passed in `/Users/apple/Exec/Code/osmx-emergency-main-sync`.
+- `cd frontend && npm run build:check` passed in `/Users/apple/Exec/Code/osmx-emergency-main-sync`.
+- `cd frontend && npx playwright test e2e/11-command-center-chain.spec.ts` passed as a mock-driven focused smoke in `/Users/apple/Exec/Code/osmx-emergency-main-sync`.
+- `cd osmx-go && go test ./internal/plan/... ./internal/runbook/handler ./internal/runbook/service ./internal/runbook/repository` passed in `/Users/apple/Exec/Code/osmx-emergency-main-sync`.
+- `osmx-go/migrations/003_approval_execution_links.mysql.sql`, `osmx-go/migrations/003_approval_execution_links.postgres.sql`, and `osmx-go/migrations/003_approval_execution_links.sql` were added as approval/execution linkage migration artifacts.
+- MySQL local live apply passed, and MySQL/PostgreSQL temporary replay passed twice.
+- Backend real-chain smoke against `cmd/emergency` at `http://127.0.0.1:18081` passed: login -> runbook -> plan -> approval -> asset execution -> chain -> audit.
+- `VITE_API_PROXY_TARGET=http://127.0.0.1:18081 E2E_BACKEND_BASE_URL=http://127.0.0.1:18081 npx playwright test e2e/12-command-center-real-chain.spec.ts` passed as a non-mock frontend real-chain smoke.
+- `VITE_API_PROXY_TARGET=http://127.0.0.1:18082 E2E_BACKEND_BASE_URL=http://127.0.0.1:18082 npx playwright test e2e/12-command-center-real-chain.spec.ts --reporter=list` initially failed at 2026-04-23 01:47 CST because the business execution remained `RUNNING` after a fast engine completion.
+- `osmx-go/internal/runbook/service/service.go` now reconciles terminal engine state after trigger to close the fast-completion overwrite race.
+- `VITE_API_PROXY_TARGET=http://127.0.0.1:18082 E2E_BACKEND_BASE_URL=http://127.0.0.1:18082 npx playwright test e2e/12-command-center-real-chain.spec.ts --reporter=list` passed at 2026-04-23 01:48 CST after the fix; `1 passed (5.9s)`; temporary backend stopped and `18082` was confirmed not listening.
+- `VITE_API_PROXY_TARGET=http://127.0.0.1:18081 E2E_BACKEND_BASE_URL=http://127.0.0.1:18081 npx playwright test e2e/13-asset-flow-real-breadth.spec.ts --reporter=list` first passed `2 passed, 1 skipped` with the imported-operation case skipped because `18081` had no materialized operation data.
+- `OSMX_SERVER_PORT=18082 go run ./cmd/emergency -config configs/emergency.yaml` plus `VITE_API_PROXY_TARGET=http://127.0.0.1:18082 E2E_BACKEND_BASE_URL=http://127.0.0.1:18082 npx playwright test e2e/13-asset-flow-real-breadth.spec.ts --reporter=list` passed `3 passed` on a current-source temporary backend; `18082` was stopped after validation.
+- `OSMX_SERVER_PORT=18082 go run ./cmd/emergency -config configs/emergency.yaml` plus `VITE_API_PROXY_TARGET=http://127.0.0.1:18082 E2E_BACKEND_BASE_URL=http://127.0.0.1:18082 npx playwright test e2e/13-asset-flow-real-breadth.spec.ts --reporter=list` was refreshed at 2026-04-23 01:45 CST and passed `3 passed (21.6s)`; temporary backend stopped and `18082` was confirmed not listening.
+- `go test ./internal/runbook/handler ./internal/runbook/contentpack ./internal/plan/... ./internal/runbook/service ./internal/runbook/repository` passed in `/Users/apple/Exec/Code/osmx-emergency-main-sync`.
+- `cd osmx-go && go test ./internal/runbook/handler ./internal/runbook/contentpack ./internal/plan/... ./internal/runbook/service ./internal/runbook/repository` passed again at 2026-04-23 01:40 CST; only GOPATH go.mod warning.
+- `cd osmx-go && go test ./internal/runbook/...` passed at 2026-04-23 01:44 CST; covers runbook compiler, contentpack, engine, handler, schedule, service, worker, and related packages.
+- `cd frontend && npm run build:check` passed again at 2026-04-23 01:40 CST; only existing Vite dynamic import / chunk size warnings.
+- Port check confirmed `18081` is still listening and `18082` is not listening; `18081` remains an old-process risk until explicitly restarted.
+- 2026-04-23 04:30-04:33 CST refresh: `git diff --check && git diff --cached --check` passed; staged set remained `47`; forbidden binary `osmx-go/emergency` was not staged; targeted Go tests passed; `npm run build:check` passed; temporary current-source `18082` backend ran Playwright specs `11`-`14` with `7 passed (34.5s)` and was stopped after validation.
+- `git diff --check` passed in implementation, `osmx` plan/status files, and `shared-specs` ledger files.
+
+## R15 / DW2 Hermes Progress Sync And Codex Recovery Plan
+
+Date: 2026-04-23 09:32 CST
+
+Status basis:
+
+- Verified with GitHub CLI: PR #45 merged at `1bedb1b2a98410d3330a2647c01436e13aa448a7`.
+- Verified with GitHub CLI: PR #46 merged at `d0c0a00b4e25f3c26175d8758dab5f99f6fdf6e0`.
+- `origin/main` now points to `d0c0a00b4e25f3c26175d8758dab5f99f6fdf6e0`.
+- Hermes reported Track B real LLM smoke passed with Qwen3.5-27B in 13.1s.
+- Hermes reported Track C deterministic SLA passed.
+- Hermes reported Track C real Qdrant mode failed because Qdrant lacks SLA test data and 3 of 5 samples returned empty.
+
+Current remaining work:
+
+| Lane | Task | Status | Next action |
+|------|------|--------|-------------|
+| Track D | Docker Compose delivery environment validation | `pending` | Run full-stack compose validation from clean worktree `/Users/apple/Exec/Code/osmx-compose-delivery-validation`, record service health and blockers |
+| Track C | Qdrant SLA test knowledge seed | `pending` | Seed Qdrant from clean worktree `/Users/apple/Exec/Code/osmx-knowledge-sla-seed`, then rerun real-mode SLA |
+
+Codex coordination changes:
+
+- `shared-specs/infrastructure/task-queue.yaml` now records PR #44/#45/#46 and Hermes Track B/C progress.
+- `shared-specs/infrastructure/dispatch.py` now respects reverse `blocks` relationships and no longer stops dispatch early because the available-slot list shrinks.
+- `shared-specs/infrastructure/README.md` now uses `.venv/bin/python`, because system `python3` lacks `pyyaml` on this machine.
+- `shared-specs/codex-handoff-20260423-dw2.md` is the short recovery entry for context-limit or session-interruption cases.
+
+Context-limit rule for the next operator:
+
+- Do not start both long tasks inside one fragile chat context.
+- If the remaining context is below a comfortable margin, run only the next bounded command and update the handoff before continuing.
+- Prefer one Track D smoke or one Track C seed/rerun loop per session.
+- Keep `shared-specs` as coordination evidence only; product docs sync must land through a clean `osmx` branch/worktree.
 
 ## Registration Template
 

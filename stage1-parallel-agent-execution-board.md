@@ -10,6 +10,40 @@
 - Final product facts remain in `osmx`.
 - `shared-specs` records coordination evidence, task ownership, and handoffs only.
 
+## Deadline Wave 2 Active Overlay
+
+Date: 2026-04-23 11:41 CST
+
+This board predates the 2026-05-15 deadline plan. The active deadline lane is now tracked in:
+
+- `osmx/docs/plans/osmx-product-deadline-2026-05-15-delivery-plan.md`
+- `osmx/docs/plans/osmx-deadline-wave1-command-asset-task-pack.md`
+- `shared-specs/infrastructure/task-queue.yaml`
+- `shared-specs/codex-handoff-20260423-dw2.md`
+- `shared-specs/deadline-wave1-command-asset-dispatch.md`
+
+Current deadline status:
+
+```text
+PR #44 merged / PR #45 merged / PR #46 merged / Track B LLM passed / Track C deterministic SLA passed / Track C real Qdrant passed_after_seed / Track D pass_with_environment_notes / DW2-DOC PR #48 ready / cleanup no_removals
+```
+
+Verified main baseline:
+
+```text
+origin/main = d0c0a00b4e25f3c26175d8758dab5f99f6fdf6e0
+```
+
+Remaining bounded work:
+
+- Track C: completed. Qdrant seed and real-mode SLA rerun passed from clean worktree `/Users/apple/Exec/Code/osmx-knowledge-sla-seed`.
+- Track D: pass with environment notes. Go builder and Qdrant healthcheck are fixed, frontend builds with local `nginx:latest`, old MySQL volume credentials were triaged without recording secrets, and the alternate-port full-stack health path passed.
+- DW2-DOC: completed in `/Users/apple/Exec/Code/osmx-main-merge`; PR #48 opened for canonical wave board and document change log sync, and checks passed after PR body checklist formatting was fixed.
+- DW2-INT cleanup: completed with no removals; active validation worktrees contain evidence and reports, and `osmx-main-merge` carries PR #48.
+- Next continuation: keep PR #48 as a human merge decision, while dispatching the non-PR-watch work in parallel: Track C productization/archive, Track D Compose fresh-volume/default-port hardening, and current-main PostgreSQL apply/runtime smoke.
+
+Context-limit rule: do not run Track D and Track C remediation in the same fragile long context. Update `codex-handoff-20260423-dw2.md` after each bounded step.
+
 ## Worktree Matrix
 
 | Track | Worktree | Branch | Baseline | Purpose |
@@ -270,3 +304,54 @@ Notes:
 
 - PR #15 is intentionally after PR #14 because both touch runbook-facing model/frontend surfaces and should not compete with the governed-loop hardening review.
 - Existing PR #1 (`batch/full-integration`) is legacy and is not part of this Stage 1 parallel queue.
+
+## Deadline Wave 1 Dispatch Overlay
+
+Date: 2026-04-22 20:43 CST
+
+This overlay supersedes the old PR #10-#15 startup recommendation for the next execution step. The historical queue above remains useful as context, but the active 2026-05-15 product-deadline dispatch is now:
+
+```text
+Deadline Wave 1 - Command Center + Asset & Flow Center P0 收口
+```
+
+Canonical product source:
+
+```text
+/Users/apple/Exec/Code/osmx/docs/plans/osmx-deadline-wave1-command-asset-task-pack.md
+```
+
+Coordination ledger:
+
+```text
+/Users/apple/Exec/Code/shared-specs/deadline-wave1-command-asset-dispatch.md
+```
+
+Active lanes:
+
+| Lane | Role | Worktree | First action | Status |
+|------|------|----------|--------------|--------|
+| DW1-OWNER | emergency owner | `/Users/apple/Exec/Code/osmx-emergency-main-sync` | triage dirty baseline and split backend/frontend/evaluation tasks | `done` |
+| DW1-BE | backend Agent | `/Users/apple/Exec/Code/osmx-emergency-main-sync` | main-chain API, asset projection, artifact/audit linkage | `in_progress` |
+| DW1-FE | frontend Agent | `/Users/apple/Exec/Code/osmx-emergency-main-sync` | Command Center path, Asset & Flow Center, viewer split, Run Explorer | `in_progress` |
+| DW1-EVAL | evaluation Agent | `/Users/apple/Exec/Code/osmx-emergency-main-sync` | build / build:check / smoke / regression verdict | `in_progress` |
+| DW1-DOC | docs/contract Agent | `osmx` + `shared-specs` | task pack, board, ledger, change log | `done` |
+
+Start rule:
+
+- DW1-OWNER triage is recorded in `deadline-wave1-owner-baseline-triage.md`; implementation lanes may continue within the listed boundaries.
+- Do not let the old Wave 1 merge result count as this deadline wave's acceptance evidence.
+- Do not let `shared-specs` become a runtime, build, test, CI, or submodule dependency.
+
+Early validation:
+
+- `go test ./internal/plan/...` passed.
+- `npm run build:check` passed.
+- Focused mock Playwright smoke `e2e/11-command-center-chain.spec.ts` passed.
+- Focused plan/runbook Go tests passed.
+- Approval/execution linkage migration pair was added under `osmx-go/migrations`.
+- MySQL local live apply passed; MySQL and PostgreSQL temporary replay passed twice.
+- Backend real-chain smoke passed against `cmd/emergency` at `http://127.0.0.1:18081`.
+- Non-mock frontend real-chain Playwright smoke `e2e/12-command-center-real-chain.spec.ts` passed with `VITE_API_PROXY_TARGET=http://127.0.0.1:18081`.
+- `git diff --check` passed across implementation, plan/status docs, and ledger docs.
+- Status has moved past the old owner-review state: PR #44, PR #45, and PR #46 are merged. The active blockers are now Track D Docker Compose delivery validation and Track C Qdrant seed plus real-mode SLA rerun.

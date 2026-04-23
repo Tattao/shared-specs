@@ -1,0 +1,86 @@
+# Quality Gates Configuration
+# Maps to existing OSMX make targets and adds slot-level gates
+# Last updated: 2026-04-23
+
+gates:
+  # Pre-dispatch: must pass before a task is assigned to a slot
+  pre_dispatch:
+    - name: worktree-clean
+      command: "git status --porcelain"
+      expect: "empty"
+      fix: "halt and resolve manually; do not stash or checkout without owner approval"
+    
+    - name: main-fresh
+      command: "git fetch origin main && git log --oneline origin/main -1"
+      expect: "exit_code=0"
+      fix: "git fetch origin"
+
+    - name: no-conflicting-prs
+      command: "gh pr list --state open --json headRefName --jq '.[].headRefName'"
+      expect: "no_overlap_with_write_scope"
+      fix: "manual resolution required"
+
+  # Per-slot: health check during execution
+  per_slot:
+    - name: process-alive
+      check: "tmux has-session -t {session} 2>/dev/null"
+      interval: 60
+      on_fail: "restart-slot"
+
+    - name: disk-space
+      check: "df -h /Users/apple | tail -1 | awk '{print $5}' | tr -d '%'"
+      expect: "lt 90"
+      on_fail: "alert-and-pause"
+
+    - name: memory
+      check: "vm_stat | head -5"
+      expect: "page_free_count gt 100000"
+      on_fail: "alert-and-pause"
+
+  # Post-task: must pass before task marked completed
+  post_task:
+    - name: diff-check
+      command: "git diff --check"
+      expect: "exit_code=0"
+
+    - name: security-gate
+      command: "make security-release-gate"
+      expect: "exit_code=0"
+
+    - name: migration-pair-check
+      command: "python3 scripts/migration_pair_check.py --root ."
+      expect: "exit_code=0"
+      condition: "task writes to migrations/"
+
+    - name: db-portability-scan
+      command: "scripts/db-portability-scan.sh"
+      expect: "exit_code=0"
+      condition: "task writes to osmx-go/internal/"
+
+    - name: go-test
+      command: "cd osmx-go && go test ./... 2>&1 | tail -5"
+      expect: "no FAIL"
+      condition: "task writes Go files"
+
+    - name: frontend-build
+      command: "cd frontend && npm run build:check"
+      expect: "exit_code=0"
+      condition: "task writes frontend/ files"
+
+    - name: integration-gate
+      command: "make integration-efficiency-gate"
+      expect: "exit_code=0"
+      condition: "always"
+
+  # PR creation gate
+  pr_gate:
+    - name: all-post-tasks-pass
+      depends_on: "post_task"
+
+    - name: pr-checklist
+      command: "python3 scripts/pr_checklist_lint.py"
+      expect: "exit_code=0"
+
+    - name: gitguardian
+      check: "GitHub status check"
+      expect: "SUCCESS"
