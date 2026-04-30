@@ -1,0 +1,10 @@
+../osmx/docs/architecture/aof-core-boundary-matrix-v0.md
+../osmx/docs/reports/aof-wp13-boundary-matrix-20260430.md
+../osmx/docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+infrastructure/task-queue-v2.yaml
+infrastructure/artifacts/AOF-WP13-BOUNDARY-001/summary.md
+infrastructure/artifacts/AOF-WP13-BOUNDARY-001/changed-files.txt
+infrastructure/artifacts/AOF-WP13-BOUNDARY-001/validation.md
+infrastructure/artifacts/AOF-WP13-BOUNDARY-001/residual-risks.md
+infrastructure/artifacts/AOF-WP13-BOUNDARY-001/handoff.md
+

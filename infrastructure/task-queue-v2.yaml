@@ -3,7 +3,7 @@ queue:
   version: 2
   status: active_stage_a
   created_at: "2026-04-30T03:45:00+08:00"
-  updated_at: 2026-04-30T10:21:12+08:00
+  updated_at: 2026-04-30T10:39:32+08:00
   mode: codex_first_guarded_autonomy
   stage: stage_a_8h_unattended
   source_of_truth: osmx/docs/plans
@@ -196,7 +196,7 @@ tasks:
     lane: architecture
     title: Draft Core Boundary Matrix for complete product Alpha
     priority: P0
-    status: ready
+    status: closed
     agent_profile: codex-architecture
     source_docs:
       - osmx/docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
@@ -220,10 +220,10 @@ tasks:
       - rg -n "core|runtime|connector|pack|optional module" docs/architecture docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
     artifacts:
       - ${OSMX_REPO}/docs/reports/aof-wp13-boundary-matrix-20260430.md
-    lease_owner: null
+    lease_owner: Codex
     lease_expires_at: null
-    heartbeat_at: null
-    attempts: 0
+    heartbeat_at: 2026-04-30T10:39:32+08:00
+    attempts: 1
     max_attempts: 2
 
   - id: AOF-WP12-QA-001
