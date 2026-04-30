@@ -1,0 +1,8 @@
+osmx/scripts/aof_live_db_runtime_replay_gate.py
+osmx/docs/test-cases/aof-product-wave3-live-db-runtime-replay-gate-20260430.md
+osmx/docs/reports/aof-product-wave3-live-db-runtime-replay-gate-20260430.md
+shared-specs/infrastructure/artifacts/PW3-WP5-LIVE-DB-RUNTIME-REPLAY-GATE-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW3-WP5-LIVE-DB-RUNTIME-REPLAY-GATE-001/handoff.md
+shared-specs/infrastructure/artifacts/PW3-WP5-LIVE-DB-RUNTIME-REPLAY-GATE-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW3-WP5-LIVE-DB-RUNTIME-REPLAY-GATE-001/summary.md
+shared-specs/infrastructure/artifacts/PW3-WP5-LIVE-DB-RUNTIME-REPLAY-GATE-001/validation.md
