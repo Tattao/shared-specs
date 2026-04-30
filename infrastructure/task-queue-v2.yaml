@@ -1,11 +1,11 @@
 queue:
   name: osmx-autonomous-delivery-stage-a
   version: 2
-  status: active_stage_a
+  status: stage_b_wave0_preparation
   created_at: "2026-04-30T03:45:00+08:00"
-  updated_at: 2026-04-30T11:35:27+08:00
+  updated_at: 2026-04-30T11:43:39+08:00
   mode: codex_first_guarded_autonomy
-  stage: stage_a_8h_unattended
+  stage: stage_b_wave0_supervised
   source_of_truth: osmx/docs/plans
   source_docs:
     - osmx/docs/plans/90-agent-execution-operating-model.md
@@ -509,5 +509,44 @@ tasks:
     lease_owner: Codex
     lease_expires_at: null
     heartbeat_at: 2026-04-30T11:35:27+08:00
+    attempts: 1
+    max_attempts: 1
+
+  - id: STAGEB-RUNNER-TIME-001
+    lane: delivery-ops
+    title: Fix active lease timestamp parsing and stale detection
+    priority: P0
+    status: closed
+    agent_profile: codex-docs-ops
+    source_docs:
+      - stage-a-owner-decision-package.md
+      - infrastructure/artifacts/AOF-STAGEA-DRYRUN-001/evaluation.md
+      - infrastructure/artifacts/AOF-STAGEA-DRYRUN-001/residual-risks.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/delivery-ops/stageb-runner-time-20260430-01
+    write_scope:
+      - infrastructure/runner-v2.py
+      - infrastructure/task-queue-v2.yaml
+      - infrastructure/artifacts/STAGEB-RUNNER-TIME-001/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    dependencies:
+      - AOF-STAGEA-DRYRUN-001
+    blocks:
+      - STAGEB-GATE-RUNNER-001
+      - STAGEB-WORKTREE-PREFLIGHT-001
+    human_gate: none
+    validation:
+      - python3 -m py_compile infrastructure/runner-v2.py
+      - python3 infrastructure/runner-v2.py stale
+      - python3 infrastructure/runner-v2.py doctor --strict-artifacts
+      - git diff --check
+    artifacts:
+      - infrastructure/artifacts/STAGEB-RUNNER-TIME-001/validation.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: 2026-04-30T11:43:39+08:00
     attempts: 1
     max_attempts: 1

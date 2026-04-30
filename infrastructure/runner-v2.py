@@ -63,10 +63,22 @@ def parse_iso(value: Any) -> datetime | None:
         return None
     if isinstance(value, datetime):
         return value.astimezone()
-    try:
-        return datetime.fromisoformat(str(value)).astimezone()
-    except ValueError:
-        return None
+    text = str(value).strip()
+    candidates = [
+        text,
+        re.sub(r" ([+-]\d{2}:?\d{2})$", r"\1", text),
+    ]
+    for candidate in dict.fromkeys(candidates):
+        try:
+            return datetime.fromisoformat(candidate).astimezone()
+        except ValueError:
+            pass
+    for fmt in ("%Y-%m-%d %H:%M:%S %z", "%Y-%m-%d %H:%M:%S.%f %z"):
+        try:
+            return datetime.strptime(text, fmt).astimezone()
+        except ValueError:
+            pass
+    return None
 
 
 def default_env() -> dict[str, str]:
