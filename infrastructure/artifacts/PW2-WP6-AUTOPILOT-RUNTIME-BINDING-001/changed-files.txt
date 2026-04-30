@@ -1,0 +1,8 @@
+../osmx/osmx-go/internal/aof/autopilot/runtime_sample.go
+../osmx/osmx-go/internal/aof/autopilot/runtime_sample_test.go
+../osmx/osmx-go/internal/api/v1/aof_handler.go
+../osmx/osmx-go/internal/api/v1/aof_handler_test.go
+../osmx/osmx-go/internal/router/router.go
+../osmx/osmx-ai/app/agent_runtime/autopilot_runtime.py
+../osmx/osmx-ai/tests/test_autopilot_runtime.py
+../osmx/docs/reports/aof-product-wave2-autopilot-runtime-binding-20260430.md

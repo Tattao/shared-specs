@@ -1,0 +1,8 @@
+../osmx/frontend/src/types/aof.ts
+../osmx/frontend/src/api/aof.ts
+../osmx/frontend/src/views/aof/AofSurfaceView.vue
+infrastructure/artifacts/PW1-WP5-WORKCENTER-SHELL-001/summary.md
+infrastructure/artifacts/PW1-WP5-WORKCENTER-SHELL-001/changed-files.txt
+infrastructure/artifacts/PW1-WP5-WORKCENTER-SHELL-001/validation.md
+infrastructure/artifacts/PW1-WP5-WORKCENTER-SHELL-001/residual-risks.md
+infrastructure/artifacts/PW1-WP5-WORKCENTER-SHELL-001/handoff.md

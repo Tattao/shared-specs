@@ -1,0 +1,11 @@
+../osmx/osmx-go/internal/aof/telemetry/source_registry.go
+../osmx/osmx-go/internal/aof/telemetry/source_registry_test.go
+../osmx/osmx-go/internal/api/v1/aof_handler.go
+../osmx/osmx-go/internal/api/v1/aof_handler_test.go
+../osmx/osmx-go/internal/router/router.go
+../osmx/docs/reference/aof-telemetry-source-registry-v0.md
+infrastructure/artifacts/PW1-WP3-TELEMETRY-SOURCE-001/summary.md
+infrastructure/artifacts/PW1-WP3-TELEMETRY-SOURCE-001/changed-files.txt
+infrastructure/artifacts/PW1-WP3-TELEMETRY-SOURCE-001/validation.md
+infrastructure/artifacts/PW1-WP3-TELEMETRY-SOURCE-001/residual-risks.md
+infrastructure/artifacts/PW1-WP3-TELEMETRY-SOURCE-001/handoff.md

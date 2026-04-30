@@ -1,0 +1,3 @@
+../osmx/osmx-go/internal/aof/pack/manifest_contract.go
+../osmx/osmx-go/internal/aof/pack/manifest_contract_test.go
+../osmx/docs/reference/aof-scenario-pack-manifest-contract-v0.md

@@ -1,0 +1,490 @@
+graph:
+  id: aof-product-wave2-runtime-binding-v1
+  status: product_wave2_active
+  date: "2026-04-30"
+  purpose: "Bind Product Wave 1 AOF contracts and UI skeletons to minimal runtime APIs without claiming release readiness."
+  product_source_of_truth:
+    - ../osmx/docs/plans/80-wave-execution-board.md
+    - ../osmx/docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+    - ../osmx/docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    - ../osmx/docs/architecture/aof-store-abstraction-v0.md
+    - ../osmx/docs/reference/aof-core-contract-v0.md
+  execution_source_of_truth:
+    - infrastructure/product-wave2-task-pack.md
+    - infrastructure/product-wave2-owner-gate.md
+    - infrastructure/task-queue-v2.yaml
+  hard_limits:
+    owner_gate_required_before_product_code: true
+    auto_merge: forbidden
+    release: forbidden
+    production_environment_changes: forbidden
+    destructive_git_commands: forbidden
+    migration_apply_without_gate: forbidden
+    security_gate_closure: forbidden
+    legal_gate_closure: forbidden
+    shared_specs_runtime_dependency: forbidden
+    hermes_product_code_write: forbidden
+
+waves:
+  - id: PRODUCT-WAVE2
+    name: Runtime binding and smoke wave
+    status: active
+    timebox: 48-72h after Owner approval
+    goal: "Replace sample-only AOF surfaces with minimal gated runtime-backed APIs, focused UI bindings, and smoke evidence."
+    allowed_repos:
+      - ../osmx
+      - shared-specs
+    forbidden_repos:
+      - production environments
+    exit_gate:
+      - all executed tasks have changed-files, validation, residual-risks, handoff
+      - no merge, release, production operation, destructive command, or human gate closure
+      - migration/security/legal/release gates remain human-owned
+      - wave summary proposes Product Wave 3 only from represented artifacts
+
+task_defaults:
+  status: ready_after_owner_gate
+  owner: Codex
+  validation_minimum:
+    - git diff --check
+    - targeted tests or build checks for touched area
+    - artifact handoff under shared-specs
+  required_artifacts:
+    - changed-files.txt
+    - validation.md
+    - residual-risks.md
+    - handoff.md
+
+tasks:
+  - id: PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001
+    wp: WP0
+    title: Product Wave 2 runtime binding preflight
+    repo: shared-specs
+    priority: P0
+    lane: ops
+    write_scope:
+      - infrastructure/artifacts/**
+      - ../osmx/docs/reports/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    depends_on: []
+    validation:
+      - git diff --check
+      - python3 infrastructure/runner-v2.py doctor --strict-artifacts
+    acceptance:
+      - Preflight records dirty worktree baseline, current validation baseline, and Product Wave 2 stop conditions.
+
+  - id: PW2-WP2-TWIN-RUNTIME-API-001
+    wp: WP2
+    title: Operational Twin runtime-backed list/detail API
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/api/v1/**
+      - osmx-go/internal/router/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+      - production config
+    depends_on:
+      - PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/api/v1 ./...
+    acceptance:
+      - Twin list/detail API returns gated sample-runtime data matching `AofTwinNode` / `AofTwinDetail`.
+      - No schema migration is introduced.
+
+  - id: PW2-WP2-TWIN-UI-BINDING-001
+    wp: WP2
+    title: Bind Twin Explorer UI to runtime API
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/api/**
+      - frontend/src/types/**
+      - frontend/src/views/aof/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP2-TWIN-RUNTIME-API-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - "`/aof/twin` reads from the runtime API adapter with loading/error/empty states preserved."
+
+  - id: PW2-WP4-ALERTOPS-RUNTIME-API-001
+    wp: WP4
+    title: AlertOps runtime-backed normalized alert API
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/api/v1/**
+      - osmx-go/internal/router/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+      - production config
+    depends_on:
+      - PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/api/v1 ./...
+    acceptance:
+      - AlertOps API returns normalized alert list/detail data with incident association placeholder.
+      - No schema migration is introduced.
+
+  - id: PW2-WP4-ALERTOPS-UI-BINDING-001
+    wp: WP4
+    title: Bind AlertOps UI to runtime API
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/api/**
+      - frontend/src/types/**
+      - frontend/src/views/aof/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP4-ALERTOPS-RUNTIME-API-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - AlertOps surface reads normalized alert records from the runtime API adapter.
+
+  - id: PW2-WP5-WORKCENTER-RUNTIME-API-001
+    wp: WP5
+    title: Workcenter ticket/change runtime-backed API
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/api/v1/**
+      - osmx-go/internal/router/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+      - production config
+    depends_on:
+      - PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/api/v1 ./...
+    acceptance:
+      - Workcenter API returns ticket/change/assignment/SLA/timeline sample-runtime data.
+      - No approval gate is closed and no mutation is introduced.
+
+  - id: PW2-WP5-WORKCENTER-UI-BINDING-001
+    wp: WP5
+    title: Bind Workcenter UI to runtime API
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/api/**
+      - frontend/src/types/**
+      - frontend/src/views/aof/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP5-WORKCENTER-RUNTIME-API-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - "`/aof/workcenter` reads records from the runtime API adapter and keeps actions non-mutating."
+
+  - id: PW2-WP6-AUTOPILOT-RUNTIME-BINDING-001
+    wp: WP6
+    title: Autopilot evidence output runtime binding
+    repo: ../osmx
+    priority: P0
+    lane: backend-ai
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/api/v1/**
+      - osmx-go/internal/router/**
+      - osmx-ai/app/agent_runtime/**
+      - docs/reports/**
+    forbidden_scope:
+      - production model config
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/api/v1 ./...
+      - cd osmx-ai && PATH=/tmp/osmx-ai-pw1-venv/bin:$PATH pytest -q
+    acceptance:
+      - Autopilot runtime binding returns evidence-backed RCA/hypothesis/recommendation sample-runtime payloads.
+      - No real LLM, production model config, or execution action is required.
+
+  - id: PW2-WP6-AUTOPILOT-UI-BINDING-001
+    wp: WP6
+    title: Bind Autopilot RCA panel to runtime API
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/api/**
+      - frontend/src/types/**
+      - frontend/src/views/aof/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP6-AUTOPILOT-RUNTIME-BINDING-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - RCA panel reads evidence/hypothesis/recommendation data from runtime API adapter and keeps human controls non-mutating.
+
+  - id: PW2-WP7-AGENTOPS-RUNTIME-API-001
+    wp: WP7
+    title: AgentOps trace runtime-backed API
+    repo: ../osmx
+    priority: P0
+    lane: backend-ai
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/api/v1/**
+      - osmx-go/internal/router/**
+      - osmx-ai/app/agent_runtime/**
+      - docs/reports/**
+    forbidden_scope:
+      - production model config
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/api/v1 ./...
+      - cd osmx-ai && PATH=/tmp/osmx-ai-pw1-venv/bin:$PATH pytest -q
+    acceptance:
+      - AgentOps API returns trace list/detail/replay-safe payloads.
+      - Replay remains read-only and does not call tools.
+
+  - id: PW2-WP7-AGENTOPS-UI-BINDING-001
+    wp: WP7
+    title: Bind AgentOps Console to runtime API
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/api/**
+      - frontend/src/types/**
+      - frontend/src/views/aof/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP7-AGENTOPS-RUNTIME-API-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - AgentOps UI reads trace records from the runtime API adapter.
+
+  - id: PW2-WP8-SKILL-REGISTRY-RUNTIME-API-001
+    wp: WP8
+    title: Skill Registry runtime-backed API
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/runbook/**
+      - osmx-go/internal/api/v1/**
+      - osmx-go/internal/router/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+      - production config
+    depends_on:
+      - PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/runbook/... ./internal/api/v1 ./...
+    acceptance:
+      - Skill Registry API returns risk/scope/version/validation records without executing skills.
+
+  - id: PW2-WP8-SKILL-REGISTRY-UI-BINDING-001
+    wp: WP8
+    title: Bind Skill Registry UI to runtime API
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/api/**
+      - frontend/src/types/**
+      - frontend/src/views/aof/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP8-SKILL-REGISTRY-RUNTIME-API-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Skill Registry UI reads records from runtime API adapter and does not execute skills.
+
+  - id: PW2-WP9-RESILIENCE-RUNTIME-API-001
+    wp: WP9
+    title: Resilience Lab replay-only runtime API
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/api/v1/**
+      - osmx-go/internal/router/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+      - production config
+      - production experiment execution
+    depends_on:
+      - PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/api/v1 ./...
+    acceptance:
+      - Resilience API returns replay-only experiment/guardrail/evidence/score records.
+      - No experiment execution endpoint or production target is introduced.
+
+  - id: PW2-WP9-RESILIENCE-UI-BINDING-001
+    wp: WP9
+    title: Bind Resilience Lab UI to replay-only runtime API
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/api/**
+      - frontend/src/types/**
+      - frontend/src/views/aof/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP9-RESILIENCE-RUNTIME-API-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Resilience Lab UI reads replay-only records and does not run experiments.
+
+  - id: PW2-WP10-PACK-REGISTRY-RUNTIME-API-001
+    wp: WP10
+    title: Scenario Pack registry runtime-backed API
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/api/v1/**
+      - osmx-go/internal/router/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+      - production config
+      - external package registry
+    depends_on:
+      - PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/api/v1 ./...
+    acceptance:
+      - Scenario Pack API returns manifest/version/dependency/install-state records.
+      - No install, external registry, or package mutation is introduced.
+
+  - id: PW2-WP10-PACK-UI-BINDING-001
+    wp: WP10
+    title: Bind Scenario Pack Console to runtime API
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/api/**
+      - frontend/src/types/**
+      - frontend/src/views/aof/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP10-PACK-REGISTRY-RUNTIME-API-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Scenario Pack UI reads manifest records from runtime API adapter and does not install packs.
+
+  - id: PW2-WP12-RUNTIME-BREADTH-SMOKE-001
+    wp: WP12
+    title: Runtime binding breadth smoke evidence
+    repo: ../osmx
+    priority: P0
+    lane: evaluation
+    write_scope:
+      - docs/reports/**
+      - docs/test-cases/**
+      - frontend/e2e/**
+    forbidden_scope:
+      - production config
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP2-TWIN-UI-BINDING-001
+      - PW2-WP4-ALERTOPS-UI-BINDING-001
+      - PW2-WP5-WORKCENTER-UI-BINDING-001
+      - PW2-WP6-AUTOPILOT-UI-BINDING-001
+      - PW2-WP7-AGENTOPS-UI-BINDING-001
+      - PW2-WP8-SKILL-REGISTRY-UI-BINDING-001
+      - PW2-WP9-RESILIENCE-UI-BINDING-001
+      - PW2-WP10-PACK-UI-BINDING-001
+    validation:
+      - cd frontend && npm run build:check
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./...
+    acceptance:
+      - Breadth smoke evidence covers all Product Wave 2 runtime-bound surfaces.
+
+  - id: PW2-WP13-RUNTIME-BINDING-DB-GUARDRAIL-001
+    wp: WP13
+    title: Runtime binding DB guardrail replay
+    repo: ../osmx
+    priority: P0
+    lane: evaluation
+    write_scope:
+      - scripts/**
+      - docs/reports/**
+    forbidden_scope:
+      - runtime secrets
+      - production config
+      - osmx-go/migrations/**
+    depends_on:
+      - PW2-WP12-RUNTIME-BREADTH-SMOKE-001
+    validation:
+      - python3 scripts/migration_pair_check.py --root .
+      - ./scripts/db-portability-scan.sh
+    acceptance:
+      - Runtime binding changes preserve PostgreSQL primary / MySQL compatibility guardrail evidence.
+
+  - id: PW2-INTEGRATION-WAVE-SUMMARY-001
+    wp: INTEGRATION
+    title: Product Wave 2 closeout and Wave 3 selection
+    repo: shared-specs
+    priority: P0
+    lane: integration
+    write_scope:
+      - infrastructure/artifacts/**
+      - ../osmx/docs/plans/80-wave-execution-board.md
+      - ../osmx/docs/guides/document-change-log.md
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    depends_on:
+      - PW2-WP12-RUNTIME-BREADTH-SMOKE-001
+      - PW2-WP13-RUNTIME-BINDING-DB-GUARDRAIL-001
+    validation:
+      - git diff --check
+    acceptance:
+      - Wave summary lists completed tasks, failed gates, residual risks, and proposed Wave 3 task ids.

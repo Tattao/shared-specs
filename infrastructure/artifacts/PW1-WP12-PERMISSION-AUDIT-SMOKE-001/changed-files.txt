@@ -1,0 +1,7 @@
+../osmx/osmx-go/internal/api/v1/aof_permission_audit_smoke_test.go
+../osmx/docs/reports/aof-permission-audit-smoke-20260430.md
+infrastructure/artifacts/PW1-WP12-PERMISSION-AUDIT-SMOKE-001/summary.md
+infrastructure/artifacts/PW1-WP12-PERMISSION-AUDIT-SMOKE-001/changed-files.txt
+infrastructure/artifacts/PW1-WP12-PERMISSION-AUDIT-SMOKE-001/validation.md
+infrastructure/artifacts/PW1-WP12-PERMISSION-AUDIT-SMOKE-001/residual-risks.md
+infrastructure/artifacts/PW1-WP12-PERMISSION-AUDIT-SMOKE-001/handoff.md

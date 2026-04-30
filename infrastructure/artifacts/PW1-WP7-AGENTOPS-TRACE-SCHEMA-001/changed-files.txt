@@ -1,0 +1,7 @@
+../osmx/osmx-go/internal/aof/agentops/trace_schema.go
+../osmx/osmx-go/internal/aof/agentops/trace_schema_test.go
+../osmx/osmx-go/internal/api/v1/aof_handler.go
+../osmx/osmx-go/internal/api/v1/aof_handler_test.go
+../osmx/osmx-go/internal/router/router.go
+../osmx/osmx-ai/app/agent_runtime/agentops_trace.py
+../osmx/docs/reference/aof-agentops-trace-schema-v0.md

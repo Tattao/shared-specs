@@ -1,0 +1,4 @@
+infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/smoke-results.json
+infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/smoke-results.md
+../osmx/docs/reports/aof-product-wave1-evidence-matrix-20260430.md
+../osmx/docs/test-cases/aof-product-wave1-smoke-evidence-plan.md

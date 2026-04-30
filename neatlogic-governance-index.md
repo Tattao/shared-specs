@@ -74,6 +74,44 @@ Use a tag or release branch for code movement, not floating HEAD.
 Prefer `4.0.0` or an owner-approved customer deployment version after legal confirmation.
 ```
 
+### 3.1 Product Wave 1 Source Pin Record
+
+Task: `PW1-WP11-NEATLOGIC-SOURCE-PIN-001`
+
+Verification command:
+
+```text
+git ls-remote https://gitee.com/neat-logic/neatlogic-itom-all.git HEAD refs/heads/develop4.0.0 refs/tags/4.0.0 'refs/tags/4.0.0^{}'
+```
+
+Verified on `2026-04-30`:
+
+| Ref | Commit / Object |
+|-----|-----------------|
+| `HEAD` | `8de339b2ce3a8c93b8162f581e5dc060e64aa421` |
+| `refs/heads/develop4.0.0` | `8de339b2ce3a8c93b8162f581e5dc060e64aa421` |
+| `refs/tags/4.0.0` | `258a00b1c7eb17a87901ea9e74cef87c16539649` |
+| `refs/tags/4.0.0^{}` | `fedf80cd8a7df8f291e6f0329e1e6215423195fe` |
+
+Source pin recommendation for read-only inventory:
+
+```text
+Use annotated tag `4.0.0` dereferenced to commit `fedf80cd8a7df8f291e6f0329e1e6215423195fe`, unless the Owner supplies a different customer-approved deployment version.
+```
+
+Legal evidence pointer:
+
+```text
+Public pointer only: private legal / commercial authorization evidence must be recorded outside this repository.
+Required private fields: contract or purchase evidence id, legal reviewer, review date, allowed usage, prohibited usage, redistribution / delivery scope.
+```
+
+Code-movement stop condition:
+
+```text
+No NeatLogic source file may be copied, translated, vendored, imported, generated from, or committed into OSMX product code until legal, source, boundary, contract, security, dependency, delivery, and no-core-pollution gates are all explicitly closed by a human owner.
+```
+
 ## 4. Reuse Lanes
 
 | Lane | Allowed Use | OSMX Location Pattern | Forbidden |

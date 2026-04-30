@@ -1,0 +1,2 @@
+../osmx/docs/plans/80-wave-execution-board.md
+../osmx/docs/guides/document-change-log.md

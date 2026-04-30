@@ -1,0 +1,11 @@
+../osmx/frontend/src/router/index.ts
+../osmx/frontend/src/components/layout/Sidebar.vue
+../osmx/frontend/src/views/aof/AofSurfaceView.vue
+../osmx/docs/plans/00-current-plan-index.md
+../osmx/docs/plans/80-wave-execution-board.md
+../osmx/docs/guides/document-change-log.md
+infrastructure/artifacts/PW1-WP0-SHELL-IA-001/summary.md
+infrastructure/artifacts/PW1-WP0-SHELL-IA-001/changed-files.txt
+infrastructure/artifacts/PW1-WP0-SHELL-IA-001/validation.md
+infrastructure/artifacts/PW1-WP0-SHELL-IA-001/residual-risks.md
+infrastructure/artifacts/PW1-WP0-SHELL-IA-001/handoff.md

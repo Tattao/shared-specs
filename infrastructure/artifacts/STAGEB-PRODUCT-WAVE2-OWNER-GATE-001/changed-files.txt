@@ -1,0 +1,9 @@
+infrastructure/product-wave2-owner-gate.md
+infrastructure/product-wave2-task-graph-v1.yaml
+../osmx/docs/plans/80-wave-execution-board.md
+../osmx/docs/guides/document-change-log.md
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE2-OWNER-GATE-001/summary.md
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE2-OWNER-GATE-001/changed-files.txt
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE2-OWNER-GATE-001/validation.md
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE2-OWNER-GATE-001/residual-risks.md
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE2-OWNER-GATE-001/handoff.md

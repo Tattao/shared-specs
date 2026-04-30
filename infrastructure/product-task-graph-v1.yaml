@@ -1,0 +1,634 @@
+graph:
+  id: aof-product-wave1-task-graph-v1
+  status: product_wave1_active
+  date: "2026-04-30"
+  purpose: "Convert the AOF complete-product plan into executable product-code waves that can run continuously under guarded autonomy."
+  product_source_of_truth:
+    - ../osmx/docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+    - ../osmx/docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    - ../osmx/docs/plans/95-autonomic-operations-fabric-full-product-shape-and-pilot-mvp-plan.md
+    - ../osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+  execution_source_of_truth:
+    - infrastructure/task-queue-v2.yaml
+    - infrastructure/product-wave1-task-pack.md
+    - infrastructure/product-wave1-owner-gate.md
+  hard_limits:
+    owner_gate_required_before_product_code: true
+    auto_merge: forbidden
+    production_environment_changes: forbidden
+    destructive_git_commands: forbidden
+    shared_specs_runtime_dependency: forbidden
+    hermes_product_code_write: forbidden
+
+waves:
+  - id: PRODUCT-WAVE1
+    name: Product skeleton and core contract wave
+    status: active
+    timebox: 48-72h after Owner approval
+    goal: "Create the first usable complete-product skeleton across shell, contracts, twin, telemetry, alert, AgentOps, governance, and WP12 evidence without deep scenario implementation."
+    allowed_repos:
+      - ../osmx
+      - shared-specs
+    forbidden_repos:
+      - production environments
+    exit_gate:
+      - all tasks have changed-files, validation, residual-risks, handoff
+      - no product-code task starts without clean worktree preflight
+      - no merge, release, or production operation
+      - owner reviews wave summary before next product wave
+
+task_defaults:
+  status: ready_after_owner_gate
+  owner: Codex
+  validation_minimum:
+    - git diff --check
+    - targeted tests or build checks for touched area
+    - artifact handoff under shared-specs
+  required_artifacts:
+    - changed-files.txt
+    - validation.md
+    - residual-risks.md
+    - handoff.md
+
+tasks:
+  - id: PW1-WP0-SHELL-IA-001
+    wp: WP0
+    title: Complete-product navigation registry and IA skeleton
+    repo: ../osmx
+    priority: P0
+    lane: frontend
+    write_scope:
+      - frontend/src/router/**
+      - frontend/src/layouts/**
+      - frontend/src/views/**
+      - docs/plans/80-wave-execution-board.md
+    forbidden_scope:
+      - osmx-go/**
+      - osmx-ai/**
+    depends_on: []
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - 10 product surfaces are discoverable behind capability-aware navigation.
+      - Empty/loading/error states are present for skeleton pages.
+
+  - id: PW1-WP0-FEATURE-GATE-001
+    wp: WP0
+    title: Product-surface feature gate matrix
+    repo: ../osmx
+    priority: P0
+    lane: governance
+    write_scope:
+      - docs/plans/**
+      - osmx-go/internal/**
+      - frontend/src/**
+    forbidden_scope:
+      - production config
+    depends_on:
+      - PW1-WP0-SHELL-IA-001
+    validation:
+      - cd osmx-go && go test ./...
+      - cd frontend && npm run build:check
+    acceptance:
+      - Every new product surface has a capability key, tenant scope, and disabled behavior.
+
+  - id: PW1-WP1-CORE-CONTRACT-DOC-001
+    wp: WP1
+    title: Freeze unified event and object contract v0
+    repo: ../osmx
+    priority: P0
+    lane: architecture
+    write_scope:
+      - docs/architecture/**
+      - docs/reference/**
+      - docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    forbidden_scope:
+      - osmx-go/**
+      - frontend/**
+    depends_on: []
+    validation:
+      - git diff --check
+    acceptance:
+      - Core object, event, permission, audit, and timeline contracts are versioned.
+
+  - id: PW1-WP1-API-STUB-001
+    wp: WP1
+    title: Core contract API stubs behind gates
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/**
+      - osmx-go/cmd/server/**
+      - osmx-go/migrations/**
+    forbidden_scope:
+      - frontend/**
+      - osmx-ai/**
+    depends_on:
+      - PW1-WP1-CORE-CONTRACT-DOC-001
+    validation:
+      - cd osmx-go && go test ./...
+      - python3 scripts/migration_pair_check.py --root .
+    acceptance:
+      - P0 contract routes compile, are gated, and do not bypass audit.
+
+  - id: PW1-WP2-TWIN-TYPE-REGISTRY-001
+    wp: WP2
+    title: Operational Twin CI type registry skeleton
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/**
+      - osmx-go/migrations/**
+      - docs/reference/**
+    forbidden_scope:
+      - frontend/**
+    depends_on:
+      - PW1-WP1-API-STUB-001
+    validation:
+      - cd osmx-go && go test ./...
+      - python3 scripts/migration_pair_check.py --root .
+    acceptance:
+      - DB, Host, Service, Kubernetes, CloudResource, SecurityAsset, BusinessJourney type metadata exists.
+
+  - id: PW1-WP2-TWIN-EXPLORER-001
+    wp: WP2
+    title: Twin Explorer list/detail skeleton
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/views/**
+      - frontend/src/api/**
+      - frontend/src/types/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW1-WP2-TWIN-TYPE-REGISTRY-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - CI list/detail shell renders sample data and links back to Command Center.
+
+  - id: PW1-WP3-TELEMETRY-SOURCE-001
+    wp: WP3
+    title: TelemetrySource registry skeleton
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/**
+      - osmx-go/migrations/**
+      - docs/reference/**
+    forbidden_scope:
+      - frontend/**
+    depends_on:
+      - PW1-WP1-API-STUB-001
+    validation:
+      - cd osmx-go && go test ./...
+      - python3 scripts/migration_pair_check.py --root .
+    acceptance:
+      - Prometheus, Webhook, DB Collector, Synthetic, Security Finding source types can be registered.
+
+  - id: PW1-WP3-TIMELINE-PROJECTION-001
+    wp: WP3
+    title: Unified timeline projection contract
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/**
+      - docs/reference/**
+    forbidden_scope:
+      - osmx-ai/**
+    depends_on:
+      - PW1-WP1-API-STUB-001
+      - PW1-WP3-TELEMETRY-SOURCE-001
+    validation:
+      - cd osmx-go && go test ./...
+    acceptance:
+      - Timeline can represent signal, alert, investigation, approval, execution, audit, and recovery markers.
+
+  - id: PW1-WP4-ALERT-SCHEMA-001
+    wp: WP4
+    title: Normalized alert schema and adapter skeleton
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/**
+      - osmx-go/migrations/**
+      - docs/reference/**
+    forbidden_scope:
+      - frontend/**
+    depends_on:
+      - PW1-WP3-TELEMETRY-SOURCE-001
+    validation:
+      - cd osmx-go && go test ./...
+      - python3 scripts/migration_pair_check.py --root .
+    acceptance:
+      - Normalized alert contains severity, fingerprint, labels, annotations, ci_id, and source.
+
+  - id: PW1-WP4-ALERT-UI-001
+    wp: WP4
+    title: AlertOps skeleton UI
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/views/**
+      - frontend/src/api/**
+      - frontend/src/types/**
+    forbidden_scope:
+      - osmx-go/**
+    depends_on:
+      - PW1-WP4-ALERT-SCHEMA-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Alert list/detail skeleton shows normalized fields and incident association placeholder.
+
+  - id: PW1-WP5-WORKCENTER-SHELL-001
+    wp: WP5
+    title: Workcenter ticket/change shell
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/views/**
+      - frontend/src/api/**
+      - frontend/src/types/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW1-WP0-SHELL-IA-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Workcenter exposes ticket, change, assignment, SLA, and timeline placeholders.
+
+  - id: PW1-WP5-ITSM-CONTRACT-001
+    wp: WP5
+    title: Ticket and ChangeRequest P0 contract
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/**
+      - osmx-go/migrations/**
+      - docs/reference/**
+    forbidden_scope:
+      - osmx-ai/**
+    depends_on:
+      - PW1-WP1-API-STUB-001
+    validation:
+      - cd osmx-go && go test ./...
+      - python3 scripts/migration_pair_check.py --root .
+    acceptance:
+      - Ticket and ChangeRequest contracts bind incident, plan, owner, priority, and SLA fields.
+
+  - id: PW1-WP6-AUTOPILOT-EVIDENCE-CONTRACT-001
+    wp: WP6
+    title: Evidence-backed Incident Autopilot contract
+    repo: ../osmx
+    priority: P0
+    lane: ai-contract
+    write_scope:
+      - docs/reference/**
+      - osmx-ai/app/**
+      - osmx-go/internal/**
+    forbidden_scope:
+      - production model config
+    depends_on:
+      - PW1-WP1-CORE-CONTRACT-DOC-001
+    validation:
+      - cd osmx-go && go test ./...
+      - cd osmx-ai && pytest
+    acceptance:
+      - RCA/hypothesis/recommendation outputs require evidence references and risk markers.
+
+  - id: PW1-INFRA-AI-PYTEST-BASELINE-001
+    wp: INFRA
+    title: Restore osmx-ai pytest validation baseline
+    repo: ../osmx
+    priority: P0
+    lane: validation
+    write_scope:
+      - osmx-ai/app/**
+      - osmx-ai/tests/**
+      - osmx-ai/requirements.txt
+      - docs/reports/**
+    forbidden_scope:
+      - production model config
+      - osmx-go/**
+      - frontend/**
+    depends_on: []
+    validation:
+      - cd osmx-ai && pytest
+      - git diff --check
+    acceptance:
+      - Full osmx-ai pytest passes without requiring production services.
+      - Optional runtime dependencies used by tests are either declared or safely mocked.
+      - Python event-loop handling is compatible with the project test runtime.
+
+  - id: PW1-WP6-RCA-PANEL-SHELL-001
+    wp: WP6
+    title: Incident Autopilot RCA panel skeleton
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/views/**
+      - frontend/src/components/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW1-WP6-AUTOPILOT-EVIDENCE-CONTRACT-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Panel shows evidence, hypotheses, recommendations, and human control actions.
+
+  - id: PW1-WP7-AGENTOPS-TRACE-SCHEMA-001
+    wp: WP7
+    title: AgentOpsTrace schema and ledger skeleton
+    repo: ../osmx
+    priority: P0
+    lane: backend-ai
+    write_scope:
+      - osmx-go/internal/**
+      - osmx-ai/app/**
+      - osmx-go/migrations/**
+      - docs/reference/**
+    forbidden_scope:
+      - frontend/**
+    depends_on:
+      - PW1-WP1-API-STUB-001
+    validation:
+      - cd osmx-go && go test ./...
+      - cd osmx-ai && pytest
+      - python3 scripts/migration_pair_check.py --root .
+    acceptance:
+      - Trace records agent, task, context, risk, cost, latency, tool calls, and evidence refs.
+
+  - id: PW1-WP7-AGENTOPS-CONSOLE-001
+    wp: WP7
+    title: AgentOps Console skeleton
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/views/**
+      - frontend/src/api/**
+      - frontend/src/types/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW1-WP7-AGENTOPS-TRACE-SCHEMA-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Trace list/detail/replay placeholders are visible from Incident context.
+
+  - id: PW1-WP8-SKILL-CONTRACT-001
+    wp: WP8
+    title: ActionSkill and AssetExecution contract alignment
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/runbook/**
+      - osmx-go/internal/plan/**
+      - docs/reference/**
+    forbidden_scope:
+      - frontend/**
+    depends_on:
+      - PW1-WP1-API-STUB-001
+    validation:
+      - cd osmx-go && go test ./internal/runbook/... ./internal/plan/...
+    acceptance:
+      - PlanStep -> Approval -> AssetExecution -> Artifact -> Audit contract is explicit.
+
+  - id: PW1-WP8-SKILL-REGISTRY-UI-001
+    wp: WP8
+    title: Skill registry skeleton UI
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/views/**
+      - frontend/src/api/**
+      - frontend/src/types/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW1-WP8-SKILL-CONTRACT-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Skill registry list/detail exposes risk, scope, version, and validation status.
+
+  - id: PW1-WP9-RESILIENCE-CONTRACT-001
+    wp: WP9
+    title: Resilience experiment and guardrail contract v0
+    repo: ../osmx
+    priority: P0
+    lane: architecture
+    write_scope:
+      - docs/reference/**
+      - docs/architecture/**
+      - osmx-go/internal/**
+    forbidden_scope:
+      - production experiment execution
+    depends_on:
+      - PW1-WP1-CORE-CONTRACT-DOC-001
+    validation:
+      - cd osmx-go && go test ./...
+    acceptance:
+      - Experiment requires blast radius, environment, abort condition, and recovery verification.
+
+  - id: PW1-WP9-RESILIENCE-LAB-SHELL-001
+    wp: WP9
+    title: Resilience Lab skeleton UI
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/views/**
+      - frontend/src/api/**
+      - frontend/src/types/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW1-WP9-RESILIENCE-CONTRACT-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Experiment catalog, guardrail, evidence, score placeholders are visible.
+
+  - id: PW1-WP10-PACK-MANIFEST-001
+    wp: WP10
+    title: Scenario Pack manifest contract
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - docs/reference/**
+      - osmx-go/internal/**
+      - osmx-go/migrations/**
+    forbidden_scope:
+      - frontend/**
+    depends_on:
+      - PW1-WP1-CORE-CONTRACT-DOC-001
+    validation:
+      - cd osmx-go && go test ./...
+      - python3 scripts/migration_pair_check.py --root .
+    acceptance:
+      - Pack manifest supports objects, collectors, alerts, runbooks, experiments, eval data.
+
+  - id: PW1-WP10-PACK-CONSOLE-001
+    wp: WP10
+    title: Scenario Pack Console skeleton
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/views/**
+      - frontend/src/api/**
+      - frontend/src/types/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW1-WP10-PACK-MANIFEST-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Pack install/preview/version/dependency placeholders are visible.
+
+  - id: PW1-WP11-NEATLOGIC-SOURCE-PIN-001
+    wp: WP11
+    title: NeatLogic source pin and legal evidence index
+    repo: shared-specs
+    priority: P0
+    lane: legal-architecture
+    write_scope:
+      - neatlogic-governance-index.md
+      - infrastructure/artifacts/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    depends_on: []
+    validation:
+      - git diff --check
+    acceptance:
+      - Source version, legal pointer, and code-movement stop condition are explicit.
+
+  - id: PW1-WP12-SMOKE-EVIDENCE-UPGRADE-001
+    wp: WP12
+    title: Upgrade smoke scaffold into wave evidence matrix
+    repo: shared-specs
+    priority: P0
+    lane: evaluation
+    write_scope:
+      - infrastructure/**
+      - ../osmx/docs/reports/**
+      - ../osmx/docs/test-cases/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    depends_on:
+      - PW1-WP0-SHELL-IA-001
+      - PW1-WP1-API-STUB-001
+    validation:
+      - python3 infrastructure/stageb-smoke-automation-v2.py --task-id STAGEB-SMOKE-AUTOMATION-001
+      - git diff --check
+    acceptance:
+      - Each product-code task maps to a smoke evidence folder and verdict rule.
+
+  - id: PW1-WP12-PERMISSION-AUDIT-SMOKE-001
+    wp: WP12
+    title: Permission and audit smoke tests
+    repo: ../osmx
+    priority: P0
+    lane: evaluation
+    write_scope:
+      - frontend/e2e/**
+      - osmx-go/internal/**
+      - docs/reports/**
+    forbidden_scope:
+      - production config
+    depends_on:
+      - PW1-WP0-FEATURE-GATE-001
+      - PW1-WP1-API-STUB-001
+    validation:
+      - cd osmx-go && go test ./...
+      - cd frontend && npm run build:check
+    acceptance:
+      - Unauthorized paths fail and audit/timeline entries exist for governed actions.
+
+  - id: PW1-WP13-STORE-ABSTRACTION-DOC-001
+    wp: WP13
+    title: Store abstraction v0 task breakdown
+    repo: ../osmx
+    priority: P0
+    lane: architecture
+    write_scope:
+      - docs/architecture/**
+      - docs/reference/**
+      - docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    forbidden_scope:
+      - osmx-go/**
+    depends_on:
+      - PW1-WP1-CORE-CONTRACT-DOC-001
+    validation:
+      - git diff --check
+    acceptance:
+      - MetricStore, EventStore, KnowledgeStore, EvidenceStore, TraceStore, ObjectStore boundaries are actionable.
+
+  - id: PW1-WP13-DB-GUARDRAIL-001
+    wp: WP13
+    title: DB-sensitive implementation guardrail pass
+    repo: ../osmx
+    priority: P0
+    lane: evaluation
+    write_scope:
+      - scripts/**
+      - docs/reports/**
+      - .github/**
+    forbidden_scope:
+      - runtime secrets
+    depends_on:
+      - PW1-WP1-API-STUB-001
+      - PW1-WP2-TWIN-TYPE-REGISTRY-001
+      - PW1-WP3-TELEMETRY-SOURCE-001
+    validation:
+      - python3 scripts/migration_pair_check.py --root .
+      - scripts/db-portability-scan.sh
+    acceptance:
+      - DB-sensitive task outputs have PostgreSQL primary and MySQL compatibility evidence.
+
+  - id: PW1-INTEGRATION-WAVE-SUMMARY-001
+    wp: INTEGRATION
+    title: Product Wave 1 closeout and next-wave selection
+    repo: shared-specs
+    priority: P0
+    lane: integration
+    write_scope:
+      - infrastructure/artifacts/**
+      - ../osmx/docs/plans/80-wave-execution-board.md
+      - ../osmx/docs/guides/document-change-log.md
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    depends_on:
+      - PW1-WP12-SMOKE-EVIDENCE-UPGRADE-001
+      - PW1-WP12-PERMISSION-AUDIT-SMOKE-001
+      - PW1-WP13-DB-GUARDRAIL-001
+    validation:
+      - git diff --check
+    acceptance:
+      - Wave summary lists completed tasks, failed gates, residual risks, and proposed Wave 2 task ids.

@@ -1,0 +1,10 @@
+infrastructure/product-task-graph-v1.yaml
+../osmx/osmx-ai/requirements.txt
+../osmx/osmx-ai/app/agent_runtime/executors/redis_executor.py
+../osmx/osmx-ai/app/core/config.py
+../osmx/osmx-ai/app/core/llm_client.py
+../osmx/osmx-ai/tests/conftest.py
+infrastructure/artifacts/PW1-WP6-AUTOPILOT-EVIDENCE-CONTRACT-001/summary.md
+infrastructure/artifacts/PW1-WP6-AUTOPILOT-EVIDENCE-CONTRACT-001/validation.md
+infrastructure/artifacts/PW1-WP6-AUTOPILOT-EVIDENCE-CONTRACT-001/residual-risks.md
+infrastructure/artifacts/PW1-WP6-AUTOPILOT-EVIDENCE-CONTRACT-001/handoff.md
