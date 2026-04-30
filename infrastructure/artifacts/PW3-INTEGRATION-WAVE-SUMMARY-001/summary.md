@@ -1,0 +1,36 @@
+# PW3 Integration Wave Summary
+
+Date: 2026-04-30
+
+Result: closed_pass_with_human_gate_remaining
+
+Completed Product Wave 3 under the approved task graph and boundaries.
+
+Completed tasks:
+
+- `PW3-WP0-MAIN-BASELINE-PREFLIGHT-001`
+- `PW3-WP1-STORE-CONTRACT-REFINE-001`
+- `PW3-WP2-STORE-BACKED-RUNTIME-CORE-001`
+- `PW3-WP3-DETAIL-API-UI-BINDING-001`
+- `PW3-WP4-AUTH-BROWSER-BREADTH-E2E-001`
+- `PW3-WP5-LIVE-DB-RUNTIME-REPLAY-GATE-001`
+- `PW3-WP6-GOVERNED-ACTION-GATES-001`
+- `PW3-INTEGRATION-WAVE-SUMMARY-001`
+
+Failed gates:
+
+- none
+
+Human gates still open:
+
+- `migration_runtime_replay` for disposable PostgreSQL/MySQL runtime replay execution.
+
+Proposed Wave 4 task IDs:
+
+- `PW4-WP1-STORE-ADAPTER-READ-PATH-001`
+- `PW4-WP2-RUNTIME-PROVENANCE-PERSISTENCE-001`
+- `PW4-WP3-BROWSER-E2E-CI-HARNESS-001`
+- `PW4-WP4-LIVE-DB-REPLAY-EXECUTION-GATE-001`
+- `PW4-WP5-ACTION-REQUEST-API-AUDIT-001`
+- `PW4-WP6-GOVERNED-ACTION-UI-GATE-001`
+- `PW4-INTEGRATION-WAVE-SUMMARY-001`
