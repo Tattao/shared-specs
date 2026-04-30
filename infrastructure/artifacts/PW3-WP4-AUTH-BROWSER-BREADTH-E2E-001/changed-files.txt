@@ -1,0 +1,8 @@
+osmx/frontend/e2e/15-aof-runtime-breadth.spec.ts
+osmx/docs/test-cases/aof-product-wave3-auth-browser-breadth-e2e-20260430.md
+osmx/docs/reports/aof-product-wave3-auth-browser-breadth-e2e-20260430.md
+shared-specs/infrastructure/artifacts/PW3-WP4-AUTH-BROWSER-BREADTH-E2E-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW3-WP4-AUTH-BROWSER-BREADTH-E2E-001/handoff.md
+shared-specs/infrastructure/artifacts/PW3-WP4-AUTH-BROWSER-BREADTH-E2E-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW3-WP4-AUTH-BROWSER-BREADTH-E2E-001/summary.md
+shared-specs/infrastructure/artifacts/PW3-WP4-AUTH-BROWSER-BREADTH-E2E-001/validation.md
