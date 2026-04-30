@@ -1,0 +1,165 @@
+pool:
+  name: osmx-autonomous-delivery-stage-a
+  version: 2
+  status: draft_ready
+  default_agent: codex
+  mode: codex_first_guarded_autonomy
+  max_parallel_slots: 4
+  health_check_interval_seconds: 300
+  workspace:
+    root_env: OSMX_WORKSPACE_ROOT
+    osmx_repo_env: OSMX_REPO
+    shared_specs_repo_env: SHARED_SPECS_REPO
+    artifact_root_env: OSMX_ARTIFACT_ROOT
+
+runner_policy:
+  allowed_agents:
+    - codex
+  disabled_agents:
+    - claude-code
+  disallowed_command_flags:
+    - --yolo
+    - --dangerously-skip-permissions
+  destructive_git_commands:
+    - git reset --hard
+    - git checkout --
+    - git clean -fd
+  auto_merge: false
+  self_approval: false
+  production_changes: false
+
+profiles:
+  codex-docs-ops:
+    agent_type: codex
+    purpose: Documentation, task queue, handoff, status board, and coordination ledger work
+    max_timeout_seconds: 1800
+    allowed_write_roots:
+      - ${SHARED_SPECS_REPO}
+      - ${OSMX_REPO}/docs
+      - ${OSMX_REPO}/ROADMAP.md
+    preferred_tasks:
+      - planning
+      - delivery-ops
+      - docs
+
+  codex-evaluation:
+    agent_type: codex
+    purpose: Independent validation, smoke inventory, quality gate review, owner decision package
+    max_timeout_seconds: 1800
+    allowed_write_roots:
+      - ${SHARED_SPECS_REPO}/infrastructure/artifacts
+      - ${SHARED_SPECS_REPO}
+      - ${OSMX_REPO}/docs/reports
+      - ${OSMX_REPO}/docs/test-cases
+    preferred_tasks:
+      - evaluation
+      - qa
+      - quality-gates
+    cannot_implement_task_it_evaluates: true
+
+  codex-architecture:
+    agent_type: codex
+    purpose: Core boundary, store abstraction, connector boundary, architecture acceptance docs
+    max_timeout_seconds: 2400
+    allowed_write_roots:
+      - ${OSMX_REPO}/docs/architecture
+      - ${OSMX_REPO}/docs/plans
+      - ${OSMX_REPO}/docs/reports
+    preferred_tasks:
+      - architecture
+    human_gate_required:
+      - architecture
+
+  codex-frontend:
+    agent_type: codex
+    purpose: Frontend implementation after Stage A gate approval
+    enabled_in_stage_a: false
+    max_timeout_seconds: 2400
+    allowed_write_roots:
+      - ${OSMX_REPO}/frontend
+      - ${OSMX_REPO}/docs/reports
+    preferred_tasks:
+      - frontend
+    human_gate_required:
+      - product_scope
+
+  codex-backend:
+    agent_type: codex
+    purpose: Backend implementation after Stage A gate approval
+    enabled_in_stage_a: false
+    max_timeout_seconds: 2400
+    allowed_write_roots:
+      - ${OSMX_REPO}/osmx-go
+      - ${OSMX_REPO}/docs/reports
+    preferred_tasks:
+      - backend
+    human_gate_required:
+      - db_migration
+      - security
+
+slots:
+  slot-docs-1:
+    profile: codex-docs-ops
+    status: available
+    stage_a_enabled: true
+    tmux_session: osmx-stagea-docs-1
+    worktree_policy: existing_or_manual
+
+  slot-eval-1:
+    profile: codex-evaluation
+    status: available
+    stage_a_enabled: true
+    tmux_session: osmx-stagea-eval-1
+    worktree_policy: existing_or_manual
+
+  slot-arch-1:
+    profile: codex-architecture
+    status: available
+    stage_a_enabled: true
+    tmux_session: osmx-stagea-arch-1
+    worktree_policy: existing_or_manual
+
+  slot-docs-2:
+    profile: codex-docs-ops
+    status: reserve
+    stage_a_enabled: true
+    tmux_session: osmx-stagea-docs-2
+    worktree_policy: existing_or_manual
+
+  slot-backend-1:
+    profile: codex-backend
+    status: disabled_until_stage_b
+    stage_a_enabled: false
+    tmux_session: osmx-stageb-backend-1
+    worktree_policy: manual_only
+
+  slot-frontend-1:
+    profile: codex-frontend
+    status: disabled_until_stage_b
+    stage_a_enabled: false
+    tmux_session: osmx-stageb-frontend-1
+    worktree_policy: manual_only
+
+worktree_policy:
+  base_branch: origin/main
+  naming: agent/<lane>/<task-id>
+  auto_create_in_stage_a: false
+  require_clean_status_before_dispatch: true
+  protect_patterns:
+    - ${OSMX_REPO}
+    - ${SHARED_SPECS_REPO}
+    - osmx-emergency
+    - osmx-emergency-main-sync
+
+handoff_policy:
+  required: true
+  context_threshold_percent: 70
+  required_fields:
+    - cwd
+    - branch
+    - task_id
+    - changed_files
+    - validation_commands
+    - validation_results
+    - residual_risks
+    - next_single_action

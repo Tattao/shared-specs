@@ -10,12 +10,33 @@
 
 `shared-specs` 是独立协作证据仓 / 非源码仓。
 
-- 本地路径：`/Users/apple/Exec/Code/shared-specs`
+- 本地路径：由执行环境配置，当前推荐使用 `SHARED_SPECS_REPO`
 - 远端仓库：`https://github.com/Tattao/shared-specs`
 - 当前用途：沉淀跨仓规则、评审记录、任务模板、Agent 登记、模块边界、PR 队列和交付证据
 - 当前限制：不放业务源码、不放密钥、不放运行数据、不替代 `osmx/docs/plans`
 - 远端状态：已配置 `origin` 并推送 baseline
 - 运行边界：不得作为 `osmx` 的 runtime / build / CI / test 依赖，不得作为 git submodule
+
+## Autonomous Delivery MVP
+
+`2026-04-30` 起，Codex / 多 Agent 7x24 自主交付的 MVP 入口为:
+
+- [infrastructure/autonomous-delivery-mvp.md](./infrastructure/autonomous-delivery-mvp.md)
+- [infrastructure/task-queue-v2.yaml](./infrastructure/task-queue-v2.yaml)
+- [infrastructure/agent-pool-v2.yaml](./infrastructure/agent-pool-v2.yaml)
+- [infrastructure/quality-gates-v2.yaml](./infrastructure/quality-gates-v2.yaml)
+- [infrastructure/runner-v2.py](./infrastructure/runner-v2.py)
+
+v2 配置只承担 `Stage A: 8 小时无人值守` 的试运行，不自动合并，不自我批准，不执行生产变更。旧 `task-queue.yaml`、`agent-pool.yaml`、`quality-gates.yaml` 保留为历史 DW1 / DW2 队列记录，不再作为新一轮完整体产品 Alpha 的默认入口。
+
+运行前建议设置:
+
+```bash
+export OSMX_WORKSPACE_ROOT=/Users/shitao/Projects/Codex
+export OSMX_REPO=$OSMX_WORKSPACE_ROOT/osmx
+export SHARED_SPECS_REPO=$OSMX_WORKSPACE_ROOT/shared-specs
+export OSMX_ARTIFACT_ROOT=$SHARED_SPECS_REPO/infrastructure/artifacts
+```
 
 ## Source Of Truth
 
@@ -54,6 +75,8 @@
 
 未来所有并行开发轮次都必须把 `shared-specs` 当作协作账本使用。
 
+当前新任务默认采用 Codex-first guarded autonomy。旧文档里的 Hermes / Claude Code 混合编排只作为历史参考，除非新的 OSMX 事实源文档重新启用。
+
 每个 Agent 开工前登记：
 
 - Agent / 模块 / 角色
@@ -81,7 +104,9 @@
 - 多 Agent 不默认 fork 全历史；每个 Agent 只拿窄任务 brief、worktree、branch、write scope 和验收命令。
 - 阶段结束前，把 `git diff` 状态、测试结果、失败信息和阻塞原因写回本目录、执行仓 `docs/`、`docs/plans/`、README 或 PR 描述。
 
-当前 DW1 可恢复入口：
+历史 DW1 / DW2 可恢复入口：
+
+以下内容保留为 2026-04-23 前后 DW1 / DW2 的历史恢复信息，不作为 `2026-04-30` 后 Codex autonomous delivery Stage A 的默认入口。
 
 - `/Users/apple/Exec/Code/osmx-emergency-main-sync/docs/agent-handoff-20260423.md`
 - PR #44 已合并，merge commit `dc0366d91da6e821efb947a7fd68fe4334f311e3`；PR #45 / PR #46 也已合并，当前 `origin/main` 为 `d0c0a00b4e25f3c26175d8758dab5f99f6fdf6e0`。

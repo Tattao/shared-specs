@@ -18,6 +18,9 @@
 7. Treat shared-specs as a non-source repository: do not add business code, secrets, runtime data, or generated artifacts.
 8. Treat `osmx` as the final product source of truth. If shared-specs conflicts with `osmx`, `osmx` wins.
 9. Do not make `osmx` build, test, CI, runtime, or source code depend on the current shared-specs HEAD.
+10. For new autonomous delivery work, use the v2 MVP entrypoints under `infrastructure/`: `autonomous-delivery-mvp.md`, `task-queue-v2.yaml`, `agent-pool-v2.yaml`, and `quality-gates-v2.yaml`.
+11. New execution lanes default to Codex-first guarded autonomy. Legacy Hermes / Claude Code mixed orchestration is historical unless a newer `osmx/docs/plans` fact source explicitly re-enables it.
+12. Use environment variables such as `OSMX_WORKSPACE_ROOT`, `OSMX_REPO`, `SHARED_SPECS_REPO`, and `OSMX_ARTIFACT_ROOT`; do not introduce new hardcoded local workspace paths.
 
 ## Agent Dispatch Policy
 
@@ -26,6 +29,8 @@
 - Emergency implementation -> modify `osmx-emergency-main-sync` only
 - Collaboration evidence / templates / handoffs -> modify `shared-specs` only
 - Test / review agents -> may read all, but must state target repository clearly
+- Evaluation agents must not self-approve their own implementation work.
+- Stage A autonomous delivery tasks must not auto-merge.
 
 ## Shared Specs Adoption Rule
 

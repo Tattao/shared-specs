@@ -1,0 +1,6 @@
+infrastructure/artifacts/AOF-STAGEA-GATE-001/changed-files.txt
+infrastructure/artifacts/AOF-STAGEA-GATE-001/gate-summary.md
+infrastructure/artifacts/AOF-STAGEA-GATE-001/handoff.md
+infrastructure/artifacts/AOF-STAGEA-GATE-001/residual-risks.md
+infrastructure/artifacts/AOF-STAGEA-GATE-001/validation.md
+infrastructure/task-queue-v2.yaml

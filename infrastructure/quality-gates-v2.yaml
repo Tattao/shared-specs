@@ -1,0 +1,156 @@
+gates:
+  version: 2
+  status: draft_ready
+  source_of_truth: osmx/docs/plans
+  database_strategy: PostgreSQL Primary Runtime, MySQL Compatibility Guardrails
+  shared_specs_runtime_dependency: forbidden
+  auto_merge: forbidden
+  self_approval: forbidden
+
+  pre_dispatch:
+    - name: env-osmx-repo
+      command: test -n "$OSMX_REPO" && test -d "$OSMX_REPO/.git"
+      expect: exit_code=0
+      on_fail: human_gate_required
+
+    - name: env-shared-specs-repo
+      command: test -n "$SHARED_SPECS_REPO" && test -d "$SHARED_SPECS_REPO/.git"
+      expect: exit_code=0
+      on_fail: human_gate_required
+
+    - name: worktree-clean
+      command: cd "$TARGET_WORKTREE" && git status --porcelain
+      expect: empty
+      on_fail: blocked
+      note: Do not stash, reset, checkout, or clean without owner approval.
+
+    - name: main-fresh
+      command: cd "$TARGET_WORKTREE" && git fetch origin main && git log --oneline origin/main -1
+      expect: exit_code=0
+      on_fail: blocked
+
+    - name: write-scope-declared
+      command: test -n "$TASK_WRITE_SCOPE"
+      expect: exit_code=0
+      on_fail: blocked
+
+  scope:
+    - name: no-shared-specs-runtime-dependency
+      command: cd "$OSMX_REPO" && rg -n "shared-specs|SHARED_SPECS_REPO" osmx-go frontend osmx-ai .github scripts Makefile go.mod package.json || true
+      expect: docs_or_no_matches_only
+      on_fail: gate_failed
+      note: Docs and runbooks may mention shared-specs; runtime, build, test, CI, and source dependency are forbidden.
+
+    - name: no-archive-shared-specs-as-active-ledger
+      command: cd "$OSMX_REPO" && rg -n "docs/archive/local-worktree-docs-2026-04-29/shared-specs" docs/plans docs/architecture README.md ROADMAP.md || true
+      expect: only_historical_warning_or_96
+      on_fail: gate_failed
+
+    - name: no-forbidden-git-commands
+      command: git diff --cached --name-only >/tmp/osmx_stagea_files.txt && true
+      expect: manual_review
+      on_fail: human_gate_required
+
+  post_task:
+    - name: diff-check
+      command: cd "$TARGET_WORKTREE" && git diff --check
+      expect: exit_code=0
+      on_fail: fix_required
+
+    - name: changed-files-recorded
+      command: test -f "$TASK_ARTIFACT_DIR/changed-files.txt"
+      expect: exit_code=0
+      on_fail: fix_required
+
+    - name: validation-recorded
+      command: test -f "$TASK_ARTIFACT_DIR/validation.md"
+      expect: exit_code=0
+      on_fail: fix_required
+
+    - name: residual-risk-recorded
+      command: test -f "$TASK_ARTIFACT_DIR/residual-risks.md"
+      expect: exit_code=0
+      on_fail: fix_required
+
+  osmx_docs_task:
+    - name: document-change-log-updated
+      command: cd "$OSMX_REPO" && rg -n "$TASK_ID|7x24|Autonomous Delivery" docs/guides/document-change-log.md
+      expect: exit_code=0
+      on_fail: fix_required
+
+    - name: docs-link-check-light
+      command: cd "$OSMX_REPO" && git diff --name-only | rg "\\.md$" || true
+      expect: manual_review
+      on_fail: human_gate_required
+
+  db_sensitive:
+    - name: db-portability-scan
+      command: cd "$OSMX_REPO" && scripts/db-portability-scan.sh
+      expect: exit_code=0
+      on_fail: gate_failed
+
+    - name: migration-pair-check
+      command: cd "$OSMX_REPO" && python3 scripts/migration_pair_check.py --root .
+      expect: exit_code=0
+      on_fail: gate_failed
+
+    - name: pr-checklist-lint
+      command: cd "$OSMX_REPO" && python3 scripts/pr_checklist_lint.py
+      expect: exit_code=0
+      on_fail: gate_failed
+
+  build_when_applicable:
+    - name: go-test
+      command: cd "$OSMX_REPO/osmx-go" && go test ./...
+      expect: exit_code=0
+      condition: task writes osmx-go
+      on_fail: gate_failed
+
+    - name: frontend-build-check
+      command: cd "$OSMX_REPO/frontend" && npm run build:check
+      expect: exit_code=0
+      condition: task writes frontend
+      on_fail: gate_failed
+
+    - name: ai-tests
+      command: cd "$OSMX_REPO/osmx-ai" && pytest
+      expect: exit_code=0
+      condition: task writes osmx-ai
+      on_fail: gate_failed
+
+  evaluation:
+    - name: independent-evaluator
+      command: test "$IMPLEMENTATION_OWNER" != "$EVALUATION_OWNER"
+      expect: exit_code=0
+      on_fail: gate_failed
+
+    - name: owner-decision-required
+      command: test "$TASK_STATUS" = "owner_decision" -o "$TASK_STATUS" = "ready_for_pr" -o "$TASK_STATUS" = "closed"
+      expect: exit_code=0
+      on_fail: human_gate_required
+
+  human_gate:
+    architecture:
+      required_for:
+        - core boundary changes
+        - store abstraction changes
+        - connector SDK boundary changes
+    legal:
+      required_for:
+        - NeatLogic reuse scope
+        - license or commercial authorization
+    security:
+      required_for:
+        - secret handling
+        - credential flow
+        - production access
+    db_migration:
+      required_for:
+        - explicit migration artifacts
+        - model changes
+        - raw SQL changes
+    release:
+      required_for:
+        - merge
+        - tag
+        - customer visible release

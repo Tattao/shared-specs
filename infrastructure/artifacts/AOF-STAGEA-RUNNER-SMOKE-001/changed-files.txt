@@ -1,0 +1,6 @@
+infrastructure/task-queue-v2.yaml
+infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/summary.md
+infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/changed-files.txt
+infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/validation.md
+infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/residual-risks.md
+infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/handoff.md

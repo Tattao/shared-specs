@@ -1,0 +1,419 @@
+queue:
+  name: osmx-autonomous-delivery-stage-a
+  version: 2
+  status: active_stage_a
+  created_at: "2026-04-30T03:45:00+08:00"
+  updated_at: 2026-04-30T10:21:12+08:00
+  mode: codex_first_guarded_autonomy
+  stage: stage_a_8h_unattended
+  source_of_truth: osmx/docs/plans
+  source_docs:
+    - osmx/docs/plans/90-agent-execution-operating-model.md
+    - osmx/docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+    - osmx/docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    - osmx/docs/plans/95-autonomic-operations-fabric-full-product-shape-and-pilot-mvp-plan.md
+    - osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+  workspace:
+    root_env: OSMX_WORKSPACE_ROOT
+    osmx_repo_env: OSMX_REPO
+    shared_specs_repo_env: SHARED_SPECS_REPO
+    artifact_root_env: OSMX_ARTIFACT_ROOT
+  hard_limits:
+    shared_specs_runtime_dependency: forbidden
+    osmx_source_of_truth_override: forbidden
+    self_approval: forbidden
+    auto_merge: forbidden
+    destructive_git_commands: forbidden
+    production_environment_changes: forbidden
+  status_flow:
+    - draft
+    - ready
+    - dispatched
+    - running
+    - self_validation
+    - evaluation_in_progress
+    - fix_required
+    - owner_decision
+    - ready_for_pr
+    - ready_for_merge
+    - merged
+    - closed
+  exception_status:
+    - blocked
+    - failed
+    - stale
+    - conflict
+    - gate_failed
+    - human_gate_required
+    - security_hold
+
+task_schema:
+  id: unique task identifier
+  lane: delivery lane
+  title: short title
+  priority: P0 | P1 | P2
+  status: draft | ready | dispatched | running | self_validation | evaluation_in_progress | fix_required | owner_decision | ready_for_pr | ready_for_merge | merged | closed | blocked | failed | stale | conflict | gate_failed | human_gate_required | security_hold
+  agent_profile: profile from agent-pool-v2.yaml
+  source_docs: canonical input documents
+  worktree: environment-expanded target path
+  branch: branch name
+  write_scope: allowed paths
+  forbidden_scope: forbidden paths
+  dependencies: upstream task ids
+  blocks: downstream task ids
+  human_gate: none | architecture | security | legal | release | db_migration | product_scope
+  validation: validation commands or gate names
+  artifacts: expected evidence files
+  lease_owner: current owner, null when unleased
+  lease_expires_at: ISO8601 or null
+  heartbeat_at: ISO8601 or null
+  attempts: integer
+  max_attempts: integer
+
+tasks:
+  - id: AOF-STAGEA-BOOTSTRAP-001
+    lane: delivery-ops
+    title: Stage A environment contract and v2 queue smoke
+    priority: P0
+    status: closed
+    agent_profile: codex-docs-ops
+    source_docs:
+      - osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/delivery-ops/stage-a-bootstrap-20260430-01
+    write_scope:
+      - infrastructure/autonomous-delivery-mvp.md
+      - infrastructure/task-queue-v2.yaml
+      - infrastructure/agent-pool-v2.yaml
+      - infrastructure/quality-gates-v2.yaml
+      - infrastructure/templates/task-card-v2.md
+      - infrastructure/templates/agent-brief-v2.md
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/.github/**
+    dependencies: []
+    blocks:
+      - AOF-STAGEA-GATE-001
+      - AOF-STAGEA-TASKMAP-001
+    human_gate: none
+    validation:
+      - git diff --check
+      - test -f infrastructure/task-queue-v2.yaml
+      - test -f infrastructure/agent-pool-v2.yaml
+      - test -f infrastructure/quality-gates-v2.yaml
+    artifacts:
+      - infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/summary.md
+      - infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/changed-files.txt
+      - infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/validation.md
+      - infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/residual-risks.md
+      - infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/handoff.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: "2026-04-30T03:55:00+08:00"
+    attempts: 1
+    max_attempts: 2
+
+  - id: AOF-STAGEA-GATE-001
+    lane: quality-gates
+    title: Align quality gates with current OSMX runtime and no shared-specs dependency rule
+    priority: P0
+    status: closed
+    agent_profile: codex-evaluation
+    source_docs:
+      - osmx/docs/plans/90-agent-execution-operating-model.md
+      - osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+      - osmx/docs/architecture/ADR-DB-001-control-plane-database-strategy.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/quality-gates/stage-a-gates-20260430-01
+    write_scope:
+      - infrastructure/quality-gates-v2.yaml
+      - infrastructure/artifacts/AOF-STAGEA-GATE-001/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+    dependencies:
+      - AOF-STAGEA-BOOTSTRAP-001
+    blocks:
+      - AOF-STAGEA-DRYRUN-001
+    human_gate: none
+    validation:
+      - git diff --check
+      - rg -n "PostgreSQL Primary Runtime, MySQL Compatibility Guardrails" infrastructure/quality-gates-v2.yaml
+      - rg -n "shared-specs.*runtime|runtime.*shared-specs" infrastructure/quality-gates-v2.yaml
+    artifacts:
+      - infrastructure/artifacts/AOF-STAGEA-GATE-001/gate-summary.md
+      - infrastructure/artifacts/AOF-STAGEA-GATE-001/changed-files.txt
+      - infrastructure/artifacts/AOF-STAGEA-GATE-001/validation.md
+      - infrastructure/artifacts/AOF-STAGEA-GATE-001/residual-risks.md
+      - infrastructure/artifacts/AOF-STAGEA-GATE-001/handoff.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: "2026-04-30T04:10:00+08:00"
+    attempts: 1
+    max_attempts: 2
+
+  - id: AOF-STAGEA-TASKMAP-001
+    lane: planning
+    title: Convert WP0-WP13 into Stage A task map without expanding product scope
+    priority: P0
+    status: closed
+    agent_profile: codex-docs-ops
+    source_docs:
+      - osmx/docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+      - osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/planning/wp-taskmap-20260430-01
+    write_scope:
+      - infrastructure/task-queue-v2.yaml
+      - infrastructure/artifacts/AOF-STAGEA-TASKMAP-001/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+    dependencies:
+      - AOF-STAGEA-BOOTSTRAP-001
+    blocks:
+      - AOF-WP13-BOUNDARY-001
+      - AOF-WP12-QA-001
+      - AOF-WP11-NEATLOGIC-001
+    human_gate: none
+    validation:
+      - git diff --check
+      - rg -n "WP13|WP12|WP11|WP0" infrastructure/task-queue-v2.yaml
+    artifacts:
+      - infrastructure/artifacts/AOF-STAGEA-TASKMAP-001/wp-task-map.md
+      - infrastructure/artifacts/AOF-STAGEA-TASKMAP-001/changed-files.txt
+      - infrastructure/artifacts/AOF-STAGEA-TASKMAP-001/validation.md
+      - infrastructure/artifacts/AOF-STAGEA-TASKMAP-001/residual-risks.md
+      - infrastructure/artifacts/AOF-STAGEA-TASKMAP-001/handoff.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: "2026-04-30T04:10:00+08:00"
+    attempts: 1
+    max_attempts: 2
+
+  - id: AOF-WP13-BOUNDARY-001
+    lane: architecture
+    title: Draft Core Boundary Matrix for complete product Alpha
+    priority: P0
+    status: ready
+    agent_profile: codex-architecture
+    source_docs:
+      - osmx/docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+      - osmx/docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    worktree: ${OSMX_REPO}
+    branch: agent/architecture/wp13-boundary-20260430-01
+    write_scope:
+      - docs/architecture/**
+      - docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    forbidden_scope:
+      - osmx-go/**
+      - frontend/**
+      - osmx-ai/**
+    dependencies:
+      - AOF-STAGEA-TASKMAP-001
+    blocks:
+      - AOF-WP13-GATE-001
+    human_gate: architecture
+    validation:
+      - git diff --check
+      - rg -n "core|runtime|connector|pack|optional module" docs/architecture docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    artifacts:
+      - ${OSMX_REPO}/docs/reports/aof-wp13-boundary-matrix-20260430.md
+    lease_owner: null
+    lease_expires_at: null
+    heartbeat_at: null
+    attempts: 0
+    max_attempts: 2
+
+  - id: AOF-WP12-QA-001
+    lane: qa
+    title: Inventory three complete-product smoke scripts and evidence requirements
+    priority: P0
+    status: closed
+    agent_profile: codex-evaluation
+    source_docs:
+      - osmx/docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+      - osmx/docs/plans/95-autonomic-operations-fabric-full-product-shape-and-pilot-mvp-plan.md
+    worktree: ${OSMX_REPO}
+    branch: agent/qa/wp12-smoke-inventory-20260430-01
+    write_scope:
+      - docs/reports/**
+      - docs/test-cases/**
+      - docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+    forbidden_scope:
+      - osmx-go/**
+      - frontend/**
+      - osmx-ai/**
+    dependencies:
+      - AOF-STAGEA-TASKMAP-001
+    blocks:
+      - AOF-STAGEA-DRYRUN-001
+    human_gate: none
+    validation:
+      - git diff --check
+      - rg -n "Database Pack|Kubernetes Pack|Business Continuity|smoke|evidence" docs/reports docs/test-cases docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+    artifacts:
+      - ${OSMX_REPO}/docs/reports/aof-wp12-smoke-inventory-20260430.md
+      - ${OSMX_REPO}/docs/test-cases/aof-complete-product-stage-a-smoke-plan.md
+      - infrastructure/artifacts/AOF-WP12-QA-001/summary.md
+      - infrastructure/artifacts/AOF-WP12-QA-001/changed-files.txt
+      - infrastructure/artifacts/AOF-WP12-QA-001/validation.md
+      - infrastructure/artifacts/AOF-WP12-QA-001/residual-risks.md
+      - infrastructure/artifacts/AOF-WP12-QA-001/handoff.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: "2026-04-30T04:25:00+08:00"
+    attempts: 1
+    max_attempts: 2
+
+  - id: AOF-STAGEA-RUNNER-001
+    lane: delivery-ops
+    title: Activate queue runner v2 for supervised Stage A execution
+    priority: P0
+    status: closed
+    agent_profile: codex-docs-ops
+    source_docs:
+      - osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+      - infrastructure/autonomous-delivery-mvp.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/delivery-ops/runner-v2-20260430-01
+    write_scope:
+      - infrastructure/runner-v2.py
+      - infrastructure/task-queue-v2.yaml
+      - infrastructure/autonomous-delivery-mvp.md
+      - infrastructure/README.md
+      - README.md
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-001/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    dependencies:
+      - AOF-STAGEA-GATE-001
+      - AOF-STAGEA-TASKMAP-001
+    blocks:
+      - AOF-STAGEA-DRYRUN-001
+    human_gate: none
+    validation:
+      - python3 infrastructure/runner-v2.py validate
+      - python3 infrastructure/runner-v2.py status
+      - python3 infrastructure/runner-v2.py next
+      - python3 infrastructure/runner-v2.py next --include-human-gate
+    artifacts:
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-001/summary.md
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-001/changed-files.txt
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-001/validation.md
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-001/residual-risks.md
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-001/handoff.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: "2026-04-30T10:18:00+08:00"
+    attempts: 1
+    max_attempts: 2
+
+  - id: AOF-STAGEA-RUNNER-SMOKE-001
+    lane: delivery-ops
+    title: Verify runner v2 lease heartbeat complete cycle
+    priority: P0
+    status: closed
+    agent_profile: codex-docs-ops
+    source_docs:
+      - infrastructure/runner-v2.py
+      - infrastructure/task-queue-v2.yaml
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/delivery-ops/runner-v2-smoke-20260430-01
+    write_scope:
+      - infrastructure/task-queue-v2.yaml
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/**
+    forbidden_scope:
+      - ../osmx/**
+    dependencies:
+      - AOF-STAGEA-RUNNER-001
+    blocks: []
+    human_gate: none
+    validation:
+      - python3 infrastructure/runner-v2.py lease AOF-STAGEA-RUNNER-SMOKE-001 --owner Codex --status running
+      - python3 infrastructure/runner-v2.py heartbeat AOF-STAGEA-RUNNER-SMOKE-001 --owner Codex
+      - python3 infrastructure/runner-v2.py complete AOF-STAGEA-RUNNER-SMOKE-001 --owner Codex --verdict pass
+    artifacts:
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/summary.md
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/changed-files.txt
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/validation.md
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/residual-risks.md
+      - infrastructure/artifacts/AOF-STAGEA-RUNNER-SMOKE-001/handoff.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: 2026-04-30T10:21:12+08:00
+    attempts: 1
+    max_attempts: 1
+
+  - id: AOF-WP11-NEATLOGIC-001
+    lane: legal-architecture
+    title: Create NeatLogic reuse governance index and mapping task brief
+    priority: P0
+    status: ready
+    agent_profile: codex-docs-ops
+    source_docs:
+      - osmx/docs/plans/91-cmdb-itsm-aiops-neatlogic-itop-evaluation.md
+      - osmx/docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+      - osmx/docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/legal-architecture/neatlogic-governance-20260430-01
+    write_scope:
+      - infrastructure/artifacts/AOF-WP11-NEATLOGIC-001/**
+      - neatlogic-governance-index.md
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    dependencies:
+      - AOF-STAGEA-TASKMAP-001
+    blocks: []
+    human_gate: legal
+    validation:
+      - git diff --check
+      - test -f neatlogic-governance-index.md
+    artifacts:
+      - infrastructure/artifacts/AOF-WP11-NEATLOGIC-001/legal-scope-summary.md
+    lease_owner: null
+    lease_expires_at: null
+    heartbeat_at: null
+    attempts: 0
+    max_attempts: 1
+
+  - id: AOF-STAGEA-DRYRUN-001
+    lane: evaluation
+    title: Run Stage A dry-run evaluation and prepare owner decision package
+    priority: P0
+    status: ready
+    agent_profile: codex-evaluation
+    source_docs:
+      - osmx/docs/plans/90-agent-execution-operating-model.md
+      - osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/evaluation/stage-a-dryrun-20260430-01
+    write_scope:
+      - infrastructure/artifacts/AOF-STAGEA-DRYRUN-001/**
+      - stage-a-owner-decision-package.md
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    dependencies:
+      - AOF-STAGEA-GATE-001
+      - AOF-WP12-QA-001
+      - AOF-STAGEA-RUNNER-001
+    blocks: []
+    human_gate: release
+    validation:
+      - git diff --check
+      - test -f stage-a-owner-decision-package.md
+    artifacts:
+      - stage-a-owner-decision-package.md
+      - infrastructure/artifacts/AOF-STAGEA-DRYRUN-001/evaluation.md
+    lease_owner: null
+    lease_expires_at: null
+    heartbeat_at: null
+    attempts: 0
+    max_attempts: 1

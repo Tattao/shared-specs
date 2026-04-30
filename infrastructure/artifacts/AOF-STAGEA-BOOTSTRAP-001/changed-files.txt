@@ -1,0 +1,15 @@
+AGENTS.md
+README.md
+infrastructure/README.md
+infrastructure/agent-pool-v2.yaml
+infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/changed-files.txt
+infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/handoff.md
+infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/residual-risks.md
+infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/summary.md
+infrastructure/artifacts/AOF-STAGEA-BOOTSTRAP-001/validation.md
+infrastructure/artifacts/README.md
+infrastructure/autonomous-delivery-mvp.md
+infrastructure/quality-gates-v2.yaml
+infrastructure/task-queue-v2.yaml
+infrastructure/templates/agent-brief-v2.md
+infrastructure/templates/task-card-v2.md

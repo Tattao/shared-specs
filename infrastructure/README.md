@@ -4,6 +4,40 @@
 > Deadline: 2026-05-15
 > Last updated: 2026-04-23
 
+## Current MVP Entry
+
+`2026-04-30` 起，新一轮 Codex / 多 Agent 自主交付试运行使用 v2 文件:
+
+| File | Role |
+|------|------|
+| [autonomous-delivery-mvp.md](./autonomous-delivery-mvp.md) | Stage A 目标、边界、环境变量、退出条件 |
+| [task-queue-v2.yaml](./task-queue-v2.yaml) | 带 lease / heartbeat / human gate / artifact 的任务队列 |
+| [agent-pool-v2.yaml](./agent-pool-v2.yaml) | Codex-first slot profiles 和环境变量路径 |
+| [quality-gates-v2.yaml](./quality-gates-v2.yaml) | 当前 OSMX guardrails 与 no shared-specs runtime dependency gate |
+| [runner-v2.py](./runner-v2.py) | 最小监督式队列 runner，支持 status / next / lease / heartbeat / complete / activate / validate |
+
+旧版 `task-queue.yaml`、`agent-pool.yaml`、`quality-gates.yaml` 是 DW1 / DW2 历史队列和调度原型。新任务先走 v2，待 Stage A 验证通过后再决定是否改造 `dispatch.py`、`health-monitor.py` 和 `handoff-generator.py` 直接消费 v2 schema。
+
+建议环境变量:
+
+```bash
+export OSMX_WORKSPACE_ROOT=/Users/shitao/Projects/Codex
+export OSMX_REPO=$OSMX_WORKSPACE_ROOT/osmx
+export SHARED_SPECS_REPO=$OSMX_WORKSPACE_ROOT/shared-specs
+export OSMX_ARTIFACT_ROOT=$SHARED_SPECS_REPO/infrastructure/artifacts
+```
+
+Runner commands:
+
+```bash
+python3 infrastructure/runner-v2.py validate
+python3 infrastructure/runner-v2.py status
+python3 infrastructure/runner-v2.py next
+python3 infrastructure/runner-v2.py next --include-human-gate
+```
+
+The sections below describe the legacy v1 DW1 / DW2 dispatcher prototype. Keep them for history and migration reference. New Stage A autonomous delivery tasks should start from the v2 files above.
+
 ## Architecture
 
 ```
@@ -54,7 +88,7 @@
 
 ### 1. Initialize the pool
 ```bash
-cd /Users/apple/Exec/Code/shared-specs/infrastructure
+cd "$SHARED_SPECS_REPO/infrastructure"
 bash slot-manager.sh init
 ```
 
@@ -119,7 +153,7 @@ bash slot-manager.sh status
 3. DB-sensitive changes must pass `migration_pair_check.py` and `db-portability-scan.sh`
 4. All PRs must pass `make integration-efficiency-gate`
 5. AutoMigrate is dev/bootstrap only — not production schema management
-6. PostgreSQL is a future candidate, not a current runtime dependency
+6. Current DB strategy is `PostgreSQL Primary Runtime, MySQL Compatibility Guardrails`
 
 ## Source of Truth
 

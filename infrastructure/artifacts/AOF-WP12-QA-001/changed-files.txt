@@ -1,0 +1,9 @@
+/Users/shitao/Projects/Codex/osmx/docs/guides/document-change-log.md
+/Users/shitao/Projects/Codex/osmx/docs/reports/aof-wp12-smoke-inventory-20260430.md
+/Users/shitao/Projects/Codex/osmx/docs/test-cases/aof-complete-product-stage-a-smoke-plan.md
+/Users/shitao/Projects/Codex/shared-specs/infrastructure/artifacts/AOF-WP12-QA-001/changed-files.txt
+/Users/shitao/Projects/Codex/shared-specs/infrastructure/artifacts/AOF-WP12-QA-001/handoff.md
+/Users/shitao/Projects/Codex/shared-specs/infrastructure/artifacts/AOF-WP12-QA-001/residual-risks.md
+/Users/shitao/Projects/Codex/shared-specs/infrastructure/artifacts/AOF-WP12-QA-001/summary.md
+/Users/shitao/Projects/Codex/shared-specs/infrastructure/artifacts/AOF-WP12-QA-001/validation.md
+/Users/shitao/Projects/Codex/shared-specs/infrastructure/task-queue-v2.yaml
