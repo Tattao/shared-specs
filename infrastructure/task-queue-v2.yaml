@@ -3,7 +3,7 @@ queue:
   version: 2
   status: stage_b_wave0_preparation
   created_at: "2026-04-30T03:45:00+08:00"
-  updated_at: 2026-04-30T12:01:46+08:00
+  updated_at: 2026-04-30T12:15:10+08:00
   mode: codex_first_guarded_autonomy
   stage: stage_b_wave0_supervised
   source_of_truth: osmx/docs/plans
@@ -632,5 +632,47 @@ tasks:
     lease_owner: Codex
     lease_expires_at: null
     heartbeat_at: 2026-04-30T12:01:46+08:00
+    attempts: 1
+    max_attempts: 1
+
+  - id: STAGEB-REMOTE-SUPERVISION-001
+    lane: delivery-ops
+    title: Register Hermes WeChat read-only remote supervision
+    priority: P0
+    status: closed
+    agent_profile: codex-docs-ops
+    source_docs:
+      - infrastructure/remote-supervision-protocol.md
+      - infrastructure/briefs/hermes-wechat-stageb-supervision.md
+      - infrastructure/artifacts/OWNER-WECHAT-SUPERVISOR-20260430/summary.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/delivery-ops/stageb-remote-supervision-20260430-01
+    write_scope:
+      - infrastructure/task-queue-v2.yaml
+      - infrastructure/artifacts/OWNER-WECHAT-SUPERVISOR-20260430/**
+      - infrastructure/artifacts/STAGEB-REMOTE-SUPERVISION-001/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    dependencies:
+      - STAGEB-WORKTREE-PREFLIGHT-001
+    blocks:
+      - STAGEB-BOARD-SYNC-001
+      - STAGEB-SMOKE-AUTOMATION-001
+    human_gate: none
+    validation:
+      - test -f infrastructure/artifacts/OWNER-WECHAT-SUPERVISOR-20260430/summary.md
+      - rg -n "Do not lease tasks|Do not complete tasks|Do not close human gates|Do not modify osmx product code" infrastructure/artifacts/OWNER-WECHAT-SUPERVISOR-20260430/summary.md
+      - python3 infrastructure/gate-runner-v2.py --task-id STAGEB-REMOTE-SUPERVISION-001 --groups post_task
+      - python3 infrastructure/runner-v2.py doctor --strict-artifacts
+      - git diff --check
+    artifacts:
+      - infrastructure/artifacts/OWNER-WECHAT-SUPERVISOR-20260430/summary.md
+      - infrastructure/artifacts/STAGEB-REMOTE-SUPERVISION-001/evaluation.md
+      - infrastructure/artifacts/STAGEB-REMOTE-SUPERVISION-001/gate-results.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: 2026-04-30T12:15:10+08:00
     attempts: 1
     max_attempts: 1
