@@ -3,7 +3,7 @@ queue:
   version: 2
   status: stage_b_wave0_preparation
   created_at: "2026-04-30T03:45:00+08:00"
-  updated_at: 2026-04-30T11:43:39+08:00
+  updated_at: 2026-04-30T11:50:58+08:00
   mode: codex_first_guarded_autonomy
   stage: stage_b_wave0_supervised
   source_of_truth: osmx/docs/plans
@@ -548,5 +548,45 @@ tasks:
     lease_owner: Codex
     lease_expires_at: null
     heartbeat_at: 2026-04-30T11:43:39+08:00
+    attempts: 1
+    max_attempts: 1
+
+  - id: STAGEB-GATE-RUNNER-001
+    lane: delivery-ops
+    title: Add executable v2 gate runner with artifact output
+    priority: P0
+    status: closed
+    agent_profile: codex-docs-ops
+    source_docs:
+      - stage-a-owner-decision-package.md
+      - infrastructure/quality-gates-v2.yaml
+      - infrastructure/artifacts/STAGEB-RUNNER-TIME-001/handoff.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/delivery-ops/stageb-gate-runner-20260430-01
+    write_scope:
+      - infrastructure/gate-runner-v2.py
+      - infrastructure/task-queue-v2.yaml
+      - infrastructure/artifacts/STAGEB-GATE-RUNNER-001/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    dependencies:
+      - STAGEB-RUNNER-TIME-001
+    blocks:
+      - STAGEB-WORKTREE-PREFLIGHT-001
+      - STAGEB-BOARD-SYNC-001
+    human_gate: none
+    validation:
+      - python3 -m py_compile infrastructure/gate-runner-v2.py
+      - python3 infrastructure/gate-runner-v2.py --task-id STAGEB-GATE-RUNNER-001 --groups post_task
+      - python3 infrastructure/runner-v2.py doctor --strict-artifacts
+      - git diff --check
+    artifacts:
+      - infrastructure/artifacts/STAGEB-GATE-RUNNER-001/gate-results.md
+      - infrastructure/artifacts/STAGEB-GATE-RUNNER-001/evaluation.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: 2026-04-30T11:50:58+08:00
     attempts: 1
     max_attempts: 1

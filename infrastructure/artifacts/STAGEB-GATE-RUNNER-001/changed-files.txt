@@ -1,0 +1,13 @@
+infrastructure/gate-runner-v2.py
+infrastructure/task-queue-v2.yaml
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/summary.md
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/evaluation.md
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/validation.md
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/residual-risks.md
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/handoff.md
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/gate-results.md
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/gate-results.json
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/gate-results-scope.md
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/gate-results-scope.json
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/gate-results-build-skip.md
+infrastructure/artifacts/STAGEB-GATE-RUNNER-001/gate-results-build-skip.json

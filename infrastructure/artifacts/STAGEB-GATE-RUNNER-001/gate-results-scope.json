@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-04-30T11:50:19+08:00",
+  "groups": [
+    "scope"
+  ],
+  "results": [
+    {
+      "command": "cd \"$OSMX_REPO\" && rg -n \"shared-specs|SHARED_SPECS_REPO\" osmx-go frontend osmx-ai .github scripts Makefile go.mod package.json || true",
+      "expect": "docs_or_no_matches_only",
+      "group": "scope",
+      "name": "no-shared-specs-runtime-dependency",
+      "on_fail": "gate_failed",
+      "reason": "docs_or_no_matches_only",
+      "returncode": 0,
+      "status": "manual_review",
+      "stderr": "rg: go.mod: No such file or directory (os error 2)\nrg: package.json: No such file or directory (os error 2)\n",
+      "stdout": "scripts/regression_dispatcher.sh:211:  - shared-specs stays evidence-only; it is not part of this dispatcher\nfrontend/src/views/system/DBCopilotGateView.vue:187:          <div>\u5f53\u524d\u89c6\u56fe\u53ea\u8bfb\u4ed3\u5185\u8bc1\u636e\uff0c\u4e0d\u4f1a\u5c1d\u8bd5\u8fde\u5916\u90e8\u670d\u52a1\uff0c\u4e5f\u4e0d\u628a shared-specs \u653e\u8fdb\u8fd0\u884c\u65f6\u4f9d\u8d56\u3002</div>\n"
+    },
+    {
+      "command": "cd \"$OSMX_REPO\" && rg -n \"docs/archive/local-worktree-docs-2026-04-29/shared-specs\" docs/plans docs/architecture README.md ROADMAP.md || true",
+      "expect": "only_historical_warning_or_96",
+      "group": "scope",
+      "name": "no-archive-shared-specs-as-active-ledger",
+      "on_fail": "gate_failed",
+      "reason": "only_historical_warning_or_96",
+      "returncode": 0,
+      "status": "manual_review",
+      "stderr": "",
+      "stdout": "docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md:363:docs/archive/local-worktree-docs-2026-04-29/shared-specs\n"
+    },
+    {
+      "command": "git diff --cached --name-only >/tmp/osmx_stagea_files.txt && true",
+      "expect": "manual_review",
+      "group": "scope",
+      "name": "no-forbidden-git-commands",
+      "on_fail": "human_gate_required",
+      "reason": "manual review required",
+      "returncode": 0,
+      "status": "manual_review",
+      "stderr": "",
+      "stdout": ""
+    }
+  ],
+  "task_id": "STAGEB-GATE-RUNNER-001",
+  "verdict": "pass_with_review"
+}
