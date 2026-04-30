@@ -1,0 +1,6 @@
+../osmx/osmx-go/internal/aof/skill/runtime_registry.go
+../osmx/osmx-go/internal/aof/skill/runtime_registry_test.go
+../osmx/osmx-go/internal/api/v1/aof_handler.go
+../osmx/osmx-go/internal/api/v1/aof_handler_test.go
+../osmx/osmx-go/internal/router/router.go
+../osmx/docs/reports/aof-product-wave2-skill-registry-runtime-api-20260430.md

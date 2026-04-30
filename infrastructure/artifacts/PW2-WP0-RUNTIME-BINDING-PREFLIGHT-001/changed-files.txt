@@ -1,0 +1,6 @@
+../osmx/docs/reports/aof-product-wave2-preflight-20260430.md
+infrastructure/artifacts/PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001/summary.md
+infrastructure/artifacts/PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001/changed-files.txt
+infrastructure/artifacts/PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001/validation.md
+infrastructure/artifacts/PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001/residual-risks.md
+infrastructure/artifacts/PW2-WP0-RUNTIME-BINDING-PREFLIGHT-001/handoff.md

@@ -1,0 +1,5 @@
+../osmx/osmx-go/internal/runbook/model/action_skill_contract.go
+../osmx/osmx-go/internal/runbook/model/action_skill_contract_test.go
+../osmx/osmx-go/internal/plan/action_skill_contract.go
+../osmx/osmx-go/internal/plan/action_skill_contract_test.go
+../osmx/docs/reference/aof-action-skill-asset-execution-contract-v0.md

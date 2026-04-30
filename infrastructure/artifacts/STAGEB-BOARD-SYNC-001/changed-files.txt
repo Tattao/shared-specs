@@ -1,0 +1,10 @@
+shared-specs/infrastructure/task-queue-v2.yaml
+shared-specs/infrastructure/artifacts/STAGEB-BOARD-SYNC-001/summary.md
+shared-specs/infrastructure/artifacts/STAGEB-BOARD-SYNC-001/changed-files.txt
+shared-specs/infrastructure/artifacts/STAGEB-BOARD-SYNC-001/validation.md
+shared-specs/infrastructure/artifacts/STAGEB-BOARD-SYNC-001/residual-risks.md
+shared-specs/infrastructure/artifacts/STAGEB-BOARD-SYNC-001/handoff.md
+osmx/docs/plans/00-current-plan-index.md
+osmx/docs/plans/80-wave-execution-board.md
+osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+osmx/docs/guides/document-change-log.md

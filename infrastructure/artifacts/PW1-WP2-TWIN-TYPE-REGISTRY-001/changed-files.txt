@@ -1,0 +1,11 @@
+../osmx/osmx-go/internal/aof/twin/type_registry.go
+../osmx/osmx-go/internal/aof/twin/type_registry_test.go
+../osmx/osmx-go/internal/api/v1/aof_handler.go
+../osmx/osmx-go/internal/api/v1/aof_handler_test.go
+../osmx/osmx-go/internal/router/router.go
+../osmx/docs/reference/aof-operational-twin-type-registry-v0.md
+infrastructure/artifacts/PW1-WP2-TWIN-TYPE-REGISTRY-001/summary.md
+infrastructure/artifacts/PW1-WP2-TWIN-TYPE-REGISTRY-001/changed-files.txt
+infrastructure/artifacts/PW1-WP2-TWIN-TYPE-REGISTRY-001/validation.md
+infrastructure/artifacts/PW1-WP2-TWIN-TYPE-REGISTRY-001/residual-risks.md
+infrastructure/artifacts/PW1-WP2-TWIN-TYPE-REGISTRY-001/handoff.md

@@ -1,0 +1,3 @@
+../osmx/osmx-go/internal/aof/resilience/experiment_contract.go
+../osmx/osmx-go/internal/aof/resilience/experiment_contract_test.go
+../osmx/docs/reference/aof-resilience-experiment-guardrail-contract-v0.md

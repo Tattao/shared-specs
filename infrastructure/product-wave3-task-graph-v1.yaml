@@ -1,0 +1,240 @@
+graph:
+  id: aof-product-wave3-store-runtime-v1
+  status: owner_gate_required
+  date: "2026-04-30"
+  purpose: "Move Product Wave 2 read-only sample-runtime AOF bindings toward store-backed runtime, browser smoke, detail binding, live DB replay, and governed action gates without claiming release readiness."
+  blocked_until:
+    - Product Wave 2 PRs are reviewed and merged to main, or Owner explicitly approves continuing from the Product Wave 2 PR branch.
+    - A fresh main or approved PR-branch baseline has passed local backend/frontend smoke.
+    - Owner approves Product Wave 3 product-scope execution.
+  product_source_of_truth:
+    - ../osmx/docs/plans/80-wave-execution-board.md
+    - ../osmx/docs/plans/93-autonomic-operations-fabric-40-day-mvp-task-pack.md
+    - ../osmx/docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+    - ../osmx/docs/architecture/aof-store-abstraction-v0.md
+    - ../osmx/docs/reference/aof-core-contract-v0.md
+  execution_source_of_truth:
+    - infrastructure/product-wave3-task-graph-v1.yaml
+    - infrastructure/product-wave2-task-graph-v1.yaml
+  hard_limits:
+    owner_gate_required_before_product_code: true
+    auto_merge: forbidden
+    release: forbidden
+    production_environment_changes: forbidden
+    destructive_git_commands: forbidden
+    migration_apply_without_gate: forbidden
+    security_gate_closure: forbidden
+    legal_gate_closure: forbidden
+    shared_specs_runtime_dependency: forbidden
+    hermes_product_code_write: forbidden
+    pack_install_without_gate: forbidden
+    skill_execution_without_gate: forbidden
+    experiment_execution_without_gate: forbidden
+
+waves:
+  - id: PRODUCT-WAVE3
+    name: Store-backed runtime and governed action readiness
+    status: blocked_until_owner_gate
+    goal: "Replace sample-backed runtime records with governed store-backed read paths, add authenticated browser breadth smoke, bind detail views, replay DB runtime guardrails, and define action request gates."
+    allowed_repos:
+      - ../osmx
+      - shared-specs
+    forbidden_repos:
+      - production environments
+    exit_gate:
+      - all executed tasks have changed-files, validation, residual-risks, handoff
+      - no merge, release, production operation, destructive command, ungated migration apply, or human gate closure
+      - migration/security/legal/release gates remain human-owned
+      - wave summary proposes Product Wave 4 only from represented artifacts
+
+task_defaults:
+  status: blocked_until_owner_gate
+  owner: Codex
+  validation_minimum:
+    - git diff --check
+    - targeted tests or build checks for touched area
+    - artifact handoff under shared-specs
+  required_artifacts:
+    - changed-files.txt
+    - validation.md
+    - residual-risks.md
+    - handoff.md
+
+tasks:
+  - id: PW3-WP0-MAIN-BASELINE-PREFLIGHT-001
+    wp: WP0
+    title: Product Wave 3 main baseline and PR branch smoke preflight
+    repo: shared-specs
+    priority: P0
+    lane: ops
+    status: blocked_until_wave2_pr_review
+    write_scope:
+      - infrastructure/artifacts/**
+      - ../osmx/docs/reports/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    depends_on: []
+    validation:
+      - git diff --check
+      - python3 infrastructure/runner-v2.py doctor --strict-artifacts
+    acceptance:
+      - Records whether Wave 3 starts from merged main or an Owner-approved Wave 2 PR branch.
+      - Records backend/frontend smoke URLs, commit SHAs, dirty baseline, and stop conditions.
+
+  - id: PW3-WP1-STORE-CONTRACT-REFINE-001
+    wp: WP1
+    title: Refine AOF store-backed runtime contract
+    repo: ../osmx
+    priority: P0
+    lane: architecture
+    write_scope:
+      - docs/architecture/**
+      - docs/reference/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+      - production config
+    depends_on:
+      - PW3-WP0-MAIN-BASELINE-PREFLIGHT-001
+    validation:
+      - git diff --check
+    acceptance:
+      - Defines store-backed runtime read contract for ObjectStore, EventStore, EvidenceStore, TraceStore, and PackRegistry.
+      - Declares tenant/project scope, idempotency semantics, and sample-to-store migration boundary.
+
+  - id: PW3-WP2-STORE-BACKED-RUNTIME-CORE-001
+    wp: WP2
+    title: AOF store-backed runtime read adapter skeleton
+    repo: ../osmx
+    priority: P0
+    lane: backend
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/api/v1/**
+      - osmx-go/internal/router/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+      - production config
+    depends_on:
+      - PW3-WP1-STORE-CONTRACT-REFINE-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/api/v1 ./...
+    acceptance:
+      - Introduces store adapter interfaces and in-memory/dev adapter boundaries without schema migration.
+      - Existing Wave 2 runtime endpoints remain backward compatible.
+
+  - id: PW3-WP3-DETAIL-API-UI-BINDING-001
+    wp: WP3
+    title: Bind AOF surface detail views to runtime detail APIs
+    repo: ../osmx
+    priority: P1
+    lane: frontend
+    write_scope:
+      - frontend/src/api/**
+      - frontend/src/types/**
+      - frontend/src/views/aof/**
+      - docs/reports/**
+    forbidden_scope:
+      - osmx-go/migrations/**
+    depends_on:
+      - PW3-WP2-STORE-BACKED-RUNTIME-CORE-001
+    validation:
+      - cd frontend && npm run build:check
+    acceptance:
+      - Twin, AlertOps, Workcenter, Autopilot, AgentOps, Skill Registry, Resilience Lab, and Scenario Pack detail panels call runtime detail APIs.
+      - Empty/error/loading states remain visible and non-mutating.
+
+  - id: PW3-WP4-AUTH-BROWSER-BREADTH-E2E-001
+    wp: WP4
+    title: Authenticated browser breadth smoke for AOF runtime-bound surfaces
+    repo: ../osmx
+    priority: P0
+    lane: evaluation
+    write_scope:
+      - frontend/e2e/**
+      - docs/test-cases/**
+      - docs/reports/**
+    forbidden_scope:
+      - production config
+      - osmx-go/migrations/**
+    depends_on:
+      - PW3-WP3-DETAIL-API-UI-BINDING-001
+    validation:
+      - cd frontend && npm run build:check
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./...
+    acceptance:
+      - Browser smoke logs in and visits all AOF runtime-bound surfaces.
+      - Evidence distinguishes real backend smoke from mock or build-only evidence.
+
+  - id: PW3-WP5-LIVE-DB-RUNTIME-REPLAY-GATE-001
+    wp: WP5
+    title: Live DB runtime replay plan and human gate package
+    repo: ../osmx
+    priority: P0
+    lane: db-guardrail
+    write_scope:
+      - docs/reports/**
+      - docs/test-cases/**
+      - scripts/**
+    forbidden_scope:
+      - runtime secrets
+      - production config
+      - osmx-go/migrations/**
+    depends_on:
+      - PW3-WP4-AUTH-BROWSER-BREADTH-E2E-001
+    human_gate: migration_runtime_replay
+    validation:
+      - python3 scripts/migration_pair_check.py --root .
+      - ./scripts/db-portability-scan.sh
+    acceptance:
+      - Produces a disposable PostgreSQL/MySQL replay plan and gate package.
+      - Does not apply migrations or mutate live DBs before human approval.
+
+  - id: PW3-WP6-GOVERNED-ACTION-GATES-001
+    wp: WP6
+    title: Governed action request gates for skill, pack, and experiment execution
+    repo: ../osmx
+    priority: P1
+    lane: governance
+    write_scope:
+      - osmx-go/internal/aof/**
+      - osmx-go/internal/api/v1/**
+      - docs/reference/**
+      - docs/reports/**
+    forbidden_scope:
+      - production config
+      - osmx-go/migrations/**
+    depends_on:
+      - PW3-WP2-STORE-BACKED-RUNTIME-CORE-001
+    validation:
+      - cd osmx-go && /Users/shitao/.local/go-tools/go1.25.0/bin/go test ./internal/aof/... ./internal/api/v1 ./...
+    acceptance:
+      - Defines non-executing action request contracts for skill execution, pack install, and resilience experiment execution.
+      - Execution remains blocked behind future human-owned approval gates.
+
+  - id: PW3-INTEGRATION-WAVE-SUMMARY-001
+    wp: INTEGRATION
+    title: Product Wave 3 closeout and Wave 4 selection
+    repo: shared-specs
+    priority: P0
+    lane: integration
+    status: blocked_until_all_wave3_tasks
+    write_scope:
+      - infrastructure/artifacts/**
+      - ../osmx/docs/plans/80-wave-execution-board.md
+      - ../osmx/docs/guides/document-change-log.md
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    depends_on:
+      - PW3-WP4-AUTH-BROWSER-BREADTH-E2E-001
+      - PW3-WP5-LIVE-DB-RUNTIME-REPLAY-GATE-001
+      - PW3-WP6-GOVERNED-ACTION-GATES-001
+    validation:
+      - git diff --check
+    acceptance:
+      - Wave summary lists completed tasks, failed gates, residual risks, and proposed Wave 4 task ids.

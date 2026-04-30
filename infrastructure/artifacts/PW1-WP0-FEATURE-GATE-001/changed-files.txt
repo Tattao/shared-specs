@@ -1,0 +1,12 @@
+../osmx/osmx-go/internal/seed/feature_seed.go
+../osmx/frontend/src/api/features.ts
+../osmx/frontend/src/views/system/FeatureGateView.vue
+../osmx/frontend/src/views/aof/AofSurfaceView.vue
+../osmx/docs/plans/00-current-plan-index.md
+../osmx/docs/plans/80-wave-execution-board.md
+../osmx/docs/plans/97-aof-product-surface-feature-gate-matrix.md
+infrastructure/artifacts/PW1-WP0-FEATURE-GATE-001/summary.md
+infrastructure/artifacts/PW1-WP0-FEATURE-GATE-001/changed-files.txt
+infrastructure/artifacts/PW1-WP0-FEATURE-GATE-001/validation.md
+infrastructure/artifacts/PW1-WP0-FEATURE-GATE-001/residual-risks.md
+infrastructure/artifacts/PW1-WP0-FEATURE-GATE-001/handoff.md

@@ -1,0 +1,7 @@
+../osmx/scripts/db-portability-scan.sh
+../osmx/docs/reports/aof-wp13-db-guardrail-20260430.md
+infrastructure/artifacts/PW1-WP13-DB-GUARDRAIL-001/summary.md
+infrastructure/artifacts/PW1-WP13-DB-GUARDRAIL-001/changed-files.txt
+infrastructure/artifacts/PW1-WP13-DB-GUARDRAIL-001/validation.md
+infrastructure/artifacts/PW1-WP13-DB-GUARDRAIL-001/residual-risks.md
+infrastructure/artifacts/PW1-WP13-DB-GUARDRAIL-001/handoff.md

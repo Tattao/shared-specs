@@ -1,0 +1,109 @@
+{
+  "task_id": "STAGEB-SMOKE-AUTOMATION-001",
+  "generated_at": "2026-04-30T16:35:08+08:00",
+  "queue_path": "infrastructure/task-queue-v2.yaml",
+  "artifact_dir": "infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001",
+  "verdict": "pass",
+  "results": [
+    {
+      "name": "queue-file-exists",
+      "status": "pass",
+      "detail": "infrastructure/task-queue-v2.yaml"
+    },
+    {
+      "name": "formal-task-id-entry-count",
+      "status": "pass",
+      "detail": "count=1 expected=1"
+    },
+    {
+      "name": "task-record-present",
+      "status": "pass",
+      "detail": "STAGEB-SMOKE-AUTOMATION-001"
+    },
+    {
+      "name": "queue-status",
+      "status": "pass",
+      "detail": "actual=stage_b_wave0_preparation expected=stage_b_wave0_preparation"
+    },
+    {
+      "name": "queue-stage",
+      "status": "pass",
+      "detail": "actual=stage_b_wave0_supervised expected=stage_b_wave0_supervised"
+    },
+    {
+      "name": "upstream-dependency-declared:STAGEB-WORKTREE-PREFLIGHT-001",
+      "status": "pass",
+      "detail": "declared=True"
+    },
+    {
+      "name": "upstream-task-closed:STAGEB-WORKTREE-PREFLIGHT-001",
+      "status": "pass",
+      "detail": "status=closed"
+    },
+    {
+      "name": "upstream-dependency-declared:STAGEB-REMOTE-SUPERVISION-001",
+      "status": "pass",
+      "detail": "declared=True"
+    },
+    {
+      "name": "upstream-task-closed:STAGEB-REMOTE-SUPERVISION-001",
+      "status": "pass",
+      "detail": "status=closed"
+    },
+    {
+      "name": "upstream-dependency-declared:STAGEB-BOARD-SYNC-001",
+      "status": "pass",
+      "detail": "declared=True"
+    },
+    {
+      "name": "upstream-task-closed:STAGEB-BOARD-SYNC-001",
+      "status": "pass",
+      "detail": "status=closed"
+    },
+    {
+      "name": "artifact-directory-exists",
+      "status": "pass",
+      "detail": "infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001"
+    },
+    {
+      "name": "required-artifact-present:summary.md",
+      "status": "pass",
+      "detail": "infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/summary.md"
+    },
+    {
+      "name": "required-artifact-present:changed-files.txt",
+      "status": "pass",
+      "detail": "infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/changed-files.txt"
+    },
+    {
+      "name": "required-artifact-present:validation.md",
+      "status": "pass",
+      "detail": "infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/validation.md"
+    },
+    {
+      "name": "required-artifact-present:residual-risks.md",
+      "status": "pass",
+      "detail": "infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/residual-risks.md"
+    },
+    {
+      "name": "required-artifact-present:handoff.md",
+      "status": "pass",
+      "detail": "infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/handoff.md"
+    },
+    {
+      "name": "osmx-reference-mentions-task:../osmx/docs/plans/00-current-plan-index.md",
+      "status": "pass",
+      "detail": "/Users/shitao/Projects/Codex/osmx/docs/plans/00-current-plan-index.md"
+    },
+    {
+      "name": "osmx-reference-mentions-task:../osmx/docs/plans/80-wave-execution-board.md",
+      "status": "pass",
+      "detail": "/Users/shitao/Projects/Codex/osmx/docs/plans/80-wave-execution-board.md"
+    },
+    {
+      "name": "osmx-reference-mentions-task:../osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md",
+      "status": "pass",
+      "detail": "/Users/shitao/Projects/Codex/osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md"
+    }
+  ]
+}

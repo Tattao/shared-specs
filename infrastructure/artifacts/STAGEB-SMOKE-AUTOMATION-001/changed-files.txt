@@ -1,0 +1,13 @@
+infrastructure/task-queue-v2.yaml
+infrastructure/stageb-smoke-automation-v2.py
+infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/smoke-results.json
+infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/smoke-results.md
+infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/summary.md
+infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/changed-files.txt
+infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/validation.md
+infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/residual-risks.md
+infrastructure/artifacts/STAGEB-SMOKE-AUTOMATION-001/handoff.md
+../osmx/docs/plans/00-current-plan-index.md
+../osmx/docs/plans/80-wave-execution-board.md
+../osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+../osmx/docs/guides/document-change-log.md

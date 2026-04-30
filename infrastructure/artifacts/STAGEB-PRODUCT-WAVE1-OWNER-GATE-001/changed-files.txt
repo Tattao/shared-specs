@@ -1,0 +1,9 @@
+infrastructure/task-queue-v2.yaml
+infrastructure/product-wave1-owner-gate.md
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE1-OWNER-GATE-001/summary.md
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE1-OWNER-GATE-001/changed-files.txt
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE1-OWNER-GATE-001/validation.md
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE1-OWNER-GATE-001/residual-risks.md
+infrastructure/artifacts/STAGEB-PRODUCT-WAVE1-OWNER-GATE-001/handoff.md
+../osmx/docs/plans/00-current-plan-index.md
+../osmx/docs/plans/80-wave-execution-board.md

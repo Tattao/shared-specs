@@ -1,0 +1,7 @@
+../osmx/docs/architecture/aof-store-abstraction-v0.md
+../osmx/docs/plans/94-autonomic-operations-fabric-architecture-technology-upgrade-plan.md
+infrastructure/artifacts/PW1-WP13-STORE-ABSTRACTION-DOC-001/summary.md
+infrastructure/artifacts/PW1-WP13-STORE-ABSTRACTION-DOC-001/changed-files.txt
+infrastructure/artifacts/PW1-WP13-STORE-ABSTRACTION-DOC-001/validation.md
+infrastructure/artifacts/PW1-WP13-STORE-ABSTRACTION-DOC-001/residual-risks.md
+infrastructure/artifacts/PW1-WP13-STORE-ABSTRACTION-DOC-001/handoff.md
