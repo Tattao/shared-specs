@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-04-30T12:01:02+08:00",
+  "groups": [
+    "build_when_applicable"
+  ],
+  "results": [
+    {
+      "command": "cd \"$OSMX_REPO/osmx-go\" && go test ./...",
+      "expect": "exit_code=0",
+      "group": "build_when_applicable",
+      "name": "go-test",
+      "on_fail": "gate_failed",
+      "reason": "condition not met: task writes osmx-go",
+      "returncode": null,
+      "status": "skipped",
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "command": "cd \"$OSMX_REPO/frontend\" && npm run build:check",
+      "expect": "exit_code=0",
+      "group": "build_when_applicable",
+      "name": "frontend-build-check",
+      "on_fail": "gate_failed",
+      "reason": "condition not met: task writes frontend",
+      "returncode": null,
+      "status": "skipped",
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "command": "cd \"$OSMX_REPO/osmx-ai\" && pytest",
+      "expect": "exit_code=0",
+      "group": "build_when_applicable",
+      "name": "ai-tests",
+      "on_fail": "gate_failed",
+      "reason": "condition not met: task writes osmx-ai",
+      "returncode": null,
+      "status": "skipped",
+      "stderr": "",
+      "stdout": ""
+    }
+  ],
+  "task_id": "STAGEB-WORKTREE-PREFLIGHT-001",
+  "verdict": "pass"
+}

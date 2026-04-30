@@ -1,0 +1,58 @@
+{
+  "generated_at": "2026-04-30T12:01:02+08:00",
+  "groups": [
+    "post_task"
+  ],
+  "results": [
+    {
+      "command": "cd \"$TARGET_WORKTREE\" && git diff --check",
+      "expect": "exit_code=0",
+      "group": "post_task",
+      "name": "diff-check",
+      "on_fail": "fix_required",
+      "reason": "exit_code=0",
+      "returncode": 0,
+      "status": "pass",
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "command": "test -f \"$TASK_ARTIFACT_DIR/changed-files.txt\"",
+      "expect": "exit_code=0",
+      "group": "post_task",
+      "name": "changed-files-recorded",
+      "on_fail": "fix_required",
+      "reason": "exit_code=0",
+      "returncode": 0,
+      "status": "pass",
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "command": "test -f \"$TASK_ARTIFACT_DIR/validation.md\"",
+      "expect": "exit_code=0",
+      "group": "post_task",
+      "name": "validation-recorded",
+      "on_fail": "fix_required",
+      "reason": "exit_code=0",
+      "returncode": 0,
+      "status": "pass",
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "command": "test -f \"$TASK_ARTIFACT_DIR/residual-risks.md\"",
+      "expect": "exit_code=0",
+      "group": "post_task",
+      "name": "residual-risk-recorded",
+      "on_fail": "fix_required",
+      "reason": "exit_code=0",
+      "returncode": 0,
+      "status": "pass",
+      "stderr": "",
+      "stdout": ""
+    }
+  ],
+  "task_id": "STAGEB-WORKTREE-PREFLIGHT-001",
+  "verdict": "pass"
+}

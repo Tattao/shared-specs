@@ -1,0 +1,91 @@
+{
+  "context": {
+    "agent_profile": "codex-docs-ops",
+    "agent_type": "codex",
+    "artifact_dir": "/Users/shitao/Projects/Codex/shared-specs/infrastructure/artifacts/STAGEB-WORKTREE-PREFLIGHT-001",
+    "branch": "main",
+    "changed_paths": [
+      "infrastructure/task-queue-v2.yaml",
+      "infrastructure/artifacts/STAGEB-WORKTREE-PREFLIGHT-001/",
+      "infrastructure/briefs/claude-code-stageb-worker-evaluator.md",
+      "infrastructure/briefs/hermes-wechat-stageb-supervision.md",
+      "infrastructure/remote-supervision-protocol.md",
+      "infrastructure/worktree-preflight-v2.py"
+    ],
+    "forbidden_scope": [
+      "../osmx/osmx-go/**",
+      "../osmx/frontend/**",
+      "../osmx/osmx-ai/**"
+    ],
+    "generated_at": "2026-04-30T12:01:02+08:00",
+    "task_branch": "agent/delivery-ops/stageb-worktree-preflight-20260430-01",
+    "task_id": "STAGEB-WORKTREE-PREFLIGHT-001",
+    "verdict": "pass_with_exception",
+    "worktree": "/Users/shitao/Projects/Codex/shared-specs",
+    "write_scope": [
+      "infrastructure/worktree-preflight-v2.py",
+      "infrastructure/remote-supervision-protocol.md",
+      "infrastructure/briefs/hermes-wechat-stageb-supervision.md",
+      "infrastructure/briefs/claude-code-stageb-worker-evaluator.md",
+      "infrastructure/task-queue-v2.yaml",
+      "infrastructure/artifacts/STAGEB-WORKTREE-PREFLIGHT-001/**"
+    ]
+  },
+  "results": [
+    {
+      "detail": "STAGEB-WORKTREE-PREFLIGHT-001",
+      "name": "task-exists",
+      "status": "pass"
+    },
+    {
+      "detail": "codex-docs-ops",
+      "name": "profile-known",
+      "status": "pass"
+    },
+    {
+      "detail": "/Users/shitao/Projects/Codex/shared-specs",
+      "name": "worktree-exists",
+      "status": "pass"
+    },
+    {
+      "detail": "infrastructure/worktree-preflight-v2.py, infrastructure/remote-supervision-protocol.md, infrastructure/briefs/hermes-wechat-stageb-supervision.md, infrastructure/briefs/claude-code-stageb-worker-evaluator.md, infrastructure/task-queue-v2.yaml, infrastructure/artifacts/STAGEB-WORKTREE-PREFLIGHT-001/**",
+      "name": "write-scope-declared",
+      "status": "pass"
+    },
+    {
+      "detail": "../osmx/osmx-go/**, ../osmx/frontend/**, ../osmx/osmx-ai/**",
+      "name": "forbidden-scope-declared",
+      "status": "pass"
+    },
+    {
+      "detail": "true",
+      "name": "git-worktree",
+      "status": "pass"
+    },
+    {
+      "detail": "current=main expected=agent/delivery-ops/stageb-worktree-preflight-20260430-01",
+      "name": "branch-matches-task",
+      "status": "exception"
+    },
+    {
+      "detail": "allowed dirty path(s): 6",
+      "name": "worktree-clean",
+      "status": "exception"
+    },
+    {
+      "detail": "infrastructure/task-queue-v2.yaml\ninfrastructure/artifacts/STAGEB-WORKTREE-PREFLIGHT-001/\ninfrastructure/briefs/claude-code-stageb-worker-evaluator.md\ninfrastructure/briefs/hermes-wechat-stageb-supervision.md\ninfrastructure/remote-supervision-protocol.md\ninfrastructure/worktree-preflight-v2.py",
+      "name": "dirty-files-within-write-scope",
+      "status": "pass"
+    },
+    {
+      "detail": "none",
+      "name": "no-forbidden-scope-changes",
+      "status": "pass"
+    },
+    {
+      "detail": "none",
+      "name": "human-gate-visible",
+      "status": "pass"
+    }
+  ]
+}
