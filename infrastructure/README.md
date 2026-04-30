@@ -45,6 +45,28 @@ External agent policy:
 - Hermes can be a read-only supervisor or wave summarizer, writing only under `shared-specs/infrastructure/artifacts`.
 - No external agent may close human gates, auto-merge, or turn `shared-specs` into an OSMX runtime/build/test/CI dependency.
 
+## Local Toolchain Status
+
+Last checked: `2026-04-30`
+
+| Tool | Status | Notes |
+|------|--------|-------|
+| Codex | installed | Stage A controller |
+| Claude Code | installed | Use as scoped worker or read-only evaluator |
+| Hermes | installed | Use as read-only supervisor or wave summarizer |
+| Homebrew | installed at `~/.homebrew`, symlinked at `~/.local/bin/brew` | User-local Tier 3 prefix; avoids sudo and system directory changes |
+| GitHub CLI | installed at `~/.local/bin/gh` | Installed from GitHub release `v2.92.0`; authentication still requires owner login |
+| Playwright CLI | installed globally through npm | Available as `playwright` |
+| Playwright MCP package | installed globally through npm | Available as `playwright-mcp`; Hermes also uses `npx @playwright/mcp@latest` |
+| Hermes Playwright MCP | enabled as `playwright-min` | 22 browser tools connected |
+| Claude Playwright MCP | configured, health check failing | Keep CLI fallback until Claude stdio MCP environment is fixed |
+
+Required owner action before PR automation:
+
+```bash
+gh auth login
+```
+
 The sections below describe the legacy v1 DW1 / DW2 dispatcher prototype. Keep them for history and migration reference. New Stage A autonomous delivery tasks should start from the v2 files above.
 
 ## Architecture

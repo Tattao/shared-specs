@@ -1,0 +1,8 @@
+infrastructure/README.md
+infrastructure/task-queue-v2.yaml
+infrastructure/artifacts/AOF-STAGEA-TOOLCHAIN-001/summary.md
+infrastructure/artifacts/AOF-STAGEA-TOOLCHAIN-001/changed-files.txt
+infrastructure/artifacts/AOF-STAGEA-TOOLCHAIN-001/validation.md
+infrastructure/artifacts/AOF-STAGEA-TOOLCHAIN-001/residual-risks.md
+infrastructure/artifacts/AOF-STAGEA-TOOLCHAIN-001/handoff.md
+
