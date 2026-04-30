@@ -10,15 +10,12 @@
 2. `infrastructure/artifacts/AOF-STAGEA-TOOLCHAIN-001/summary.md`
 3. `infrastructure/artifacts/AOF-STAGEA-TOOLCHAIN-001/validation.md`
 
-## Owner Action
+## Toolchain Status
 
-Run:
-
-```bash
-gh auth login
-```
+- `gh` is authenticated as `Tattao`.
+- Claude Code `playwright` MCP is connected.
+- Hermes `playwright-min` MCP is connected.
 
 ## Next Single Action
 
 Run `AOF-WP11-NEATLOGIC-001` for reuse governance, or run `AOF-STAGEA-DRYRUN-001` for the owner release decision package.
-

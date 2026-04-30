@@ -55,17 +55,11 @@ Last checked: `2026-04-30`
 | Claude Code | installed | Use as scoped worker or read-only evaluator |
 | Hermes | installed | Use as read-only supervisor or wave summarizer |
 | Homebrew | installed at `~/.homebrew`, symlinked at `~/.local/bin/brew` | User-local Tier 3 prefix; avoids sudo and system directory changes |
-| GitHub CLI | installed at `~/.local/bin/gh` | Installed from GitHub release `v2.92.0`; authentication still requires owner login |
+| GitHub CLI | installed at `~/.local/bin/gh` | Installed from GitHub release `v2.92.0`; authenticated as `Tattao` |
 | Playwright CLI | installed globally through npm | Available as `playwright` |
 | Playwright MCP package | installed globally through npm | Available as `playwright-mcp`; Hermes also uses `npx @playwright/mcp@latest` |
 | Hermes Playwright MCP | enabled as `playwright-min` | 22 browser tools connected |
-| Claude Playwright MCP | configured, health check failing | Keep CLI fallback until Claude stdio MCP environment is fixed |
-
-Required owner action before PR automation:
-
-```bash
-gh auth login
-```
+| Claude Playwright MCP | configured and connected | User-scope `playwright` MCP now passes `claude mcp get/list` health checks |
 
 The sections below describe the legacy v1 DW1 / DW2 dispatcher prototype. Keep them for history and migration reference. New Stage A autonomous delivery tasks should start from the v2 files above.
 
