@@ -3,7 +3,7 @@ queue:
   version: 2
   status: active_stage_a
   created_at: "2026-04-30T03:45:00+08:00"
-  updated_at: 2026-04-30T10:39:32+08:00
+  updated_at: 2026-04-30T10:48:09+08:00
   mode: codex_first_guarded_autonomy
   stage: stage_a_8h_unattended
   source_of_truth: osmx/docs/plans
@@ -345,6 +345,54 @@ tasks:
     lease_owner: Codex
     lease_expires_at: null
     heartbeat_at: 2026-04-30T10:21:12+08:00
+    attempts: 1
+    max_attempts: 1
+
+  - id: AOF-STAGEA-AGENT-ROLES-001
+    lane: delivery-ops
+    title: Configure Claude Code and Hermes controlled profiles
+    priority: P0
+    status: closed
+    agent_profile: codex-docs-ops
+    source_docs:
+      - osmx/docs/architecture/aof-core-boundary-matrix-v0.md
+      - osmx/docs/plans/96-codex-7x24-autonomous-delivery-operating-model.md
+      - infrastructure/autonomous-delivery-mvp.md
+    worktree: ${SHARED_SPECS_REPO}
+    branch: agent/delivery-ops/external-agent-roles-20260430-01
+    write_scope:
+      - infrastructure/agent-pool-v2.yaml
+      - infrastructure/quality-gates-v2.yaml
+      - infrastructure/runner-v2.py
+      - infrastructure/autonomous-delivery-mvp.md
+      - infrastructure/README.md
+      - README.md
+      - infrastructure/task-queue-v2.yaml
+      - infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/**
+    forbidden_scope:
+      - ../osmx/osmx-go/**
+      - ../osmx/frontend/**
+      - ../osmx/osmx-ai/**
+    dependencies:
+      - AOF-STAGEA-RUNNER-001
+      - AOF-WP13-BOUNDARY-001
+    blocks: []
+    human_gate: none
+    validation:
+      - python3 infrastructure/runner-v2.py validate
+      - python3 infrastructure/runner-v2.py doctor
+      - python3 infrastructure/runner-v2.py stale
+      - python3 infrastructure/runner-v2.py status
+      - git diff --check
+    artifacts:
+      - infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/summary.md
+      - infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/changed-files.txt
+      - infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/validation.md
+      - infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/residual-risks.md
+      - infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/handoff.md
+    lease_owner: Codex
+    lease_expires_at: null
+    heartbeat_at: 2026-04-30T10:48:09+08:00
     attempts: 1
     max_attempts: 1
 

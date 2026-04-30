@@ -4,8 +4,8 @@ OSMX autonomous delivery runner v2.
 
 This is the Stage A control runner for task-queue-v2.yaml. It intentionally
 does not execute product-code tasks. It only reads, validates, leases,
-heartbeats, and completes queue records so the autonomous delivery system can
-be consumed by a supervised Codex workflow.
+heartbeats, checks artifacts, detects stale leases, and completes queue records
+so the autonomous delivery system can be consumed by a supervised workflow.
 
 The runner avoids a PyYAML dependency by using Ruby's stdlib YAML parser for
 read validation. Mutations are narrow text updates to keep the queue readable.
@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -29,8 +30,24 @@ POOL_PATH = INFRA_DIR / "agent-pool-v2.yaml"
 GATES_PATH = INFRA_DIR / "quality-gates-v2.yaml"
 
 TERMINAL_OK_STATUSES = {"closed", "merged"}
+ACTIVE_LEASE_STATUSES = {
+    "dispatched",
+    "running",
+    "self_validation",
+    "evaluation_in_progress",
+    "fix_required",
+    "owner_decision",
+    "ready_for_pr",
+    "ready_for_merge",
+}
 READY_STATUS = "ready"
 HUMAN_GATE_NONE = {None, "", "none"}
+REQUIRED_TASK_ARTIFACT_FILES = (
+    "changed-files.txt",
+    "validation.md",
+    "residual-risks.md",
+    "handoff.md",
+)
 
 
 class RunnerError(Exception):
@@ -39,6 +56,38 @@ class RunnerError(Exception):
 
 def now_iso() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
+
+
+def parse_iso(value: Any) -> datetime | None:
+    if not value:
+        return None
+    if isinstance(value, datetime):
+        return value.astimezone()
+    try:
+        return datetime.fromisoformat(str(value)).astimezone()
+    except ValueError:
+        return None
+
+
+def default_env() -> dict[str, str]:
+    workspace_root = INFRA_DIR.parent.parent
+    shared_specs_repo = INFRA_DIR.parent
+    return {
+        "OSMX_WORKSPACE_ROOT": os.environ.get("OSMX_WORKSPACE_ROOT", str(workspace_root)),
+        "OSMX_REPO": os.environ.get("OSMX_REPO", str(workspace_root / "osmx")),
+        "SHARED_SPECS_REPO": os.environ.get("SHARED_SPECS_REPO", str(shared_specs_repo)),
+        "OSMX_ARTIFACT_ROOT": os.environ.get("OSMX_ARTIFACT_ROOT", str(INFRA_DIR / "artifacts")),
+    }
+
+
+def resolve_path(value: str) -> Path:
+    resolved = value
+    for key, env_value in default_env().items():
+        resolved = resolved.replace("${" + key + "}", env_value)
+    path = Path(resolved)
+    if not path.is_absolute():
+        path = INFRA_DIR.parent / path
+    return path
 
 
 def load_yaml_with_ruby(path: Path) -> dict[str, Any]:
@@ -86,6 +135,81 @@ def dependency_state(queue: dict[str, Any], task: dict[str, Any]) -> tuple[bool,
     done = completed_ids(queue)
     missing = [dep for dep in task.get("dependencies", []) if dep not in done]
     return not missing, missing
+
+
+def pool_profiles(pool: dict[str, Any]) -> set[str]:
+    return set((pool.get("profiles") or {}).keys())
+
+
+def check_profile_references(queue: dict[str, Any], pool: dict[str, Any]) -> list[str]:
+    profiles = pool_profiles(pool)
+    errors = []
+    for task in queue.get("tasks", []):
+        profile = task.get("agent_profile")
+        if profile and profile not in profiles:
+            errors.append(f"{task.get('id')}: unknown agent_profile={profile}")
+    return errors
+
+
+def check_slot_references(pool: dict[str, Any]) -> list[str]:
+    profiles = pool_profiles(pool)
+    errors = []
+    for slot_id, slot in (pool.get("slots") or {}).items():
+        profile = slot.get("profile")
+        if profile and profile not in profiles:
+            errors.append(f"{slot_id}: unknown profile={profile}")
+    return errors
+
+
+def artifact_dir_for(task_id: str) -> Path:
+    return INFRA_DIR / "artifacts" / task_id
+
+
+def check_task_artifacts(
+    task: dict[str, Any],
+    strict_external: bool = False,
+    require_terminal: bool = True,
+) -> list[str]:
+    task_id = task.get("id")
+    if not task_id:
+        return []
+    if require_terminal and task.get("status") not in TERMINAL_OK_STATUSES:
+        return []
+
+    missing = []
+    artifact_dir = artifact_dir_for(task_id)
+    for filename in REQUIRED_TASK_ARTIFACT_FILES:
+        path = artifact_dir / filename
+        if not path.exists():
+            missing.append(str(path.relative_to(INFRA_DIR.parent)))
+
+    if strict_external:
+        for artifact in task.get("artifacts") or []:
+            path = resolve_path(str(artifact))
+            if not path.exists():
+                missing.append(str(path))
+    return missing
+
+
+def check_closed_task_artifacts(queue: dict[str, Any], strict_external: bool = False) -> list[str]:
+    errors = []
+    for task in queue.get("tasks", []):
+        missing = check_task_artifacts(task, strict_external=strict_external)
+        if missing:
+            errors.append(f"{task.get('id')}: missing artifacts: {', '.join(missing)}")
+    return errors
+
+
+def stale_tasks(queue: dict[str, Any]) -> list[dict[str, Any]]:
+    stale = []
+    now = datetime.now().astimezone()
+    for task in queue.get("tasks", []):
+        if task.get("status") not in ACTIVE_LEASE_STATUSES:
+            continue
+        lease_expires_at = parse_iso(task.get("lease_expires_at"))
+        if not lease_expires_at or lease_expires_at < now:
+            stale.append(task)
+    return sorted(stale, key=priority_key)
 
 
 def is_ready(queue: dict[str, Any], task: dict[str, Any]) -> tuple[bool, str]:
@@ -236,6 +360,38 @@ def cmd_next(args: argparse.Namespace) -> None:
         print_task(task)
 
 
+def cmd_stale(_: argparse.Namespace) -> None:
+    queue = load_queue()
+    tasks = stale_tasks(queue)
+    if not tasks:
+        print("no stale leased tasks")
+        return
+    for task in tasks:
+        print_task(task)
+
+
+def cmd_doctor(args: argparse.Namespace) -> None:
+    validate_all()
+    queue = load_queue()
+    pool = load_yaml_with_ruby(POOL_PATH)
+
+    errors = []
+    errors.extend(check_profile_references(queue, pool))
+    errors.extend(check_slot_references(pool))
+    errors.extend(check_closed_task_artifacts(queue, strict_external=args.strict_artifacts))
+
+    stale = stale_tasks(queue)
+    if stale:
+        errors.append("stale leased tasks: " + ", ".join(task.get("id", "") for task in stale))
+
+    if errors:
+        for error in errors:
+            print(f"doctor: {error}", file=sys.stderr)
+        raise RunnerError(f"doctor found {len(errors)} issue(s)")
+
+    print("doctor: ok")
+
+
 def cmd_lease(args: argparse.Namespace) -> None:
     queue = load_queue()
     task = task_by_id(queue, args.task_id)
@@ -292,6 +448,18 @@ def cmd_complete(args: argparse.Namespace) -> None:
         "human_gate_required": "human_gate_required",
     }
     status = verdict_status[args.verdict]
+    if status in TERMINAL_OK_STATUSES and not args.skip_artifact_check:
+        queue = load_queue()
+        task = task_by_id(queue, args.task_id)
+        missing = check_task_artifacts(
+            task,
+            strict_external=args.strict_artifacts,
+            require_terminal=False,
+        )
+        if missing:
+            raise RunnerError(
+                f"cannot complete {args.task_id}: missing artifacts: {', '.join(missing)}"
+            )
     timestamp = now_iso()
     update_fields(
         args.task_id,
@@ -317,6 +485,11 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("status").set_defaults(func=cmd_status)
     sub.add_parser("validate").set_defaults(func=cmd_validate)
     sub.add_parser("activate").set_defaults(func=activate)
+    sub.add_parser("stale").set_defaults(func=cmd_stale)
+
+    p_doctor = sub.add_parser("doctor")
+    p_doctor.add_argument("--strict-artifacts", action="store_true")
+    p_doctor.set_defaults(func=cmd_doctor)
 
     p_next = sub.add_parser("next")
     p_next.add_argument("--include-human-gate", action="store_true")
@@ -341,6 +514,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_complete.add_argument("task_id")
     p_complete.add_argument("--owner", default="Codex")
     p_complete.add_argument("--verdict", choices=["pass", "pass_with_risk", "fail", "blocked", "human_gate_required"], required=True)
+    p_complete.add_argument("--strict-artifacts", action="store_true")
+    p_complete.add_argument("--skip-artifact-check", action="store_true")
     p_complete.set_defaults(func=cmd_complete)
 
     return parser

@@ -29,6 +29,14 @@
 
 v2 配置只承担 `Stage A: 8 小时无人值守` 的试运行，不自动合并，不自我批准，不执行生产变更。旧 `task-queue.yaml`、`agent-pool.yaml`、`quality-gates.yaml` 保留为历史 DW1 / DW2 队列记录，不再作为新一轮完整体产品 Alpha 的默认入口。
 
+本机 Hermes 与 Claude Code 已按受控 profile 接入 v2 账本:
+
+- Codex: Stage A 默认控制者和 scoped executor。
+- Claude Code: scoped implementation worker 或 read-only evaluator；不能同时实现和评估同一任务。
+- Hermes: read-only supervisor 或 wave summarizer；只写 `shared-specs/infrastructure/artifacts`，不做第二控制平面。
+
+任何外部 Agent 都不得关闭 human gate、不得 auto-merge、不得让 `osmx` runtime/build/test/CI 依赖 `shared-specs`。
+
 运行前建议设置:
 
 ```bash

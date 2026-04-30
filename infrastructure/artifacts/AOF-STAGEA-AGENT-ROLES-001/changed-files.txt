@@ -1,0 +1,13 @@
+README.md
+infrastructure/README.md
+infrastructure/autonomous-delivery-mvp.md
+infrastructure/agent-pool-v2.yaml
+infrastructure/quality-gates-v2.yaml
+infrastructure/runner-v2.py
+infrastructure/task-queue-v2.yaml
+infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/summary.md
+infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/changed-files.txt
+infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/validation.md
+infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/residual-risks.md
+infrastructure/artifacts/AOF-STAGEA-AGENT-ROLES-001/handoff.md
+

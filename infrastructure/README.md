@@ -14,7 +14,7 @@
 | [task-queue-v2.yaml](./task-queue-v2.yaml) | 带 lease / heartbeat / human gate / artifact 的任务队列 |
 | [agent-pool-v2.yaml](./agent-pool-v2.yaml) | Codex-first slot profiles 和环境变量路径 |
 | [quality-gates-v2.yaml](./quality-gates-v2.yaml) | 当前 OSMX guardrails 与 no shared-specs runtime dependency gate |
-| [runner-v2.py](./runner-v2.py) | 最小监督式队列 runner，支持 status / next / lease / heartbeat / complete / activate / validate |
+| [runner-v2.py](./runner-v2.py) | 最小监督式队列 runner，支持 status / next / lease / heartbeat / complete / activate / validate / stale / doctor |
 
 旧版 `task-queue.yaml`、`agent-pool.yaml`、`quality-gates.yaml` 是 DW1 / DW2 历史队列和调度原型。新任务先走 v2，待 Stage A 验证通过后再决定是否改造 `dispatch.py`、`health-monitor.py` 和 `handoff-generator.py` 直接消费 v2 schema。
 
@@ -31,10 +31,19 @@ Runner commands:
 
 ```bash
 python3 infrastructure/runner-v2.py validate
+python3 infrastructure/runner-v2.py doctor
 python3 infrastructure/runner-v2.py status
 python3 infrastructure/runner-v2.py next
 python3 infrastructure/runner-v2.py next --include-human-gate
+python3 infrastructure/runner-v2.py stale
 ```
+
+External agent policy:
+
+- Codex remains the Stage A controller.
+- Claude Code can be a scoped worker after explicit dispatch, or a read-only evaluator with report-only writes.
+- Hermes can be a read-only supervisor or wave summarizer, writing only under `shared-specs/infrastructure/artifacts`.
+- No external agent may close human gates, auto-merge, or turn `shared-specs` into an OSMX runtime/build/test/CI dependency.
 
 The sections below describe the legacy v1 DW1 / DW2 dispatcher prototype. Keep them for history and migration reference. New Stage A autonomous delivery tasks should start from the v2 files above.
 

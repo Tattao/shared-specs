@@ -27,7 +27,7 @@ It is not a new product source of truth. Product facts remain in `osmx/docs/plan
 | `task-queue-v2.yaml` | Stage A executable queue with lease, heartbeat, human gate, artifact, and validation fields |
 | `agent-pool-v2.yaml` | Codex-first slot profiles using environment-based paths |
 | `quality-gates-v2.yaml` | Current OSMX guardrails, PostgreSQL primary runtime, MySQL compatibility checks, and no shared-specs runtime dependency checks |
-| `runner-v2.py` | Minimal supervised runner for status, next, lease, heartbeat, complete, activate, and validate |
+| `runner-v2.py` | Minimal supervised runner for status, next, lease, heartbeat, complete, activate, validate, stale lease review, and doctor checks |
 | `templates/task-card-v2.md` | Human-readable task card template matching `task-queue-v2.yaml` |
 | `templates/agent-brief-v2.md` | Codex dispatch brief template with write scope and gate rules |
 
@@ -79,9 +79,11 @@ Use the minimal v2 runner to consume the queue safely:
 ```bash
 cd "$SHARED_SPECS_REPO"
 python3 infrastructure/runner-v2.py validate
+python3 infrastructure/runner-v2.py doctor
 python3 infrastructure/runner-v2.py status
 python3 infrastructure/runner-v2.py next
 python3 infrastructure/runner-v2.py next --include-human-gate
+python3 infrastructure/runner-v2.py stale
 ```
 
 The runner can lease and complete tasks, but it does not execute product-code changes:
@@ -93,6 +95,19 @@ python3 infrastructure/runner-v2.py complete AOF-WP13-BOUNDARY-001 --owner Codex
 ```
 
 Human-gated tasks require explicit `--allow-human-gate`. Auto-merge remains forbidden.
+
+## External Agent Roles
+
+Stage A remains Codex-first guarded autonomy. Local Hermes and Claude Code can participate only through controlled profiles:
+
+| Profile | Role | Stage A Rule |
+|---------|------|--------------|
+| `claude-code-readonly-evaluator` | Independent evaluator and code reviewer | Report-only writes under artifacts or reports |
+| `claude-code-implementation-worker` | Scoped implementation worker | Disabled until Stage B or explicit owner gate |
+| `hermes-readonly-supervisor` | Stale lease, missing artifact, and wave health supervisor | Read-only target repos; may write shared-specs artifacts |
+| `hermes-wave-summarizer` | Nightly or micro-wave summary writer | Summary-only writes under shared-specs artifacts |
+
+Hermes must not become a second control plane. Claude Code must not both implement and evaluate the same task. Neither may close architecture, legal, release, security, migration, product-scope, or production gates.
 
 ## Human Gates
 

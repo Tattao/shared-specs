@@ -15,8 +15,9 @@ pool:
 runner_policy:
   allowed_agents:
     - codex
-  disabled_agents:
     - claude-code
+    - hermes
+  disabled_agents: []
   disallowed_command_flags:
     - --yolo
     - --dangerously-skip-permissions
@@ -27,6 +28,13 @@ runner_policy:
   auto_merge: false
   self_approval: false
   production_changes: false
+  default_controller: codex
+  queue_source_of_truth: task-queue-v2.yaml
+  external_agents_require_task_id: true
+  external_agents_require_write_scope: true
+  external_agents_may_close_human_gate: false
+  hermes_default_mode: read_only_supervisor
+  claude_code_default_mode: scoped_worker_or_readonly_evaluator
 
 profiles:
   codex-docs-ops:
@@ -97,6 +105,94 @@ profiles:
       - db_migration
       - security
 
+  claude-code-implementation-worker:
+    agent_type: claude-code
+    purpose: Scoped implementation worker for Go, Vue, Python, and test repair after explicit task dispatch
+    enabled_in_stage_a: false
+    max_timeout_seconds: 3600
+    allowed_write_roots:
+      - ${OSMX_REPO}/osmx-go
+      - ${OSMX_REPO}/frontend
+      - ${OSMX_REPO}/osmx-ai
+      - ${OSMX_REPO}/docs/reports
+      - ${OSMX_REPO}/docs/test-cases
+      - ${SHARED_SPECS_REPO}/infrastructure/artifacts
+    preferred_tasks:
+      - backend
+      - frontend
+      - ai
+      - test-repair
+    requires:
+      - task_id
+      - write_scope
+      - validation_commands
+      - artifact_dir
+    cannot_close_human_gate: true
+    cannot_auto_merge: true
+
+  claude-code-readonly-evaluator:
+    agent_type: claude-code
+    purpose: Independent read-only code and architecture evaluator with report-only writes
+    enabled_in_stage_a: true
+    read_only_target_repos:
+      - ${OSMX_REPO}
+      - ${SHARED_SPECS_REPO}
+    max_timeout_seconds: 2400
+    allowed_write_roots:
+      - ${SHARED_SPECS_REPO}/infrastructure/artifacts
+      - ${OSMX_REPO}/docs/reports
+    preferred_tasks:
+      - evaluation
+      - qa
+      - architecture-review
+    cannot_implement_task_it_evaluates: true
+    cannot_close_human_gate: true
+    cannot_auto_merge: true
+
+  hermes-readonly-supervisor:
+    agent_type: hermes
+    purpose: Read-only 24x7 queue supervisor for stale leases, missing artifacts, failed gates, and wave health
+    enabled_in_stage_a: true
+    read_only_target_repos:
+      - ${OSMX_REPO}
+      - ${SHARED_SPECS_REPO}
+    max_timeout_seconds: 1800
+    allowed_write_roots:
+      - ${SHARED_SPECS_REPO}/infrastructure/artifacts
+    preferred_tasks:
+      - supervision
+      - stale-lease-review
+      - wave-health-summary
+    allowed_runner_commands:
+      - status
+      - next
+      - stale
+      - doctor
+    forbidden_runner_commands:
+      - lease
+      - complete
+      - activate
+    cannot_close_human_gate: true
+    cannot_auto_merge: true
+
+  hermes-wave-summarizer:
+    agent_type: hermes
+    purpose: Nightly or micro-wave summarizer that writes evidence summaries only to shared-specs artifacts
+    enabled_in_stage_a: true
+    read_only_target_repos:
+      - ${OSMX_REPO}
+      - ${SHARED_SPECS_REPO}
+    max_timeout_seconds: 1800
+    allowed_write_roots:
+      - ${SHARED_SPECS_REPO}/infrastructure/artifacts
+    preferred_tasks:
+      - wave-summary
+      - handoff-summary
+      - owner-brief
+    cannot_implement_product_code: true
+    cannot_close_human_gate: true
+    cannot_auto_merge: true
+
 slots:
   slot-docs-1:
     profile: codex-docs-ops
@@ -139,6 +235,34 @@ slots:
     stage_a_enabled: false
     tmux_session: osmx-stageb-frontend-1
     worktree_policy: manual_only
+
+  slot-claude-eval-1:
+    profile: claude-code-readonly-evaluator
+    status: reserve
+    stage_a_enabled: true
+    tmux_session: osmx-stagea-claude-eval-1
+    worktree_policy: existing_or_manual
+
+  slot-claude-worker-1:
+    profile: claude-code-implementation-worker
+    status: disabled_until_stage_b
+    stage_a_enabled: false
+    tmux_session: osmx-stageb-claude-worker-1
+    worktree_policy: manual_only
+
+  slot-hermes-supervisor-1:
+    profile: hermes-readonly-supervisor
+    status: reserve
+    stage_a_enabled: true
+    tmux_session: osmx-stagea-hermes-supervisor-1
+    worktree_policy: existing_or_manual
+
+  slot-hermes-summary-1:
+    profile: hermes-wave-summarizer
+    status: reserve
+    stage_a_enabled: true
+    tmux_session: osmx-stagea-hermes-summary-1
+    worktree_policy: existing_or_manual
 
 worktree_policy:
   base_branch: origin/main

@@ -129,6 +129,52 @@ gates:
       expect: exit_code=0
       on_fail: human_gate_required
 
+  external_agent_control:
+    - name: external-agent-task-id-required
+      command: test -n "$TASK_ID"
+      expect: exit_code=0
+      applies_to:
+        - claude-code
+        - hermes
+      on_fail: blocked
+
+    - name: external-agent-write-scope-required
+      command: test -n "$TASK_WRITE_SCOPE"
+      expect: exit_code=0
+      applies_to:
+        - claude-code
+        - hermes
+      on_fail: blocked
+
+    - name: hermes-readonly-default
+      command: test "$AGENT_TYPE" != "hermes" -o "$AGENT_PROFILE" = "hermes-readonly-supervisor" -o "$AGENT_PROFILE" = "hermes-wave-summarizer"
+      expect: exit_code=0
+      on_fail: gate_failed
+      note: Hermes is a supervisor or summarizer in Stage A. It must not be an active product-code worker.
+
+    - name: hermes-shared-specs-artifacts-only
+      command: test "$AGENT_TYPE" != "hermes" -o "$TARGET_WRITE_ROOT" = "$SHARED_SPECS_REPO/infrastructure/artifacts"
+      expect: exit_code=0
+      on_fail: gate_failed
+      note: Hermes may write summaries and evidence only under shared-specs artifacts unless a later scoped task changes this rule.
+
+    - name: claude-implementation-not-evaluation-owner
+      command: test "$AGENT_TYPE" != "claude-code" -o "$TASK_OWNER_ROLE" != "evaluation" -o "$IMPLEMENTATION_OWNER" != "$EVALUATION_OWNER"
+      expect: exit_code=0
+      on_fail: gate_failed
+      note: Claude Code may implement or evaluate, but not both for the same task.
+
+    - name: no-external-agent-human-gate-close
+      command: test "$AGENT_TYPE" != "claude-code" -a "$AGENT_TYPE" != "hermes" -o "$TASK_HUMAN_GATE" = "none"
+      expect: exit_code=0
+      on_fail: human_gate_required
+      note: External agents cannot close architecture, legal, release, security, migration, or product-scope gates.
+
+    - name: no-external-agent-auto-merge
+      command: test "$AGENT_TYPE" != "claude-code" -a "$AGENT_TYPE" != "hermes" -o "$AUTO_MERGE" != "true"
+      expect: exit_code=0
+      on_fail: gate_failed
+
   human_gate:
     architecture:
       required_for:
@@ -154,3 +200,8 @@ gates:
         - merge
         - tag
         - customer visible release
+    external_agent_role_change:
+      required_for:
+        - enabling Hermes as active orchestrator
+        - enabling Claude Code as Stage A implementation worker
+        - granting external agents product-code write access outside declared task scope
