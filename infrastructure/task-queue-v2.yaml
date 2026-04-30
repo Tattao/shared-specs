@@ -3,7 +3,7 @@ queue:
   version: 2
   status: active_stage_a
   created_at: "2026-04-30T03:45:00+08:00"
-  updated_at: 2026-04-30T11:24:42+08:00
+  updated_at: 2026-04-30T11:35:27+08:00
   mode: codex_first_guarded_autonomy
   stage: stage_a_8h_unattended
   source_of_truth: osmx/docs/plans
@@ -480,7 +480,7 @@ tasks:
     lane: evaluation
     title: Run Stage A dry-run evaluation and prepare owner decision package
     priority: P0
-    status: ready
+    status: closed
     agent_profile: codex-evaluation
     source_docs:
       - osmx/docs/plans/90-agent-execution-operating-model.md
@@ -506,8 +506,8 @@ tasks:
     artifacts:
       - stage-a-owner-decision-package.md
       - infrastructure/artifacts/AOF-STAGEA-DRYRUN-001/evaluation.md
-    lease_owner: null
+    lease_owner: Codex
     lease_expires_at: null
-    heartbeat_at: null
-    attempts: 0
+    heartbeat_at: 2026-04-30T11:35:27+08:00
+    attempts: 1
     max_attempts: 1
