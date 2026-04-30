@@ -35,3 +35,18 @@ Follow-up retest:
 
 - A strict temporary Claude runtime MCP test logged `MCP server "playwright": Successfully connected`.
 - After clearing stale `playwright-mcp` processes, the user-scope Claude MCP health check also recovered.
+
+Current retest on `2026-04-30`:
+
+- `command -v brew` resolves to `/Users/shitao/.homebrew/bin/brew`.
+- `/Users/shitao/.local/bin/brew` exists as a symlink to `/Users/shitao/.homebrew/bin/brew`.
+- `brew --version` reports `Homebrew >=4.3.0`.
+- `command -v gh` resolves to `/Users/shitao/.local/bin/gh`.
+- `gh --version` reports `gh version 2.92.0 (2026-04-28)`.
+- `gh auth status` reports login to GitHub account `Tattao`; token value is intentionally not recorded.
+- `command -v playwright` resolves to `/Users/shitao/.local/nodejs/current/bin/playwright`.
+- `playwright --version` reports `Version 1.59.1`.
+- `command -v playwright-mcp` resolves to `/Users/shitao/.local/nodejs/current/bin/playwright-mcp`.
+- `npm list -g --depth=0 @playwright/mcp playwright` reports `@playwright/mcp@0.0.71` and `playwright@1.59.1`.
+- `claude mcp get playwright` reports user-scope `playwright` MCP as `Status: Connected`, command `npx -y @playwright/mcp@latest`.
+- `hermes mcp list` reports `playwright-min` over `npx @playwright/mcp@latest` as enabled.

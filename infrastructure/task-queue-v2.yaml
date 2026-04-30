@@ -3,7 +3,7 @@ queue:
   version: 2
   status: active_stage_a
   created_at: "2026-04-30T03:45:00+08:00"
-  updated_at: 2026-04-30T11:03:36+08:00
+  updated_at: 2026-04-30T11:24:42+08:00
   mode: codex_first_guarded_autonomy
   stage: stage_a_8h_unattended
   source_of_truth: osmx/docs/plans
@@ -446,7 +446,7 @@ tasks:
     lane: legal-architecture
     title: Create NeatLogic reuse governance index and mapping task brief
     priority: P0
-    status: ready
+    status: closed
     agent_profile: codex-docs-ops
     source_docs:
       - osmx/docs/plans/91-cmdb-itsm-aiops-neatlogic-itop-evaluation.md
@@ -470,10 +470,10 @@ tasks:
       - test -f neatlogic-governance-index.md
     artifacts:
       - infrastructure/artifacts/AOF-WP11-NEATLOGIC-001/legal-scope-summary.md
-    lease_owner: null
+    lease_owner: Codex
     lease_expires_at: null
-    heartbeat_at: null
-    attempts: 0
+    heartbeat_at: 2026-04-30T11:24:42+08:00
+    attempts: 1
     max_attempts: 1
 
   - id: AOF-STAGEA-DRYRUN-001
