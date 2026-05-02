@@ -1,0 +1,2 @@
+osmx/docs/architecture/aof-wave5-execution-gate-contract-v0.md
+osmx/docs/reports/aof-product-wave5-wp2-wp4-readiness-20260503.md
