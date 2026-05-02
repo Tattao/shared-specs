@@ -1,0 +1,8 @@
+osmx/frontend/src/api/aof.ts
+osmx/frontend/src/views/aof/AofSurfaceView.vue
+osmx/docs/reports/aof-product-wave3-detail-api-ui-binding-20260430.md
+shared-specs/infrastructure/artifacts/PW3-WP3-DETAIL-API-UI-BINDING-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW3-WP3-DETAIL-API-UI-BINDING-001/handoff.md
+shared-specs/infrastructure/artifacts/PW3-WP3-DETAIL-API-UI-BINDING-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW3-WP3-DETAIL-API-UI-BINDING-001/summary.md
+shared-specs/infrastructure/artifacts/PW3-WP3-DETAIL-API-UI-BINDING-001/validation.md

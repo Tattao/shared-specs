@@ -1,0 +1,8 @@
+osmx/docs/architecture/aof-store-abstraction-v0.md
+osmx/docs/reference/aof-core-contract-v0.md
+osmx/docs/reports/aof-product-wave3-store-contract-refine-20260430.md
+shared-specs/infrastructure/artifacts/PW3-WP1-STORE-CONTRACT-REFINE-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW3-WP1-STORE-CONTRACT-REFINE-001/handoff.md
+shared-specs/infrastructure/artifacts/PW3-WP1-STORE-CONTRACT-REFINE-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW3-WP1-STORE-CONTRACT-REFINE-001/summary.md
+shared-specs/infrastructure/artifacts/PW3-WP1-STORE-CONTRACT-REFINE-001/validation.md

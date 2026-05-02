@@ -1,0 +1,9 @@
+osmx/docs/reports/aof-product-wave3-store-runtime-core-20260430.md
+osmx/osmx-go/internal/aof/store/contract.go
+osmx/osmx-go/internal/aof/store/inmemory.go
+osmx/osmx-go/internal/aof/store/inmemory_test.go
+shared-specs/infrastructure/artifacts/PW3-WP2-STORE-BACKED-RUNTIME-CORE-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW3-WP2-STORE-BACKED-RUNTIME-CORE-001/handoff.md
+shared-specs/infrastructure/artifacts/PW3-WP2-STORE-BACKED-RUNTIME-CORE-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW3-WP2-STORE-BACKED-RUNTIME-CORE-001/summary.md
+shared-specs/infrastructure/artifacts/PW3-WP2-STORE-BACKED-RUNTIME-CORE-001/validation.md

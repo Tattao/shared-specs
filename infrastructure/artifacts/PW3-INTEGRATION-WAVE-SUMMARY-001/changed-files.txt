@@ -1,0 +1,7 @@
+osmx/docs/plans/80-wave-execution-board.md
+osmx/docs/guides/document-change-log.md
+shared-specs/infrastructure/artifacts/PW3-INTEGRATION-WAVE-SUMMARY-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW3-INTEGRATION-WAVE-SUMMARY-001/handoff.md
+shared-specs/infrastructure/artifacts/PW3-INTEGRATION-WAVE-SUMMARY-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW3-INTEGRATION-WAVE-SUMMARY-001/summary.md
+shared-specs/infrastructure/artifacts/PW3-INTEGRATION-WAVE-SUMMARY-001/validation.md

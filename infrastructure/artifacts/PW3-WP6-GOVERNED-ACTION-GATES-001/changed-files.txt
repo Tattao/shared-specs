@@ -1,0 +1,9 @@
+osmx/osmx-go/internal/aof/governance/action_request.go
+osmx/osmx-go/internal/aof/governance/action_request_test.go
+osmx/docs/reference/aof-action-skill-asset-execution-contract-v0.md
+osmx/docs/reports/aof-product-wave3-governed-action-gates-20260430.md
+shared-specs/infrastructure/artifacts/PW3-WP6-GOVERNED-ACTION-GATES-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW3-WP6-GOVERNED-ACTION-GATES-001/handoff.md
+shared-specs/infrastructure/artifacts/PW3-WP6-GOVERNED-ACTION-GATES-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW3-WP6-GOVERNED-ACTION-GATES-001/summary.md
+shared-specs/infrastructure/artifacts/PW3-WP6-GOVERNED-ACTION-GATES-001/validation.md

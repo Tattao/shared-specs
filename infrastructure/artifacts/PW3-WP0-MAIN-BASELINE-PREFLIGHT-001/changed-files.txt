@@ -1,0 +1,6 @@
+shared-specs/infrastructure/artifacts/PW3-WP0-MAIN-BASELINE-PREFLIGHT-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW3-WP0-MAIN-BASELINE-PREFLIGHT-001/handoff.md
+shared-specs/infrastructure/artifacts/PW3-WP0-MAIN-BASELINE-PREFLIGHT-001/preflight.md
+shared-specs/infrastructure/artifacts/PW3-WP0-MAIN-BASELINE-PREFLIGHT-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW3-WP0-MAIN-BASELINE-PREFLIGHT-001/summary.md
+shared-specs/infrastructure/artifacts/PW3-WP0-MAIN-BASELINE-PREFLIGHT-001/validation.md
