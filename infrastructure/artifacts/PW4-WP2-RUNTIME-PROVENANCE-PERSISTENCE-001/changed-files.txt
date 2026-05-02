@@ -1,0 +1,11 @@
+osmx/osmx-go/internal/api/v1/aof_handler.go
+osmx/osmx-go/internal/api/v1/aof_handler_test.go
+osmx/osmx-go/internal/aof/store/inmemory.go
+osmx/osmx-go/internal/aof/store/inmemory_test.go
+osmx/docs/reference/aof-runtime-provenance-contract-v0.md
+osmx/docs/reports/aof-product-wave4-runtime-provenance-persistence-20260430.md
+shared-specs/infrastructure/artifacts/PW4-WP2-RUNTIME-PROVENANCE-PERSISTENCE-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW4-WP2-RUNTIME-PROVENANCE-PERSISTENCE-001/handoff.md
+shared-specs/infrastructure/artifacts/PW4-WP2-RUNTIME-PROVENANCE-PERSISTENCE-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW4-WP2-RUNTIME-PROVENANCE-PERSISTENCE-001/summary.md
+shared-specs/infrastructure/artifacts/PW4-WP2-RUNTIME-PROVENANCE-PERSISTENCE-001/validation.md

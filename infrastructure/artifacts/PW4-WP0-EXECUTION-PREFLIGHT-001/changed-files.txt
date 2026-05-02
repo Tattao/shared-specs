@@ -1,0 +1,9 @@
+shared-specs/infrastructure/product-wave4-owner-gate.md
+shared-specs/infrastructure/product-wave4-task-graph-v1.yaml
+shared-specs/infrastructure/product-wave4-task-pack.md
+shared-specs/infrastructure/artifacts/PW4-WP0-EXECUTION-PREFLIGHT-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW4-WP0-EXECUTION-PREFLIGHT-001/handoff.md
+shared-specs/infrastructure/artifacts/PW4-WP0-EXECUTION-PREFLIGHT-001/preflight.md
+shared-specs/infrastructure/artifacts/PW4-WP0-EXECUTION-PREFLIGHT-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW4-WP0-EXECUTION-PREFLIGHT-001/summary.md
+shared-specs/infrastructure/artifacts/PW4-WP0-EXECUTION-PREFLIGHT-001/validation.md

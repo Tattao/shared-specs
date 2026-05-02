@@ -1,0 +1,10 @@
+osmx/frontend/e2e/15-aof-runtime-breadth.spec.ts
+osmx/frontend/playwright.aof-runtime.config.ts
+osmx/frontend/vite.config.ts
+osmx/docs/test-cases/aof-product-wave4-browser-e2e-ci-harness-20260430.md
+osmx/docs/reports/aof-product-wave4-browser-e2e-ci-harness-20260430.md
+shared-specs/infrastructure/artifacts/PW4-WP3-BROWSER-E2E-CI-HARNESS-001/changed-files.txt
+shared-specs/infrastructure/artifacts/PW4-WP3-BROWSER-E2E-CI-HARNESS-001/handoff.md
+shared-specs/infrastructure/artifacts/PW4-WP3-BROWSER-E2E-CI-HARNESS-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW4-WP3-BROWSER-E2E-CI-HARNESS-001/summary.md
+shared-specs/infrastructure/artifacts/PW4-WP3-BROWSER-E2E-CI-HARNESS-001/validation.md
