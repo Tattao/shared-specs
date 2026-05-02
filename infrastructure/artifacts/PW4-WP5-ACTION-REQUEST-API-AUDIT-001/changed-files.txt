@@ -1,0 +1,13 @@
+../osmx/osmx-go/internal/aof/governance/action_request.go
+../osmx/osmx-go/internal/aof/governance/action_request_store.go
+../osmx/osmx-go/internal/aof/governance/action_request_test.go
+../osmx/osmx-go/internal/api/v1/aof_handler.go
+../osmx/osmx-go/internal/api/v1/aof_handler_test.go
+../osmx/osmx-go/internal/router/router.go
+../osmx/docs/reference/aof-action-skill-asset-execution-contract-v0.md
+../osmx/docs/reports/aof-product-wave4-action-request-api-audit-20260503.md
+infrastructure/artifacts/PW4-WP5-ACTION-REQUEST-API-AUDIT-001/changed-files.txt
+infrastructure/artifacts/PW4-WP5-ACTION-REQUEST-API-AUDIT-001/handoff.md
+infrastructure/artifacts/PW4-WP5-ACTION-REQUEST-API-AUDIT-001/residual-risks.md
+infrastructure/artifacts/PW4-WP5-ACTION-REQUEST-API-AUDIT-001/summary.md
+infrastructure/artifacts/PW4-WP5-ACTION-REQUEST-API-AUDIT-001/validation.md
