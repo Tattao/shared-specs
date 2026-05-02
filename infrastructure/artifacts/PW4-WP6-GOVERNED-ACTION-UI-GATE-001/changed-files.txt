@@ -1,0 +1,11 @@
+../osmx/frontend/src/api/aof.ts
+../osmx/frontend/src/types/aof.ts
+../osmx/frontend/src/views/aof/AofSurfaceView.vue
+../osmx/frontend/e2e/15-aof-runtime-breadth.spec.ts
+../osmx/docs/reports/aof-product-wave4-governed-action-ui-gate-20260503.md
+../osmx/docs/plans/80-wave-execution-board.md
+infrastructure/artifacts/PW4-WP6-GOVERNED-ACTION-UI-GATE-001/changed-files.txt
+infrastructure/artifacts/PW4-WP6-GOVERNED-ACTION-UI-GATE-001/handoff.md
+infrastructure/artifacts/PW4-WP6-GOVERNED-ACTION-UI-GATE-001/residual-risks.md
+infrastructure/artifacts/PW4-WP6-GOVERNED-ACTION-UI-GATE-001/summary.md
+infrastructure/artifacts/PW4-WP6-GOVERNED-ACTION-UI-GATE-001/validation.md

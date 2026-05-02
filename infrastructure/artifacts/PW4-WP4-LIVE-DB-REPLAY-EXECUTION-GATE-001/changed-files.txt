@@ -1,0 +1,8 @@
+../osmx/docs/reports/aof-product-wave3-live-db-runtime-replay-gate-20260430.md
+infrastructure/product-wave4-owner-gate.md
+infrastructure/product-wave4-task-graph-v1.yaml
+infrastructure/artifacts/PW4-WP4-LIVE-DB-REPLAY-EXECUTION-GATE-001/changed-files.txt
+infrastructure/artifacts/PW4-WP4-LIVE-DB-REPLAY-EXECUTION-GATE-001/handoff.md
+infrastructure/artifacts/PW4-WP4-LIVE-DB-REPLAY-EXECUTION-GATE-001/residual-risks.md
+infrastructure/artifacts/PW4-WP4-LIVE-DB-REPLAY-EXECUTION-GATE-001/summary.md
+infrastructure/artifacts/PW4-WP4-LIVE-DB-REPLAY-EXECUTION-GATE-001/validation.md

@@ -1,0 +1,13 @@
+../osmx/docs/plans/80-wave-execution-board.md
+../osmx/docs/reference/aof-action-skill-asset-execution-contract-v0.md
+../osmx/docs/reports/aof-product-wave4-action-request-api-audit-20260503.md
+../osmx/docs/reports/aof-product-wave4-governed-action-ui-gate-20260503.md
+infrastructure/product-wave4-task-graph-v1.yaml
+infrastructure/artifacts/PW4-WP4-LIVE-DB-REPLAY-EXECUTION-GATE-001/**
+infrastructure/artifacts/PW4-WP5-ACTION-REQUEST-API-AUDIT-001/**
+infrastructure/artifacts/PW4-WP6-GOVERNED-ACTION-UI-GATE-001/**
+infrastructure/artifacts/PW4-INTEGRATION-WAVE-SUMMARY-001/changed-files.txt
+infrastructure/artifacts/PW4-INTEGRATION-WAVE-SUMMARY-001/handoff.md
+infrastructure/artifacts/PW4-INTEGRATION-WAVE-SUMMARY-001/residual-risks.md
+infrastructure/artifacts/PW4-INTEGRATION-WAVE-SUMMARY-001/summary.md
+infrastructure/artifacts/PW4-INTEGRATION-WAVE-SUMMARY-001/validation.md

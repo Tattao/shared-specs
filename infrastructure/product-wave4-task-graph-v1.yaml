@@ -200,6 +200,7 @@ tasks:
     repo: ../osmx
     priority: P1
     lane: governance
+    status: closed_pass
     write_scope:
       - osmx-go/internal/aof/**
       - osmx-go/internal/api/v1/**
@@ -225,6 +226,7 @@ tasks:
     repo: ../osmx
     priority: P1
     lane: frontend
+    status: closed_pass
     write_scope:
       - frontend/src/api/**
       - frontend/src/types/**
@@ -249,7 +251,7 @@ tasks:
     repo: shared-specs
     priority: P0
     lane: integration
-    status: blocked_until_all_wave4_tasks
+    status: closed_pass_with_human_gate_remaining
     write_scope:
       - infrastructure/artifacts/**
       - ../osmx/docs/plans/80-wave-execution-board.md
