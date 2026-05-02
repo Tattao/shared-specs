@@ -1,0 +1,16 @@
+osmx/docs/plans/80-wave-execution-board.md
+osmx/docs/reference/aof-action-skill-asset-execution-contract-v0.md
+osmx/docs/reports/aof-product-wave5-durable-action-approval-20260503.md
+osmx/frontend/e2e/15-aof-runtime-breadth.spec.ts
+osmx/frontend/src/api/aof.ts
+osmx/frontend/src/types/aof.ts
+osmx/frontend/src/views/aof/AofSurfaceView.vue
+osmx/osmx-go/internal/aof/governance/action_request.go
+osmx/osmx-go/internal/aof/governance/action_request_store.go
+osmx/osmx-go/internal/aof/governance/action_request_test.go
+osmx/osmx-go/internal/api/v1/aof_handler.go
+osmx/osmx-go/internal/api/v1/aof_handler_test.go
+osmx/osmx-go/internal/app/app.go
+osmx/osmx-go/internal/repository/aof_action_request_store.go
+osmx/osmx-go/internal/repository/aof_action_request_store_test.go
+osmx/osmx-go/internal/router/router.go
