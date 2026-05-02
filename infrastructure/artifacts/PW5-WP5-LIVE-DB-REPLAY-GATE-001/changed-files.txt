@@ -1,0 +1,6 @@
+osmx/docs/reports/aof-product-wave5-wp2-wp4-readiness-20260503.md
+shared-specs/infrastructure/product-wave5-task-graph-v1.yaml
+shared-specs/infrastructure/artifacts/PW5-WP5-LIVE-DB-REPLAY-GATE-001/summary.md
+shared-specs/infrastructure/artifacts/PW5-WP5-LIVE-DB-REPLAY-GATE-001/validation.md
+shared-specs/infrastructure/artifacts/PW5-WP5-LIVE-DB-REPLAY-GATE-001/residual-risks.md
+shared-specs/infrastructure/artifacts/PW5-WP5-LIVE-DB-REPLAY-GATE-001/handoff.md
