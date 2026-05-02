@@ -1,0 +1,66 @@
+meta:
+  id: aof-product-wave5-durable-approval-v1
+  status: active_with_db_replay_gate_blocked
+  owner: Codex
+  purpose: "Close the Wave 4 follow-up for durable governed action approval while keeping execution and live DB replay behind explicit human gates."
+  source_of_truth: "../osmx"
+  hard_boundaries:
+    - "Do not execute skills, install packs, run resilience experiments, or bind approval to executors in this wave."
+    - "Do not run live DB replay without `migration_runtime_replay` approval and disposable PostgreSQL/MySQL DSNs."
+    - "Do not add source code to shared-specs."
+
+tasks:
+  - id: PW5-WP1-DURABLE-ACTION-APPROVAL-001
+    wp: WP1
+    title: Durable governed action approval bridge
+    repo: ../osmx
+    priority: P0
+    lane: governance
+    status: closed_pass
+    write_scope:
+      - osmx-go/internal/aof/governance/**
+      - osmx-go/internal/repository/**
+      - osmx-go/internal/api/v1/aof_handler.go
+      - osmx-go/internal/router/router.go
+      - frontend/src/views/aof/**
+      - docs/reference/**
+      - docs/reports/**
+    acceptance:
+      - Governed action requests persist through existing `osm_approvals` / `osm_approval_steps`.
+      - Governance UI can approve, reject, and cancel requests.
+      - Approved requests still return `execution_blocked=true`.
+      - No new table, migration, raw SQL, skill execution, pack install, or resilience experiment run is introduced.
+
+  - id: PW5-WP2-ACTION-EXECUTOR-BINDING-GATE-001
+    wp: WP2
+    title: Approval-to-executor binding design gate
+    repo: ../osmx
+    priority: P1
+    lane: governance
+    status: not_started
+    human_gate: execution_binding
+    acceptance:
+      - Defines a separate explicit gate before any approval can trigger execution.
+      - Keeps default behavior non-executing.
+
+  - id: PW5-WP3-DURABLE-RUNTIME-ADAPTERS-001
+    wp: WP3
+    title: Durable AOF runtime adapters
+    repo: ../osmx
+    priority: P1
+    lane: runtime
+    status: not_started
+    acceptance:
+      - Runtime readers can use real store adapters with provenance.
+      - Sample fallback remains explicit and observable.
+
+  - id: PW5-WP4-LIVE-DB-REPLAY-GATE-001
+    wp: WP4
+    title: Live DB replay gate remains blocked
+    repo: ../osmx
+    priority: P0
+    lane: database
+    status: human_gate_required
+    human_gate: migration_runtime_replay
+    acceptance:
+      - Runs only after explicit `migration_runtime_replay` approval and disposable PostgreSQL/MySQL DSNs.
